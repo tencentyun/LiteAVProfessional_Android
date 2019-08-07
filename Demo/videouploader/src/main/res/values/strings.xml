@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">videouploader</string>
+    <string name="title_activity_txdownload">TXDownloadActivity</string>
+</resources>

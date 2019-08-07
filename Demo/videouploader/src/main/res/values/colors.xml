@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--green-->
+    <color name="colorGreen">#0accac</color>
+    <color name="white">#FFFFFF</color>
+    <color name="record_settings_tip">#999999</color>
+    <color name="colorAccent">#0accac</color>
+    <!--文字白色-->
+    <color name="colorTextWhite">#FFFFFF</color>
+</resources>

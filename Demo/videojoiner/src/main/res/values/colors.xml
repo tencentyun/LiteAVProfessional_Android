@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dialog_btn_pressed_color">#efefef</color>
+    <color name="tencent_tls_ui_deepgray">#777777</color>
+    <color name="colorAccent">#0accac</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <!--文字白色-->
+    <color name="colorTextWhite">#FFFFFF</color>
+    <color name="btn_red">#D63F41</color>
+    <color name="transparent">#00000000</color>
+    <color name="background_gray1">#EBEBEB</color>
+    <color name="c8">#FFFFFF</color>
+</resources>

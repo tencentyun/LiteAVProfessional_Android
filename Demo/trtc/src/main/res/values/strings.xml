@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">trtc</string>
+    <string name="str_room_id_tips">输入房间号</string>
+    <string name="str_user_id_tips">输入用户名</string>
+</resources>

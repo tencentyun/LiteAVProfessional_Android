@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="colorAccent">#0accac</color>
+    <!--文字白色-->
+    <color name="colorTextWhite">#FFFFFF</color>
+    <color name="record_settings_tip">#999999</color>
+    <!--green-->
+    <color name="colorGreen">#0accac</color>
+    <!--gray4-->
+    <color name="colorGray4">#787878</color>
+    <!--gray7-->
+    <color name="colorGray7">#D8D8D8</color>
+
+    <color name="record_progress_bg">#66000000</color> <!-- 40%不透明度 -->
+    <color name="record_progress">#00f5ac</color>
+    <color name="record_progress_pending">#10acc0</color>
+    <color name="background_gray1">#EBEBEB</color>
+    <color name="c8">#FFFFFF</color>
+</resources>

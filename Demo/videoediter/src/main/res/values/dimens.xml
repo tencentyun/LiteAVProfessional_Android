@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 视频进度条 -->
+    <dimen name="video_progress_height">50dp</dimen>
+    <dimen name="video_thumbnail_width">50dp</dimen>
+
+    <!--大小-->
+    <!--h1-->
+    <!--h2-->
+    <!--h3-->
+    <dimen name="h3">11sp</dimen>
+    <!--h4-->
+    <dimen name="h4">12sp</dimen>
+    <!--h5-->
+    <!--h6-->
+    <dimen name="h6">14sp</dimen>
+    <!--h7-->
+    <dimen name="h7">15sp</dimen>
+    <!--h8-->
+    <dimen name="h8">16sp</dimen>
+    <!--h9-->
+    <!--h10-->
+    <dimen name="h10">18sp</dimen>
+    <!--h11-->
+
+    <dimen name="live_btn_size">35dp</dimen>
+</resources>

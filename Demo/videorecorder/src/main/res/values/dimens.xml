@@ -1,0 +1,29 @@
+<resources>
+    <!-- UGC*******************************************************************************************************************************-->
+    <dimen name="ugc_aspect_width">44dp</dimen>
+    <dimen name="ugc_aspect_divider">18dp</dimen>
+    <dimen name="ugc_progress_cursor">2dp</dimen>
+    <dimen name="ugc_progress_min_pos">2dp</dimen>
+    <dimen name="ugc_progress_divider">1dp</dimen>
+
+    <!--大小-->
+    <!--h1-->
+    <!--h2-->
+    <!--h3-->
+    <dimen name="h3">11sp</dimen>
+    <!--h4-->
+    <dimen name="h4">12sp</dimen>
+    <!--h5-->
+    <!--h6-->
+    <dimen name="h6">14sp</dimen>
+    <!--h7-->
+    <dimen name="h7">15sp</dimen>
+    <!--h8-->
+    <dimen name="h8">16sp</dimen>
+    <!--h9-->
+    <!--h10-->
+    <dimen name="h10">18sp</dimen>
+    <!--h11-->
+
+    <dimen name="live_btn_size">35dp</dimen>
+</resources>

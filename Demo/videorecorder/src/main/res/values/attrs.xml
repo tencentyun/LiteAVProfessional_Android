@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 标题模板自定义属性 -->
+    <declare-styleable name="TCActivityTitle">
+        <!-- 标题文案 -->
+        <attr name="titleText" format="string" />
+        <!-- 是否有back按钮 -->
+        <attr name="canBack" format="boolean" />
+        <!-- back按钮文案 -->
+        <attr name="backText" format="string" />
+        <!-- 右侧更多功能按钮文字 -->
+        <attr name="moreText" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="TCReversalSeekBar">
+        <attr name="rs_pointerBackground" format="reference" />
+        <attr name="rs_backgroundColor" format="color" />
+        <attr name="rs_progressColor" format="color" />
+        <attr name="rs_progress" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="RangeSlider">
+        <attr name="lineHeight" format="dimension" />
+        <attr name="thumbWidth" format="dimension" />
+        <attr name="lineColor" format="color" />
+        <attr name="maskColor" format="color" />
+        <attr name="tickCount" format="integer" />
+        <attr name="leftThumbIndex" format="integer" />
+        <attr name="rightThumbIndex" format="integer" />
+        <attr name="leftThumbDrawable" format="reference" />
+        <attr name="rightThumbDrawable" format="reference" />
+        <attr name="midThumbDrawable" format="reference" />
+    </declare-styleable>
+</resources>

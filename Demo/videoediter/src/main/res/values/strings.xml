@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">videoediter</string>
+    <string name="video_edit">编辑视频</string>
+    <string name="video_edit_segment">请拖拽两侧滑块选择剪裁区域</string>
+    <string name="video_repeate_segment">设置重复的片段</string>
+    <string name="video_reverse">开启视频倒放</string>
+    <string name="video_editer_set_speed">设置慢速片段</string>
+    <string name="video_editer_bubble">气泡字幕</string>
+    <string name="video_editer_set_transition_type">设置转场类型</string>
+
+    <string name="music_empty">空空如也</string>
+    <string name="music_loading">正在加载本地音乐...</string>
+</resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--动态滤镜的颜色-->
+    <!--1-->
+    <color name="spirit_out_color">#EC5F9B</color>
+    <color name="spirit_out_color_press">#AAEC5F9B</color>
+    <!--2-->
+    <color name="screen_split">#EC8435</color>
+    <color name="screen_split_press">#AAEC8435</color>
+    <!--3-->
+    <color name="light_wave">#1FBCB6</color>
+    <color name="light_wave_press">#AA1FBCB6</color>
+    <!--4-->
+    <color name="dark_illusion">#449FF3</color>
+    <color name="dark_illusion_press">#AA449FF3</color>
+    <!--5-->
+    <color name="win_shaddow_color">#FF6EA745</color>
+    <color name="win_shaddow_color_press">#CC6EA745</color>
+    <!--6-->
+    <color name="ghost_shaddow_color">#FF47A9B2</color>
+    <color name="ghost_shaddow_color_press">#CC47A9B2</color>
+    <!--7-->
+    <color name="phantom_shaddow_color">#FF4368BC</color>
+    <color name="phantom_shaddow_color_press">#CC4368BC</color>
+    <!--8-->
+    <color name="ghost_color">#FF6A3FC6</color>
+    <color name="ghost_color_press">#CC6A3FC6</color>
+    <!--9-->
+    <color name="lightning_color">#FFC73AD1</color>
+    <color name="lightning_color_press">#CCC73AD1</color>
+    <!--10-->
+    <color name="mirror_color">#FFDB347F</color>
+    <color name="mirror_color_press">#CCDB347F</color>
+    <!--11-->
+    <color name="illusion_color">#FF7F554C</color>
+    <color name="illusion_color_press">#CC7F554C</color>
+
+    <color name="paster_activity_background_color">#0d0d0d</color>
+    <!--green-->
+    <color name="colorGreen">#0accac</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <!--gray4-->
+    <color name="colorGray4">#787878</color>
+    <!--gray5-->
+    <color name="colorGray5">#505050</color>
+    <!--gray6-->
+    <color name="colorGray6">#141414</color>
+    <!--gray8-->
+    <color name="colorGray8">#181818</color>
+    <color name="line_btn">#BBBBBB</color>
+    <color name="colorAccent">#0accac</color>
+    <color name="transparent">#00000000</color>
+    <color name="bubble_panel_background_color">#0d0d0d</color>
+    <color name="input_text_color">#00f5ac</color>
+    <!--文字白色-->
+    <color name="colorTextWhite">#FFFFFF</color>
+
+    <color name="time_bg_normal">#0accac</color>
+    <color name="time_bg_selected">#AA0ACCAC</color>
+
+    <!-- 裁剪范围颜色 -->
+    <color name="colorAccentTransparent30">#4d0accac</color>
+    <color name="background_gray1">#EBEBEB</color>
+    <color name="c8">#FFFFFF</color>
+</resources>
