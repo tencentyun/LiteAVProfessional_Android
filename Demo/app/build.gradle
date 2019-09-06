@@ -44,7 +44,7 @@ dependencies {
 
     compile(name: 'volley-1.0.0', ext: 'aar')
 //    compile(name: 'LiteAVSDK_Professional', ext: 'aar')
-    compile 'com.tencent.liteav:LiteAVSDK_Professional:6.6.7458'
+    compile 'com.tencent.liteav:LiteAVSDK_Professional:6.6.7551'
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
