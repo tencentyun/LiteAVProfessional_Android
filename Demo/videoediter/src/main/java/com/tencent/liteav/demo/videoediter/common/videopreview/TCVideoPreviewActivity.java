@@ -220,10 +220,10 @@ public class TCVideoPreviewActivity extends Activity implements View.OnClickList
         File file = new File(mVideoPath);
         if (file.exists()) {
             try {
-                File newFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + File.separator + file.getName());
-//                if (!newFile.exists()) {
-//                    newFile = new File(getExternalFilesDir(Environment.DIRECTORY_DCIM).getPath() + File.separator + file.getName());
-//                }
+                String galleryPath = Environment.getExternalStorageDirectory()
+                        + File.separator + Environment.DIRECTORY_DCIM
+                        + File.separator + "Camera" + File.separator;
+                File newFile = new File(galleryPath + file.getName());
 
                 file.renameTo(newFile);
                 mVideoPath = newFile.getAbsolutePath();

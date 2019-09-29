@@ -203,7 +203,7 @@
             android:src="@drawable/loading_animation"
             android:visibility="gone"/>
 
-        <com.tencent.liteav.demo.play.view.BitrateView
+        <com.tencent.liteav.demo.player.view.BitrateView
             android:id="@+id/bitrate_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

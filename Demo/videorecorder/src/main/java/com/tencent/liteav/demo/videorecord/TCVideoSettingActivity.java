@@ -57,6 +57,7 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
     private int mGop = 3; // 关键帧间隔
     private CheckBox cbTouchFocus; // true：手动对焦；false： 自动对焦
     private CheckBox cbEdit;
+    private RadioButton rbVideoAspectRatio169;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -143,6 +144,7 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
         rbVideoAspectRatio11 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_1_1);
         rbVideoAspectRatio34 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_3_4);
         rbVideoAspectRatio916 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_9_16);
+        rbVideoAspectRatio169 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_16_9);
 
         tvRecommendResolution = (TextView) findViewById(R.id.tv_recommend_resolution);
         tvRecommendBitrate = (TextView) findViewById(R.id.tv_recommend_bitrate);
@@ -202,8 +204,10 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
                     mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_1_1;
                 } else if (i == rbVideoAspectRatio34.getId()) {
                     mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_3_4;
-                } else {
+                } else if (i == rbVideoAspectRatio916.getId()) {
                     mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_9_16;
+                } else if (i == rbVideoAspectRatio169.getId()) {
+                    mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_16_9;
                 }
             }
         });

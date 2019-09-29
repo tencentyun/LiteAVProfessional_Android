@@ -42,6 +42,7 @@ ext {
     noffmpeg = false
     noijkplay = false
     useASAN = true
-    aekit_version = '1.0.10-cloud'
+    aekit_version = '1.0.12-cloud'
+    liteavsdk_version = '6.7.7732'
     //kotlin_version = "1.3.21"
 }

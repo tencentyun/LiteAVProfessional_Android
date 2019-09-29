@@ -37,14 +37,18 @@ android {
 //        all*.exclude module: 'okhttp'
 //        all*.exclude module: 'okio'
 //    }
+
+
+    packagingOptions {
+        pickFirst '**/libc++_shared.so'
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     compile(name: 'volley-1.0.0', ext: 'aar')
-//    compile(name: 'LiteAVSDK_Professional', ext: 'aar')
-    compile 'com.tencent.liteav:LiteAVSDK_Professional:6.6.7553'
+    compile "com.tencent.liteav:LiteAVSDK_Professional:$rootProject.ext.liteavsdk_version"
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'

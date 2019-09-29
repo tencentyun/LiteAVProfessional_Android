@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.liteav.demo.videouploader.common.utils.TCConstants;
 import com.tencent.liteav.demo.videouploader.common.utils.TCUtils;
-import com.tencent.liteav.demo.play.SuperPlayerModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +33,6 @@ public class VideoDataMgr {
     private PublishSigListener mPublishSigListener;
     private GetVideoInfoListListener mGetVideoInfoListListener;
     private ReportVideoInfoListener mReportVideoInfoListener;
-    private ArrayList<SuperPlayerModel> mDefaultList;
 
     public static VideoDataMgr getInstance(){
         if(instance == null){
@@ -283,19 +281,5 @@ public class VideoDataMgr {
                 + "&" + "sig=" + sig
                 + "&" + "appid=" + TCConstants.VOD_APPID;
         return sigParams;
-    }
-
-    public ArrayList<SuperPlayerModel> loadVideoInfoList(List<VideoInfo> videoInfoList) {
-        mDefaultList = new ArrayList<SuperPlayerModel>();
-        if (videoInfoList == null || videoInfoList.size() == 0)
-            return null;
-        for (VideoInfo videoInfo : videoInfoList) {
-            SuperPlayerModel model = new SuperPlayerModel();
-            model.appid = TCConstants.VOD_APPID;
-            model.fileid = videoInfo.fileId;
-            mDefaultList.add(model);
-        }
-
-        return mDefaultList;
     }
 }

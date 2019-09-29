@@ -189,8 +189,10 @@ public class TVCClient {
     private void postVirtualProgress() {
         if (uploadInfo != null) {
             long total = uploadInfo.getFileSize() + (uploadInfo.isNeedCover()? uploadInfo.getCoverFileSize(): 0);
-            ++virtualPercent;
-            notifyUploadProgress(virtualPercent*total/100, total);
+            if ((virtualPercent >= 0 && virtualPercent < 10) || (virtualPercent >=90 && virtualPercent <100)) {
+                ++virtualPercent;
+                notifyUploadProgress(virtualPercent * total / 100, total);
+            }
         }
     }
 

@@ -137,6 +137,19 @@
                     android:text="16:9"
                     android:textColor="@color/text_settings_color"
                     android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_video_aspect_ratio_16_9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_bg"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="9:16"
+                    android:textColor="@color/text_settings_color"
+                    android:textSize="16sp" />
             </RadioGroup>
 
             <!-- 推荐配置和自定义配置 -->

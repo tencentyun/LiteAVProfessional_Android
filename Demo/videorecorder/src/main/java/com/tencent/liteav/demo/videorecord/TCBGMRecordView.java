@@ -20,7 +20,7 @@ import com.tencent.ugc.TXUGCRecord;
  */
 public class TCBGMRecordView extends RelativeLayout implements RangeSlider.OnRangeChangeListener {
 
-    private String TAG = TCBGMRecordView.class.getSimpleName();
+    private String TAG = "TCBGMRecordView";
 
     private TCReversalSeekBar mTCReversalSeekBar;
     private TextView mTvTip, mTvDelete, mTvMusicName;

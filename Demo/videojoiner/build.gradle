@@ -23,7 +23,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.tencent.liteav:LiteAVSDK_Professional:6.6.7458'
+    compile "com.tencent.liteav:LiteAVSDK_Professional:$rootProject.ext.liteavsdk_version"
 
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.android.support:recyclerview-v7:25.+'

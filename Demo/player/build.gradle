@@ -25,8 +25,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.tencent.liteav:LiteAVSDK_Professional:6.6.7458'
-    compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
+    compile "com.tencent.liteav:LiteAVSDK_Professional:$rootProject.ext.liteavsdk_version"
+    compile project(':libsuperplayer')
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.android.support:recyclerview-v7:25.+'
     compile 'me.dm7.barcodescanner:zxing:1.8.4'

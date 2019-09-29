@@ -97,6 +97,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private RelativeLayout mRlAspectSelect;
     private ImageView mIvAspectSelectFirst;
     private ImageView mIvAspectSelectSecond;
+    private ImageView mIvAspectSelectThird;
     private ImageView mIvScaleMask;
     private boolean mAspectSelectShow = false;
     private TextView mTvFilter;
@@ -109,6 +110,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private int mCurrentAspectRatio;
     private int mFirstSelectScale;
     private int mSecondSelectScale;
+    private int mThirdSelectScale;
     private RelativeLayout mRecordRelativeLayout = null;
     private FrameLayout mMaskLayout;
     private RecordProgressView mRecordProgressView;
@@ -354,6 +356,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         mIvScaleMask = (ImageView) findViewById(R.id.iv_scale_mask);
         mIvAspectSelectFirst = (ImageView) findViewById(R.id.iv_scale_first);
         mIvAspectSelectSecond = (ImageView) findViewById(R.id.iv_scale_second);
+        mIvAspectSelectThird = (ImageView) findViewById(R.id.iv_scale_third);
         mRlAspect = (RelativeLayout) findViewById(R.id.layout_aspect);
         mRlAspectSelect = (RelativeLayout) findViewById(R.id.layout_aspect_select);
 
@@ -702,7 +705,8 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
         } else if (i == R.id.iv_scale_second) {
             selectAnotherAspect(mSecondSelectScale);
-
+        } else if (i == R.id.iv_scale_third) {
+            selectAnotherAspect(mThirdSelectScale);
         } else if (i == R.id.btn_delete_last_part) {
             deleteLastPart();
 
@@ -753,25 +757,47 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private void setSelectAspect() {
         if (mCurrentAspectRatio == TXRecordCommon.VIDEO_ASPECT_RATIO_9_16) {
             mIvScale.setImageResource(R.drawable.selector_aspect169);
+
             mFirstSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_1_1;
             mIvAspectSelectFirst.setImageResource(R.drawable.selector_aspect11);
 
             mSecondSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_3_4;
             mIvAspectSelectSecond.setImageResource(R.drawable.selector_aspect43);
+
+            mThirdSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_16_9;
+            mIvAspectSelectThird.setImageResource(R.drawable.selector_aspect916);
         } else if (mCurrentAspectRatio == TXRecordCommon.VIDEO_ASPECT_RATIO_1_1) {
             mIvScale.setImageResource(R.drawable.selector_aspect11);
+
             mFirstSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_3_4;
             mIvAspectSelectFirst.setImageResource(R.drawable.selector_aspect43);
 
             mSecondSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_9_16;
             mIvAspectSelectSecond.setImageResource(R.drawable.selector_aspect169);
-        } else {
+
+            mThirdSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_16_9;
+            mIvAspectSelectThird.setImageResource(R.drawable.selector_aspect916);
+        } else if (mCurrentAspectRatio == TXRecordCommon.VIDEO_ASPECT_RATIO_3_4) {
             mIvScale.setImageResource(R.drawable.selector_aspect43);
             mFirstSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_1_1;
             mIvAspectSelectFirst.setImageResource(R.drawable.selector_aspect11);
 
             mSecondSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_9_16;
             mIvAspectSelectSecond.setImageResource(R.drawable.selector_aspect169);
+
+            mThirdSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_16_9;
+            mIvAspectSelectThird.setImageResource(R.drawable.selector_aspect916);
+        } else {
+            mIvScale.setImageResource(R.drawable.selector_aspect916);
+
+            mFirstSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_1_1;
+            mIvAspectSelectFirst.setImageResource(R.drawable.selector_aspect11);
+
+            mSecondSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_9_16;
+            mIvAspectSelectSecond.setImageResource(R.drawable.selector_aspect169);
+
+            mThirdSelectScale = TXRecordCommon.VIDEO_ASPECT_RATIO_3_4;
+            mIvAspectSelectThird.setImageResource(R.drawable.selector_aspect43);
         }
     }
 
@@ -838,6 +864,8 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
             } else if (mCurrentAspectRatio == TXRecordCommon.VIDEO_ASPECT_RATIO_1_1) {
                 mTXCameraRecord.setAspectRatio(TXRecordCommon.VIDEO_ASPECT_RATIO_1_1);
+            } else if (mCurrentAspectRatio == TXRecordCommon.VIDEO_ASPECT_RATIO_16_9) {
+                mTXCameraRecord.setAspectRatio(TXRecordCommon.VIDEO_ASPECT_RATIO_16_9);
             }
 
             setSelectAspect();

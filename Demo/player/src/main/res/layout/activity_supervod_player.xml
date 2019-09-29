@@ -19,6 +19,7 @@
             android:src="@drawable/ic_new_vod_back_normal" />
 
         <TextView
+            android:id="@+id/et_url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -42,7 +43,7 @@
             android:padding="10dp"
             android:src="@drawable/question_link" />
 
-        <Button
+        <ImageView
             android:id="@+id/btnScan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,7 +51,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/webrtc_link_button"
-            android:background="@drawable/ic_qcode" />
+            android:src="@drawable/ic_qcode" />
 
 
         <View

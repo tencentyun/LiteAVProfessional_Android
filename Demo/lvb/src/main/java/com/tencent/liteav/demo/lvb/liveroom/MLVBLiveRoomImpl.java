@@ -673,7 +673,7 @@ public class MLVBLiveRoomImpl extends MLVBLiveRoom implements HttpRequests.Heart
         } else if (op == MLVBCommonDef.CustomFieldOp.INC) {
             strOp = "inc";
         } else if (op == MLVBCommonDef.CustomFieldOp.DEC) {
-            strOp = "del";
+            strOp = "dec";
         }
         mHttpRequest.setCustomInfo(mCurrRoomID, key, strOp, value, new HttpRequests.OnResponseCallback<HttpResponse>() {
             @Override
@@ -699,18 +699,8 @@ public class MLVBLiveRoomImpl extends MLVBLiveRoom implements HttpRequests.Heart
             public void onResponse(final int retcode, @Nullable final String retmsg, @Nullable HttpResponse.GetCustomInfoResponse data) {
                 if (retcode == HttpResponse.CODE_OK) {
                     final Map<String, Object> customList = new HashMap<>();
-                    if (data.custom != null && data.custom.length() > 0) {
-                        try {
-                            JSONObject customObj = new JSONObject(data.custom);
-                            Iterator<String> keys = customObj.keys();
-                            while (keys.hasNext()) {
-                                String key = keys.next();
-                                Object value = customObj.get(key);
-                                customList.put(key, value);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    if (data.custom != null && data.custom.size() > 0) {
+                        customList.putAll(data.custom);
                     }
                     callbackOnThread(callback, "onGetCustomInfo", customList);
                 } else {

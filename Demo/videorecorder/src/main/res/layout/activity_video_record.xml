@@ -304,6 +304,17 @@
             android:onClick="onClick"
             android:padding="6dp"
             android:src="@drawable/selector_aspect169" />
+
+        <ImageView
+            android:id="@+id/iv_scale_third"
+            android:layout_width="@dimen/ugc_aspect_width"
+            android:layout_height="44dp"
+            android:layout_marginRight="@dimen/ugc_aspect_divider"
+            android:layout_toRightOf="@id/iv_scale_second"
+            android:background="@drawable/record_round_bg"
+            android:onClick="onClick"
+            android:padding="6dp"
+            android:src="@drawable/selector_aspect916" />
     </RelativeLayout>
 
     <RelativeLayout

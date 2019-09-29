@@ -17,7 +17,7 @@ import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.liteav.demo.videouploader.R;
 import com.tencent.liteav.demo.videouploader.common.utils.TCConstants;
 import com.tencent.liteav.demo.videouploader.common.view.VideoWorkProgressFragment;
-import com.tencent.liteav.demo.play.superplayer.SuperPlayerActivity;
+import com.tencent.liteav.demo.player.superplayer.SuperPlayerActivity;
 import com.tencent.liteav.demo.videouploader.videopublish.server.PublishSigListener;
 import com.tencent.liteav.demo.videouploader.videopublish.server.ReportVideoInfoListener;
 import com.tencent.liteav.demo.videouploader.videopublish.server.VideoDataMgr;

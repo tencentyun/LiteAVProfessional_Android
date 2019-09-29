@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 public class GifUtil {
-    private static final String TAG = GifUtil.class.getSimpleName();
+    private static final String TAG = "GifUtil";
     public static String createGifByBitmaps(String filePath, List<Bitmap> bitmapList, int delayMs, int width, int height) throws IOException{
         if(bitmapList == null || bitmapList.size() == 0){
             return null;
