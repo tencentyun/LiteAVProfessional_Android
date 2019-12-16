@@ -9,7 +9,6 @@ import com.tencent.liteav.demo.videouploader.videoupload.impl.compute.TXOkHTTPEv
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Callback;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -32,7 +30,7 @@ public class UGCClient {
     private String signature;
     private OkHttpClient okHttpClient;
     private TXOkHTTPEventListener mTXOkHTTPEventListener;
-    public static String SERVER = "https://" + TVCConstants.VOD_SERVER_HOST + "/v3/index.php?Action=";
+
     private String serverIP = "";
 
     private static UGCClient ourInstance;
@@ -69,7 +67,7 @@ public class UGCClient {
      *@param callback 回调
      */
     public void PrepareUploadUGC(Callback callback) {
-        String reqUrl = SERVER + "PrepareUploadUGC";
+        String reqUrl = "https://" + TVCConstants.VOD_SERVER_HOST + "/v3/index.php?Action=PrepareUploadUGC";
         Log.d(TAG, "PrepareUploadUGC->request url:" + reqUrl);
 
         String body = "";
@@ -111,8 +109,8 @@ public class UGCClient {
      * @param customKey
      *@param callback 回调  @return
      */
-    public int initUploadUGC(TVCUploadInfo info, String customKey, String vodSessionKey, Callback callback) {
-        String reqUrl = SERVER + "ApplyUploadUGC";
+    public int initUploadUGC(String domain, TVCUploadInfo info, String customKey, String vodSessionKey, final Callback callback) {
+        String reqUrl = "https://" + domain + "/v3/index.php?Action=ApplyUploadUGC";
         Log.d(TAG, "initUploadUGC->request url:" + reqUrl);
 
         String body = "";
@@ -177,8 +175,7 @@ public class UGCClient {
      * @return
      */
     public int finishUploadUGC(String domain, String customKey, String vodSessionKey, final Callback callback) {
-//        String reqUrl = "https://" + domain + "/v3/index.php?Action=CommitUploadUGC";
-        String reqUrl = SERVER + "CommitUploadUGC";
+        String reqUrl = "https://" + domain + "/v3/index.php?Action=CommitUploadUGC";
         Log.d(TAG, "finishUploadUGC->request url:" + reqUrl);
         String body = "";
         try {
@@ -232,59 +229,6 @@ public class UGCClient {
 
     public void updateSignature(String signature) {
         this.signature = signature;
-    }
-
-    public void postFile(TVCUploadInfo info, String customKey, final ProgressRequestBody.ProgressListener listener, Callback callback){
-        File videoFile = new File(info.getFilePath());
-        MultipartBody.Builder builder = new MultipartBody.Builder();
-        builder.setType(MultipartBody.FORM);
-        String body = "";
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("signature", signature);
-            jsonObject.put("videoName", info.getFileName());
-            jsonObject.put("videoType", info.getFileType());
-            jsonObject.put("videoSize", info.getFileSize());
-            // 判断是否需要上传封面
-            if (info.isNeedCover()) {
-                jsonObject.put("coverName",info.getCoverName());
-                jsonObject.put("coverType",info.getCoverImgType());
-                jsonObject.put("coverSize", info.getCoverFileSize());
-            }
-            jsonObject.put("clientReportId", customKey);
-            jsonObject.put("clientVersion", TVCConstants.TVCVERSION);
-            body = jsonObject.toString();
-            Log.d(TAG, body);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        builder.addFormDataPart("para", null, RequestBody.create(MediaType.parse("application/json"), body));
-        builder.addFormDataPart("video_content",videoFile.getName(), RequestBody.create(MediaType.parse("application/octet-stream"),videoFile));
-        if (info.isNeedCover()) {
-            builder.addFormDataPart("cover_content", info.getCoverName(), RequestBody.create(MediaType.parse("application/octet-stream"),new File(info.getCoverPath())));
-        }
-
-        MultipartBody multipartBody = builder.build();
-
-        Request request  = new Request.Builder().url(SERVER + "UploadFile").post(new ProgressRequestBody(multipartBody,listener)).build();
-
-        if (TVCDnsCache.useProxy()) {
-            final String host = request.url().host();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        InetAddress address = InetAddress.getByName(host);
-                        serverIP = address.getHostAddress();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        }
-
-        okHttpClient.newCall(request).enqueue(callback);
     }
 
     private class LoggingInterceptor implements Interceptor {

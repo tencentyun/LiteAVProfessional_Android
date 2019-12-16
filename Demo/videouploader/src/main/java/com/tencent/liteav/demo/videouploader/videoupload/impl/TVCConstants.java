@@ -4,8 +4,12 @@ package com.tencent.liteav.demo.videouploader.videoupload.impl;
  * 视频上传常量定义
  */
 public class TVCConstants {
-    public static final String TVCVERSION = "1.1.0.0";
+    public static final String TVCVERSION = "1.1.1.0";
     public static String VOD_SERVER_HOST = "vod2.qcloud.com";
+    public static String VOD_SERVER_HOST_BAK = "vod2.dnsv1.com";
+
+    // 最大连接次数
+    public static int MAX_REQUEST_COUNT = 2;
 
     //网络类型
     public static final int NETTYPE_NONE = 0;
@@ -100,76 +104,9 @@ public class TVCConstants {
     public static final int ERR_USER_CANCEL = 1017;
 
     /**
-     * 直接上传失败
+     * [已废弃]直接上传失败
      */
     public static final int ERR_UPLOAD_VOD = 1018;
-
-    /************************************************ COS 错误码 ***********************************/
-    /**
-     * 秒传成功
-     */
-    public static final int FAST_SUCCESS = -20001;
-    /**
-     * 任务取消
-     */
-
-    public static final int CANCELED = -20002;
-    /**
-     * 任务暂停
-     */
-    public static final int PAUSED = -20003;
-    /**
-     * 文件不存在
-     */
-    public static final int FILE_NOT_EXIST = -20004;
-    /**
-     * 服务器回包为空
-     */
-    public static final int RESPONSE_IS_NULL = -20007;
-    /**
-     * 请求超时
-     */
-    public static final int REQUEST_TIMEOUT = -20008;
-    /**
-     * appid为空
-     */
-    public static final int APPID_NULL = -20009;
-    /**
-     * bucket为空
-     */
-    public static final int BUCKET_NULL = -20010;
-    /**
-     * COS远程路径为空
-     */
-    public static final int COSPATH_NULL = -20011;
-    /**
-     * COS目录中含有保留字符
-     */
-    public static final int COSPATH_ILLEGAL = -20012;
-    /**
-     * dest_fileId为空
-     */
-    public static final int DEST_FILEID_NULL = -20013;
-    /**
-     * bucket_authority为空
-     */
-    public static final int AUTHORITY_BUCKET_NULL = -20014;
-    /**
-     * 网络不可用
-     */
-    public static final int NETWORK_NOT_AVAILABLE = -20015;
-    /**
-     * Out Of Memory
-     */
-    public static final int OOM = -21001;
-    /**
-     * IO异常
-     */
-    public static final int IO_EXCEPTION = -22000;
-    /**
-     * 其他
-     */
-    public static final int OTHER = -25000;
 
 
     /************************************************ 数据上报定义 **********************************/

@@ -30,5 +30,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.+'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.squareup.okio:okio:1.13.0'
-    compile 'com.tencent.qcloud:cosxml:5.4.20'
+    compile 'com.tencent.qcloud:cosxml:5.4.21'
 }
