@@ -26,9 +26,11 @@ dependencies {
     compile "com.tencent.liteav:LiteAVSDK_Professional:$rootProject.ext.liteavsdk_version"
     compile project(':player')
 
-    compile 'com.android.support:appcompat-v7:25.+'
-    compile 'com.android.support:recyclerview-v7:25.+'
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportSdkVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportSdkVersion"
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.squareup.okio:okio:1.13.0'
-    compile 'com.tencent.qcloud:cosxml:5.4.21'
+    compile('com.tencent.qcloud:cosxml:5.4.21') {
+        exclude group: 'com.tencent.qcloud', module: 'mtaUtils' //关闭 mta 上报功能}
+    }
 }

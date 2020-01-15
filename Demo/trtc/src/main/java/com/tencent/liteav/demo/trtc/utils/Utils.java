@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 
 import com.google.zxing.BarcodeFormat;
@@ -18,6 +19,9 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -27,9 +31,9 @@ import java.util.Map;
  * 工具类
  */
 public class Utils {
-
     /**
      * 计算 MD5
+     *
      * @param string
      * @return
      */
@@ -59,6 +63,7 @@ public class Utils {
 
     /**
      * 根据 Uri 转换到真实的路径
+     *
      * @param context
      * @param contentUri
      * @return
@@ -82,7 +87,11 @@ public class Utils {
     public static String getPath(final Context context, final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        final boolean isN = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
 
+        if (isN) {
+            return getFilePathForN(context, uri);
+        }
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
@@ -92,13 +101,17 @@ public class Utils {
                 final String type = split[0];
 
                 if ("primary".equalsIgnoreCase(type)) {
+                    // FIXBUG：Android10此处Environment.getExternalStorageDirectory()不可以修改，不然从content://映射的路径则不正确
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
-
                 final String id = DocumentsContract.getDocumentId(uri);
+                //FIXBUG：以raw:打头的，去掉raw:就是绝对路径
+                if (id != null && id.startsWith("raw:")) {
+                    return id.substring(4);
+                }
                 final Uri contentUri = ContentUris.withAppendedId(
                         Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
@@ -136,8 +149,40 @@ public class Utils {
         return null;
     }
 
+    /**
+     * android7.0以上处理方法
+     */
+    private static String getFilePathForN(Context context, Uri uri) {
+        try {
+            Cursor returnCursor = context.getContentResolver().query(uri, null, null, null, null);
+            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            returnCursor.moveToFirst();
+            String name = (returnCursor.getString(nameIndex));
+            File file = new File(context.getFilesDir(), name);
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            int read = 0;
+            int maxBufferSize = 1 * 1024 * 1024;
+            int bytesAvailable = inputStream.available();
+
+            int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+
+            final byte[] buffers = new byte[bufferSize];
+            while ((read = inputStream.read(buffers)) != -1) {
+                outputStream.write(buffers, 0, read);
+            }
+            returnCursor.close();
+            inputStream.close();
+            outputStream.close();
+            return file.getPath();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private static String getDataColumn(Context context, Uri uri, String selection,
-                                String[] selectionArgs) {
+                                        String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";
@@ -182,7 +227,6 @@ public class Utils {
     }
 
 
-
     /**
      * 利用 QRCode 生成 Bitmap的工具函数
      *
@@ -225,4 +269,6 @@ public class Utils {
         }
         return null;
     }
+
+
 }

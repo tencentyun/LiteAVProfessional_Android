@@ -24,23 +24,21 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.tencent.liteav.basic.log.TXCLog;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCConstants;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCVideoEditUtil;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCVideoEditerMgr;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCVideoFileInfo;
-import com.tencent.rtmp.TXLog;
+import com.tencent.qcloud.ugckit.UGCKitConstants;
+import com.tencent.qcloud.ugckit.module.picker.data.PickerManagerKit;
+import com.tencent.qcloud.ugckit.module.picker.data.TCVideoFileInfo;
+import com.tencent.qcloud.ugckit.utils.VideoChecker;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class TCVideoJoinChooseActivity extends Activity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
-    private static final String TAG = TCVideoJoinChooseActivity.class.getSimpleName();
-
-    public static final int TYPE_SINGLE_CHOOSE = 0;
+    private static final String TAG = "TCVideoJoinChooseActivity";
+    // 视频拼接
     public static final int TYPE_MULTI_CHOOSE = 1;
-    public static final int TYPE_PUBLISH_CHOOSE = 2; //
-    public static final int TYPE_MULTI_CHOOSE_PICTURE = 3; // 选择多图片
-    public static final int TYPE_VIDEO_CHOOSE = 4; // 本地文件选择
+    // 视频上传
+    public static final int TYPE_PUBLISH_CHOOSE = 2;
+    // 图片转场
+    public static final int TYPE_MULTI_CHOOSE_PICTURE = 3;
 
     private Button mBtnOk;
     private ImageButton mBtnLink;
@@ -72,7 +70,7 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
         mHandlerThread.start();
         mHandler = new Handler(mHandlerThread.getLooper());
 
-        mType = getIntent().getIntExtra("CHOOSE_TYPE", TYPE_SINGLE_CHOOSE);
+        mType = getIntent().getIntExtra("TYPE", TYPE_MULTI_CHOOSE);
 
         init();
         if (mType == TYPE_MULTI_CHOOSE_PICTURE) {
@@ -87,7 +85,7 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    ArrayList<TCVideoFileInfo> fileInfoArrayList = TCVideoEditerMgr.getAllPictrue(TCVideoJoinChooseActivity.this);
+                    ArrayList<TCVideoFileInfo> fileInfoArrayList = PickerManagerKit.getInstance(TCVideoJoinChooseActivity.this).getAllPictrue();
 
                     Message msg = new Message();
                     msg.obj = fileInfoArrayList;
@@ -95,7 +93,7 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
                 }
             });
         } else {
-            if (Build.VERSION.SDK_INT >= 23) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
         }
@@ -121,7 +119,7 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    ArrayList<TCVideoFileInfo> fileInfoArrayList = TCVideoEditerMgr.getAllVideo(TCVideoJoinChooseActivity.this);
+                    ArrayList<TCVideoFileInfo> fileInfoArrayList = PickerManagerKit.getInstance(TCVideoJoinChooseActivity.this).getAllVideo();
 
                     Message msg = new Message();
                     msg.obj = fileInfoArrayList;
@@ -129,7 +127,7 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
                 }
             });
         } else {
-            if (Build.VERSION.SDK_INT >= 23) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
         }
@@ -161,9 +159,10 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
         mAdapter = new TCVideoEditerListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        if (mType == TYPE_SINGLE_CHOOSE || mType == TYPE_PUBLISH_CHOOSE) {
+        if (mType == TYPE_PUBLISH_CHOOSE) {
             mAdapter.setMultiplePick(false);
         } else {
+            // 多选,排序
             mAdapter.setMultiplePick(true);
         }
 
@@ -188,10 +187,9 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
 
         } else if (id == R.id.tv_right) {
             if (mType == TYPE_PUBLISH_CHOOSE) {
-//                Intent intent = new Intent(TCVideoJoinChooseActivity.this, SuperPlayerActivity.class);
                 Intent intent = new Intent();
                 intent.setAction("com.tencent.liteav.demo.play.action.float.click");
-                intent.putExtra(TCConstants.PLAYER_DEFAULT_VIDEO, false);
+                intent.putExtra(UGCKitConstants.PLAYER_DEFAULT_VIDEO, false);
                 startActivity(intent);
             }
 
@@ -226,41 +224,8 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
     }
 
     private void doSelect() {
-        if (mType == TYPE_SINGLE_CHOOSE) {
-//            Class preprocesActivityClass = null;
-//            try {
-//                preprocesActivityClass = Class.forName("com.tencent.liteav.demo.shortvideo.editor.TCVideoPreprocessActivity");
-//            } catch (ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//            Intent intent = new Intent(this, preprocesActivityClass);
-            Intent intent = new Intent();
-            intent.setAction("com.tencent.liteav.demo.videopreprocess");
-            TCVideoFileInfo fileInfo = mAdapter.getSingleSelected();
-            if (fileInfo == null) {
-                TXCLog.d(TAG, "select file null");
-                return;
-            }
-            if (TCVideoEditUtil.isVideoDamaged(fileInfo)) {
-                TCVideoEditUtil.showErrorDialog(this, "该视频文件已经损坏");
-                return;
-            }
-            File file = new File(fileInfo.getFilePath());
-            if (!file.exists()) {
-                TCVideoEditUtil.showErrorDialog(this, "选择的文件不存在");
-                return;
-            }
-            intent.putExtra(TCConstants.VIDEO_EDITER_PATH, fileInfo.getFilePath());
-            startActivity(intent);
-        } else if (mType == TYPE_MULTI_CHOOSE) {
+        if (mType == TYPE_MULTI_CHOOSE) {
             // ugc精简版本没有TCVideoJoinerActivity
-//            Class joinerActivityClass = null;
-//            try {
-//                joinerActivityClass = Class.forName("com.tencent.liteav.demo.shortvideo.joiner.TCVideoJoinerActivity");
-//            } catch (ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//            Intent intent = new Intent(this, joinerActivityClass);
             Intent intent = new Intent();
             intent.setAction("com.tencent.liteav.demo.videojoiner");
             ArrayList<TCVideoFileInfo> videoFileInfos = mAdapter.getMultiSelected();
@@ -272,30 +237,16 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
                 Toast.makeText(this, "必须选择两个以上视频文件", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (TCVideoEditUtil.isVideoDamaged(videoFileInfos)) {
-                TCVideoEditUtil.showErrorDialog(this, "包含已经损坏的视频文件");
+            if (VideoChecker.isVideoDamaged(this, videoFileInfos)) {
+                VideoChecker.showErrorDialog(this, "包含已经损坏的视频文件");
                 return;
             }
-            for (TCVideoFileInfo info : videoFileInfos) {
-                File file = new File(info.getFilePath());
-                if (!file.exists()) {
-                    TCVideoEditUtil.showErrorDialog(this, "选择的文件不存在");
-                    return;
-                }
-            }
-            intent.putExtra(TCConstants.INTENT_KEY_MULTI_CHOOSE, videoFileInfos);
+            intent.putExtra(UGCKitConstants.INTENT_KEY_MULTI_CHOOSE, videoFileInfos);
             startActivity(intent);
         } else if (mType == TYPE_MULTI_CHOOSE_PICTURE) {
             // ugc精简版本没有TCVideoEditerActivity
-//            Class editActivityClass = null;
-//            try {
-//                editActivityClass = Class.forName("com.tencent.liteav.demo.shortvideo.editor.TCVideoEditerActivity");
-//            } catch (ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//            Intent intent = new Intent(this, editActivityClass);
             Intent intent = new Intent();
-            intent.setAction("com.tencent.liteav.demo.videoediter");
+            intent.setAction("com.tencent.liteav.demo.picturejoin");
             ArrayList<TCVideoFileInfo> pictureList = mAdapter.getInOrderMultiSelected();
             if (pictureList == null || pictureList.size() == 0) {
                 TXCLog.d(TAG, "select file null");
@@ -305,20 +256,17 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
                 Toast.makeText(this, "必须选择三个以上图片", Toast.LENGTH_SHORT).show();
                 return;
             }
-            ArrayList picturePathList = new ArrayList();
+            ArrayList<String> picturePathList = new ArrayList<String>();
             for (TCVideoFileInfo info : pictureList) {
-                File file = new File(info.getFilePath());
-                if (!file.exists()) {
-                    TCVideoEditUtil.showErrorDialog(this, "选择的文件不存在");
-                    return;
+                if (Build.VERSION.SDK_INT >= 29) {
+                    picturePathList.add(info.getFileUri().toString());
+                } else {
+                    picturePathList.add(info.getFilePath());
                 }
-                picturePathList.add(info.getFilePath());
             }
-            intent.putExtra(TCConstants.INTENT_KEY_MULTI_PIC_CHOOSE, true);
-            intent.putStringArrayListExtra(TCConstants.INTENT_KEY_MULTI_PIC_LIST, picturePathList);
+            intent.putStringArrayListExtra(UGCKitConstants.INTENT_KEY_MULTI_PIC_LIST, picturePathList);
             startActivity(intent);
         } else if (mType == TYPE_PUBLISH_CHOOSE) {
-//            Intent intent = new Intent(this, TCCompressActivity.class);
             Intent intent = new Intent();
             intent.setAction("com.tencent.liteav.demo.videocompress");
             TCVideoFileInfo fileInfo = mAdapter.getSingleSelected();
@@ -326,36 +274,13 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
                 TXCLog.d(TAG, "select file null");
                 return;
             }
-            if (TCVideoEditUtil.isVideoDamaged(fileInfo)) {
-                TCVideoEditUtil.showErrorDialog(this, "该视频文件已经损坏");
+            if (VideoChecker.isVideoDamaged(this, fileInfo)) {
+                VideoChecker.showErrorDialog(this, "该视频文件已经损坏");
                 return;
             }
-            File file = new File(fileInfo.getFilePath());
-            if (!file.exists()) {
-                TCVideoEditUtil.showErrorDialog(this, "选择的文件不存在");
-                return;
-            }
-            intent.putExtra(TCConstants.VIDEO_EDITER_PATH, fileInfo.getFilePath());
+            intent.putExtra(UGCKitConstants.VIDEO_URI, fileInfo.getFileUri().toString());
+            intent.putExtra(UGCKitConstants.VIDEO_PATH, fileInfo.getFilePath());
             startActivity(intent);
-        } else if (mType == TYPE_VIDEO_CHOOSE) {
-            Intent intent = new Intent();
-            TCVideoFileInfo fileInfo = mAdapter.getSingleSelected();
-            if (fileInfo == null) {
-                TXLog.d(TAG, "select file null");
-                return;
-            }
-            if (TCVideoEditUtil.isVideoDamaged(fileInfo)) {
-                TCVideoEditUtil.showErrorDialog(this, "该视频文件已经损坏");
-                return;
-            }
-            File file = new File(fileInfo.getFilePath());
-            if (!file.exists()) {
-                TCVideoEditUtil.showErrorDialog(this, "选择的文件不存在");
-                return;
-            }
-            intent.putExtra("videoFile", fileInfo.getFilePath());
-            //设置返回数据
-           setResult(RESULT_OK, intent);
         }
         finish();
     }

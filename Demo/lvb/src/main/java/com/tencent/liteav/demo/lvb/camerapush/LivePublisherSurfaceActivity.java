@@ -22,7 +22,6 @@ import android.graphics.SurfaceTexture;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -55,14 +54,13 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.liteav.basic.log.TXCLog;
+import com.tencent.liteav.demo.beauty.BeautyPanel;
 import com.tencent.liteav.demo.lvb.R;
 import com.tencent.liteav.demo.lvb.common.activity.QRCodeScanActivity;
-import com.tencent.liteav.demo.lvb.common.view.BeautySettingPannel;
 import com.tencent.liteav.renderer.TXCFocusIndicatorView;
 import com.tencent.rtmp.ITXLivePushListener;
 import com.tencent.rtmp.TXLiveConstants;
@@ -71,7 +69,6 @@ import com.tencent.rtmp.TXLivePusher;
 
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -87,14 +84,14 @@ import okhttp3.Response;
 /**
  * 使用Surface模式进行推流的Activity
  */
-public class LivePublisherSurfaceActivity extends Activity implements View.OnClickListener , ITXLivePushListener, BeautySettingPannel.IOnBeautyParamsChangeListener/*, ImageReader.OnImageAvailableListener*/{
+public class LivePublisherSurfaceActivity extends Activity implements View.OnClickListener , ITXLivePushListener/*, ImageReader.OnImageAvailableListener*/{
     private static final String TAG = LivePublisherSurfaceActivity.class.getSimpleName();
     private TXLivePushConfig mLivePushConfig;
     private TXLivePusher     mLivePusher;
     private TextureView      mTextureView;
     private Surface          mSurface;
     private LinearLayout     mBitrateLayout;
-    private BeautySettingPannel mBeautyPannelView;
+    private BeautyPanel      mBeautyPannelView;
     private RadioGroup       mRadioGroupBitrate;
     private Button           mBtnBitrate;
     private Button           mBtnPlay;
@@ -167,7 +164,7 @@ public class LivePublisherSurfaceActivity extends Activity implements View.OnCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setTheme(R.style.BeautyTheme);
         mLivePusher     = new TXLivePusher(this);
         mLivePushConfig = new TXLivePushConfig();
         mLivePushConfig.setVideoEncodeGop(5);
@@ -329,8 +326,10 @@ public class LivePublisherSurfaceActivity extends Activity implements View.OnCli
         });
 
         //美颜p图部分
-        mBeautyPannelView = (BeautySettingPannel) findViewById(R.id.layoutFaceBeauty);
-        mBeautyPannelView.setBeautyParamsChangeListener(this);
+        mBeautyPannelView = (BeautyPanel) findViewById(R.id.layoutFaceBeauty);
+        PusherBeautyKit manager = new PusherBeautyKit(mLivePusher);
+        mBeautyPannelView.setProxy(manager);
+
 
         mBtnFaceBeauty = (Button)findViewById(R.id.btnFaceBeauty);
         mBtnFaceBeauty.setOnClickListener(new View.OnClickListener() {
@@ -390,7 +389,7 @@ public class LivePublisherSurfaceActivity extends Activity implements View.OnCli
                     mLivePusher.switchCamera();
                 }
                 mLivePushConfig.setFrontCamera(mFrontCamera);
-                btnChangeCam.setBackgroundResource(mFrontCamera ? R.drawable.camera_change : R.drawable.camera_change2);
+                btnChangeCam.setBackgroundResource(mFrontCamera ? R.drawable.lvb_camera_change : R.drawable.lvb_camera_change2);
             }
         });
 
@@ -573,6 +572,8 @@ public class LivePublisherSurfaceActivity extends Activity implements View.OnCli
                 startActivity(intent);
             }
         });
+
+
     }
 
 
@@ -726,24 +727,6 @@ public class LivePublisherSurfaceActivity extends Activity implements View.OnCli
                 mBeautyPannelView.setVisibility(View.GONE);
                 mBitrateLayout.setVisibility(View.GONE);
         }
-    }
-
-    private String getDefaultDir() {
-        String saveDir = null;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                || !Environment.isExternalStorageRemovable()) {
-            String outputDir = Environment.getExternalStorageDirectory() + File.separator + "TXUGC";
-            File outputFolder = new File(outputDir);
-            if (!outputFolder.exists()) {
-                outputFolder.mkdir();
-            }
-            return outputDir;
-        } else {
-            File file = this.getFilesDir();
-            if (file != null)
-                saveDir = file.getPath();
-        }
-        return saveDir;
     }
 
     @Override
@@ -1320,103 +1303,6 @@ public class LivePublisherSurfaceActivity extends Activity implements View.OnCli
             return false;
         }
         return true;
-    }
-
-    @Override
-    public void onBeautyParamsChange(BeautySettingPannel.BeautyParams params, int key) {
-        switch (key) {
-            case BeautySettingPannel.BEAUTYPARAM_EXPOSURE:
-                if (mLivePusher != null) {
-                    mLivePusher.setExposureCompensation(params.mExposure);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_BEAUTY:
-                mBeautyStyle = params.mBeautyStyle;
-                mBeautyLevel = params.mBeautyLevel;
-                if (mLivePusher != null) {
-                    mLivePusher.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_WHITE:
-                mWhiteningLevel = params.mWhiteLevel;
-                if (mLivePusher != null) {
-                    mLivePusher.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_BIG_EYE:
-                if (mLivePusher != null) {
-                    mLivePusher.setEyeScaleLevel(params.mBigEyeLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACE_LIFT:
-                if (mLivePusher != null) {
-                    mLivePusher.setFaceSlimLevel(params.mFaceSlimLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FILTER:
-                if (mLivePusher != null) {
-                    mLivePusher.setFilter(params.mFilterBmp);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_GREEN:
-                if (mLivePusher != null) {
-                    mLivePusher.setGreenScreenFile(params.mGreenFile);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_MOTION_TMPL:
-                if (mLivePusher != null) {
-                    mLivePusher.setMotionTmpl(params.mMotionTmplPath);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_RUDDY:
-                mRuddyLevel = params.mRuddyLevel;
-                if (mLivePusher != null) {
-                    mLivePusher.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-//            case BeautySettingPannel.BEAUTYPARAM_BEAUTY_STYLE:
-//                mBeautyStyle = params.mBeautyStyle;
-//                if (mLivePusher != null) {
-//                    mLivePusher.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-//                }
-//                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACEV:
-                if (mLivePusher != null) {
-                    mLivePusher.setFaceVLevel(params.mFaceVLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACESHORT:
-                if (mLivePusher != null) {
-                    mLivePusher.setFaceShortLevel(params.mFaceShortLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_CHINSLIME:
-                if (mLivePusher != null) {
-                    mLivePusher.setChinLevel(params.mChinSlimLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_NOSESCALE:
-                if (mLivePusher != null) {
-                    mLivePusher.setNoseSlimLevel(params.mNoseScaleLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FILTER_MIX_LEVEL:
-                if (mLivePusher != null) {
-                    mLivePusher.setSpecialRatio(params.mFilterMixLevel/10.f);
-                }
-                break;
-//            case BeautySettingPannel.BEAUTYPARAM_CAPTURE_MODE:
-//                if (mLivePusher != null) {
-//                    boolean bEnable = ( 0 == params.mCaptureMode ? false : true);
-//                    mLivePusher.enableHighResolutionCapture(bEnable);
-//                }
-//                break;
-//            case BeautySettingPannel.BEAUTYPARAM_SHARPEN:
-//                if (mLivePusher != null) {
-//                    mLivePusher.setSharpenLevel(params.mSharpenLevel);
-//                }
-//                break;
-        }
     }
 
     //观察屏幕旋转设置变化，类似于注册动态广播监听变化机制

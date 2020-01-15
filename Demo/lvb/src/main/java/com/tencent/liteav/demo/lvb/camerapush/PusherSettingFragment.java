@@ -36,12 +36,13 @@ public class PusherSettingFragment extends DialogFragment implements CompoundBut
     public static final String SP_KEY_QUALIY = "sp_key_quality";
     public static final String SP_KEY_REVERB = "sp_key_reverb";
     public static final String SP_KEY_VOICE = "sp_key_voice";
+    public static final String SP_KEY_EARMONITORING = "sp_key_earmonitoring";
 
     // 画质偏好列表
-    private static final List<String> VIDEO_QUALITY_LIST = Arrays.asList(new String[]{"标清", "高清", "超清", "连麦大主播", "连麦小主播", "实时音视频"});
+    private static final List<String> VIDEO_QUALITY_LIST = Arrays.asList(new String[]{"蓝光", "超清", "高清", "标清", "连麦大主播", "连麦小主播", "实时音视频"});
     // 对应 SDK 的画质列表（TXLiveConstants中定义）
-    private static final int[] VIDEO_QUALITY_TYPE_ARR = new int[]{TXLiveConstants.VIDEO_QUALITY_STANDARD_DEFINITION,
-            TXLiveConstants.VIDEO_QUALITY_HIGH_DEFINITION, TXLiveConstants.VIDEO_QUALITY_SUPER_DEFINITION, TXLiveConstants.VIDEO_QUALITY_LINKMIC_MAIN_PUBLISHER,
+    private static final int[] VIDEO_QUALITY_TYPE_ARR = new int[]{TXLiveConstants.VIDEO_QUALITY_ULTRA_DEFINITION, TXLiveConstants.VIDEO_QUALITY_SUPER_DEFINITION, TXLiveConstants.VIDEO_QUALITY_HIGH_DEFINITION, TXLiveConstants.VIDEO_QUALITY_STANDARD_DEFINITION,
+            TXLiveConstants.VIDEO_QUALITY_LINKMIC_MAIN_PUBLISHER,
             TXLiveConstants.VIDEO_QUALITY_LINKMIC_SUB_PUBLISHER, TXLiveConstants.VIDEO_QUALITY_REALTIEM_VIDEOCHAT};
     // 混响列表
     private static final List<String> REVERB_LIST = Arrays.asList(new String[]{"关闭混响", "KTV", "小房间", "大会堂", "低沉", "洪亮", "磁性"});
@@ -59,8 +60,8 @@ public class PusherSettingFragment extends DialogFragment implements CompoundBut
             TXLiveConstants.VOICECHANGER_TYPE_10, TXLiveConstants.VOICECHANGER_TYPE_11};
 
     // CheckBox控件
-    private CheckBox mCbHwAcc, mCbAdjustBitrate;
-    private boolean mIsHWAcc = true, mIsAdjustBitrate = true;
+    private CheckBox mCbHwAcc, mCbAdjustBitrate, mCbEarmonitoring;
+    private boolean mIsHWAcc = true, mIsAdjustBitrate = true,mIsEarmonitoringEnable = false;
 
     // Spinner控件
     private Spinner mSpVideoQuality, mSpReverb, mSpVoiceChanger;
@@ -107,9 +108,14 @@ public class PusherSettingFragment extends DialogFragment implements CompoundBut
         mCbHwAcc.setChecked(mIsHWAcc);
         mCbAdjustBitrate = (CheckBox) view.findViewById(R.id.pusher_cb_adjust_bitrate);
         mCbAdjustBitrate.setChecked(mIsAdjustBitrate);
+        mCbEarmonitoring = (CheckBox) view.findViewById(R.id.pusher_cb_earmonitoring);
+        mCbEarmonitoring.setChecked(mIsEarmonitoringEnable);
+
 
         mCbHwAcc.setOnCheckedChangeListener(this);
         mCbAdjustBitrate.setOnCheckedChangeListener(this);
+        mCbEarmonitoring.setOnCheckedChangeListener(this);
+
 
         initVideoQualitySpinner(view);
         initRevervSpinner(view);
@@ -145,6 +151,9 @@ public class PusherSettingFragment extends DialogFragment implements CompoundBut
         } else if (id == R.id.pusher_cb_adjust_bitrate) {
             mIsAdjustBitrate = mCbAdjustBitrate.isChecked();
             listener.onAdjustBitrateChange(mIsAdjustBitrate);
+        }else if( id == R.id.pusher_cb_earmonitoring){
+            mIsEarmonitoringEnable = mCbEarmonitoring.isChecked();
+            listener.onEarmonitoringChange(mIsEarmonitoringEnable);
         }
     }
 
@@ -227,6 +236,7 @@ public class PusherSettingFragment extends DialogFragment implements CompoundBut
             mQualityIndex = s.getInt(SP_KEY_QUALIY, mQualityIndex);
             mReverbIndex = s.getInt(SP_KEY_REVERB, mReverbIndex);
             mVoiceChangerIndex = s.getInt(SP_KEY_VOICE, mVoiceChangerIndex);
+            mIsEarmonitoringEnable = s.getBoolean(SP_KEY_EARMONITORING,mIsEarmonitoringEnable);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -244,6 +254,7 @@ public class PusherSettingFragment extends DialogFragment implements CompoundBut
                     .putInt(SP_KEY_QUALIY, mQualityIndex)
                     .putInt(SP_KEY_REVERB, mReverbIndex)
                     .putInt(SP_KEY_VOICE, mVoiceChangerIndex)
+                    .putBoolean(SP_KEY_EARMONITORING,mIsEarmonitoringEnable)
                     .apply();
         } catch (Exception e) {
             e.printStackTrace();
@@ -289,6 +300,11 @@ public class PusherSettingFragment extends DialogFragment implements CompoundBut
          * @param type
          */
         void onVoiceChange(int type);
+        /**
+         * 耳返开关
+         * @param enable
+         */
+        void onEarmonitoringChange(boolean enable);
     }
 
     public int getQualityType() {
@@ -309,6 +325,9 @@ public class PusherSettingFragment extends DialogFragment implements CompoundBut
 
     public boolean isEnableAdjustBitrate() {
         return mIsAdjustBitrate;
+    }
+    public boolean isEarmonitoringEnable(){
+        return mIsEarmonitoringEnable;
     }
 }
 

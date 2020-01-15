@@ -1,12 +1,12 @@
 package com.tencent.liteav.demo.videojoiner;
 
-import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -16,6 +16,7 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -24,13 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.liteav.basic.log.TXCLog;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCConstants;
-import com.tencent.liteav.demo.videojoiner.common.videopreview.TCVideoPreviewActivity;
-import com.tencent.liteav.demo.videojoiner.common.view.VideoWorkProgressFragment;
-import com.tencent.liteav.demo.videojoiner.common.utils.DialogUtil;
-import com.tencent.liteav.demo.videojoiner.common.utils.PlayState;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCEditerUtil;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCVideoFileInfo;
+import com.tencent.qcloud.ugckit.UGCKitConstants;
+import com.tencent.qcloud.ugckit.component.dialogfragment.VideoWorkProgressFragment;
+import com.tencent.qcloud.ugckit.module.effect.utils.PlayState;
+import com.tencent.qcloud.ugckit.module.picker.data.TCVideoFileInfo;
+import com.tencent.qcloud.ugckit.utils.DialogUtil;
+import com.tencent.qcloud.ugckit.utils.VideoPathUtil;
 import com.tencent.ugc.TXVideoEditConstants;
 import com.tencent.ugc.TXVideoInfoReader;
 import com.tencent.ugc.TXVideoJoiner;
@@ -40,10 +40,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class TCVideoJoinerPreviewActivity extends FragmentActivity implements View.OnClickListener, TXVideoJoiner.TXVideoPreviewListener, TXVideoJoiner.TXVideoJoinerListener {
     private static final String TAG = "TCVideoJoinerPreviewActivity";
@@ -64,9 +61,7 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
 
     private BackGroundHandler mHandler;
     private final int MSG_SINGLE_VIDEO_INFO = 1000;
-    private final int MSG_MULTI_VIDEO_INFO = 1001;
     private final int MSG_SINGLE_JOIN = 1002;
-    private final int MSG_MULTI_JOIN = 1003;
     private HandlerThread mHandlerThread;
     private VideoWorkProgressFragment mWorkLoadingProgress;
     private Context mContext;
@@ -165,7 +160,7 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
         mContext = TCVideoJoinerPreviewActivity.this;
         mDialogUtil = new DialogUtil();
 
-        mTCVideoFileInfoList = (ArrayList<TCVideoFileInfo>) getIntent().getSerializableExtra(TCConstants.INTENT_KEY_MULTI_CHOOSE);
+        mTCVideoFileInfoList = getIntent().getParcelableArrayListExtra(UGCKitConstants.INTENT_KEY_MULTI_CHOOSE);
         if (mTCVideoFileInfoList == null || mTCVideoFileInfoList.size() == 0) {
             finish();
             return;
@@ -173,11 +168,15 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
         mTXVideoJoiner = new TXVideoJoiner(this);
         mTXVideoJoiner.setTXVideoPreviewListener(this);
 
-        mVideoInfoReader = TXVideoInfoReader.getInstance();
+        mVideoInfoReader = TXVideoInfoReader.getInstance(this);
 
         mVideoSourceList = new ArrayList<>();
         for (int i = 0; i < mTCVideoFileInfoList.size(); i++) {
-            mVideoSourceList.add(mTCVideoFileInfoList.get(i).getFilePath());
+            if (Build.VERSION.SDK_INT >= 29) {
+                mVideoSourceList.add(mTCVideoFileInfoList.get(i).getFileUri().toString());
+            } else {
+                mVideoSourceList.add(mTCVideoFileInfoList.get(i).getFilePath());
+            }
         }
 
         mHandlerThread = new HandlerThread("LoadData");
@@ -200,8 +199,9 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
 
     private void createThumbFile(TXVideoEditConstants.TXVideoInfo videoInfo) {
         final TCVideoFileInfo fileInfo = mTCVideoFileInfoList.get(0);
-        if (fileInfo == null)
+        if (fileInfo == null) {
             return;
+        }
         mBtnDone.setClickable(false);
         mIbPlay.setClickable(false);
         AsyncTask<TXVideoEditConstants.TXVideoInfo, String, Void> task = new AsyncTask<TXVideoEditConstants.TXVideoInfo, String, Void>() {
@@ -230,7 +230,13 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
         if (mediaFileName.lastIndexOf(".") != -1) {
             mediaFileName = mediaFileName.substring(0, mediaFileName.lastIndexOf("."));
         }
-        String folder = Environment.getExternalStorageDirectory() + File.separator + TCConstants.DEFAULT_MEDIA_PACK_FOLDER + File.separator + mediaFileName;
+
+        File sdcardDir = getExternalFilesDir(null);
+        if (sdcardDir == null) {
+            TXCLog.e(TAG, "sdcardDir is null");
+            return;
+        }
+        String folder = sdcardDir + File.separator + UGCKitConstants.DEFAULT_MEDIA_PACK_FOLDER + File.separator + mediaFileName;
         File appDir = new File(folder);
         if (!appDir.exists()) {
             appDir.mkdirs();
@@ -278,34 +284,6 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
         }
     }
 
-    /**
-     * 选择合成模式
-     */
-    private void showJoinModeDialog() {
-        AlertDialog.Builder normalDialog = new AlertDialog.Builder(TCVideoJoinerPreviewActivity.this, R.style.ConfirmDialogStyle);
-        normalDialog.setMessage("选择合成模式");
-        normalDialog.setCancelable(true);
-        normalDialog.setPositiveButton("合成模式1", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                loadSingleVideoInfo();
-//                startGenerateVideo();
-            }
-        });
-        normalDialog.setNegativeButton("合成模式2", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                loadMultiVideoInfo();
-//                startPictureJoin();
-            }
-        });
-        normalDialog.show();
-    }
-
-    private void loadMultiVideoInfo() {
-        mHandler.sendEmptyMessage(MSG_MULTI_VIDEO_INFO);
-    }
-
     private void loadSingleVideoInfo() {
         mHandler.sendEmptyMessage(MSG_SINGLE_VIDEO_INFO);
     }
@@ -320,13 +298,17 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_SINGLE_VIDEO_INFO:
-                    videoInfo = mVideoInfoReader.getVideoFileInfo(mTCVideoFileInfoList.get(0).getFilePath());
+                    // Android 10（Q）Google官方尚未强制启用 App 沙箱运行，当且仅当 targetSDK 为 29 的时候才会在沙箱下运行
+                    // Google官方预计 2020 年在 Android 11（R）强制启动沙箱机制，届时所有 app 无论 targetSDK 是否为 29，都运行在沙箱机制。
+                    // 因此为了您的 app 保持较高兼容性，推荐您在系统版本为 Android 10或以上的设备，都使用 Google 官方推荐的 uri 统一资源定位符的方式传递给 SDK。
+                    String source = "";
+                    if (Build.VERSION.SDK_INT >= 29) {
+                        source = mTCVideoFileInfoList.get(0).getFileUri().toString();
+                    } else {
+                        source = mTCVideoFileInfoList.get(0).getFilePath();
+                    }
+                    videoInfo = mVideoInfoReader.getVideoFileInfo(source);
                     sendMsgToMain(MSG_SINGLE_JOIN);
-                    break;
-                case MSG_MULTI_VIDEO_INFO:
-                    videoInfo = mVideoInfoReader.getVideoFileInfo(mTCVideoFileInfoList.get(0).getFilePath());
-                    videoInfo2 = mVideoInfoReader.getVideoFileInfo(mTCVideoFileInfoList.get(1).getFilePath());
-                    sendMsgToMain(MSG_MULTI_JOIN);
                     break;
             }
 
@@ -358,71 +340,9 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
                     }
                     startGenerateVideo();
                     break;
-                case MSG_MULTI_JOIN:
-
-                    if (videoInfo == null) {
-                        mDialogUtil.showDialog(mContext, "视频合成失败", "暂不支持Android 4.3以下的系统", null);
-                        mBtnDone.setClickable(true);
-                        return;
-                    }
-                    startPictureJoin();
-                    break;
             }
         }
     };
-
-    private void startPictureJoin() {
-        if (mCurrentState == PlayState.STATE_PLAY || mCurrentState == PlayState.STATE_PAUSE) {
-            mTXVideoJoiner.setTXVideoPreviewListener(null);
-            mTXVideoJoiner.stopPlay();
-        }
-        mBtnDone.setClickable(false);
-        mBtnDone.setEnabled(false);
-        Toast.makeText(this, "开始视频合成", Toast.LENGTH_SHORT).show();
-        mWorkLoadingProgress.setProgress(0);
-        mWorkLoadingProgress.setCancelable(false);
-        mWorkLoadingProgress.show(getSupportFragmentManager(), "progress_dialog");
-        try {
-            String outputPath = Environment.getExternalStorageDirectory() + File.separator + TCConstants.DEFAULT_MEDIA_PACK_FOLDER;
-            File outputFolder = new File(outputPath);
-
-            if (!outputFolder.exists()) {
-                outputFolder.mkdirs();
-            }
-
-            String current = String.valueOf(System.currentTimeMillis() / 1000);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-            String time = sdf.format(new Date(Long.valueOf(current + "000")));
-            String saveFileName = String.format("TXVideo_%s.mp4", time);
-            mVideoOutputPath = outputFolder + "/" + saveFileName;
-            TXCLog.d(TAG, mVideoOutputPath);
-            mTXVideoJoiner.setVideoJoinerListener(this);
-            mCurrentState = PlayState.STATE_GENERATE;
-
-            //示例：以右边高度为准
-            if (videoInfo != null && videoInfo2 != null) {
-                TXVideoEditConstants.TXAbsoluteRect rect1 = new TXVideoEditConstants.TXAbsoluteRect();
-                rect1.x = 0;                     //第一个视频的左上角位置
-                rect1.y = 0;
-                rect1.width = videoInfo.width;   //第一个视频的宽高
-                rect1.height = videoInfo.height;
-
-                TXVideoEditConstants.TXAbsoluteRect rect2 = new TXVideoEditConstants.TXAbsoluteRect();
-                rect2.x = rect1.x + rect1.width; //第2个视频的左上角位置
-                rect2.y = 0;
-                rect2.width = videoInfo2.width;  //第2个视频的宽高
-                rect2.height = videoInfo2.height;
-
-                List<TXVideoEditConstants.TXAbsoluteRect> list = new ArrayList<>();
-                list.add(rect1);
-                list.add(rect2);
-                mTXVideoJoiner.setSplitScreenList(list, videoInfo.width + videoInfo2.width, videoInfo2.height); //第2，3个param：两个视频合成画布的宽高
-                mTXVideoJoiner.splitJoinVideo(TXVideoEditConstants.VIDEO_COMPRESSED_540P, mVideoOutputPath);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -477,7 +397,6 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
 
         if (mHandler != null) {
             mHandler.removeMessages(MSG_SINGLE_VIDEO_INFO);
-            mHandler.removeMessages(MSG_MULTI_VIDEO_INFO);
             mHandler.getLooper().quit();
             mHandler = null;
         }
@@ -491,13 +410,7 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
         mBtnDone.setClickable(false);
         mBtnDone.setEnabled(false);
         // 生成视频输出路径
-        mVideoOutputPath = TCEditerUtil.generateVideoPath();
-//        if (mWorkLoadingProgress == null) {
-//            initWorkLoadingProgress();
-//        }
-//        mWorkLoadingProgress.setProgress(0);
-//        mWorkLoadingProgress.setCancelable(false);
-//        mWorkLoadingProgress.show(getSupportFragmentManager(), "progress_dialog");
+        mVideoOutputPath = VideoPathUtil.generateVideoPath();
 
         mTXVideoJoiner.setVideoJoinerListener(this);
         mTXVideoJoiner.joinVideo(TXVideoEditConstants.VIDEO_COMPRESSED_540P, mVideoOutputPath);
@@ -524,7 +437,6 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
 
     @Override
     public void onPreviewProgress(int time) {
-//        TXCLog.d(TAG, "onPreviewProgress time = " + time);
     }
 
     @Override
@@ -560,12 +472,11 @@ public class TCVideoJoinerPreviewActivity extends FragmentActivity implements Vi
 
     private void startPreviewActivity() {
         Intent intent = new Intent(getApplicationContext(), TCVideoPreviewActivity.class);
-        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_PLAY);
-        intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
-        intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mTCVideoFileInfoList.get(0).getThumbPath());
-        TXVideoEditConstants.TXVideoInfo txVideoInfo = TXVideoInfoReader.getInstance().getVideoFileInfo(mVideoOutputPath);
+        intent.putExtra(UGCKitConstants.VIDEO_PATH, mVideoOutputPath);
+        intent.putExtra(UGCKitConstants.VIDEO_COVERPATH, mTCVideoFileInfoList.get(0).getThumbPath());
+        TXVideoEditConstants.TXVideoInfo txVideoInfo = TXVideoInfoReader.getInstance(this).getVideoFileInfo(mVideoOutputPath);
         if (txVideoInfo != null) {
-            intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, TXVideoInfoReader.getInstance().getVideoFileInfo(mVideoOutputPath).duration);
+            intent.putExtra(UGCKitConstants.VIDEO_RECORD_DURATION, TXVideoInfoReader.getInstance(this).getVideoFileInfo(mVideoOutputPath).duration);
         }
         startActivity(intent);
     }

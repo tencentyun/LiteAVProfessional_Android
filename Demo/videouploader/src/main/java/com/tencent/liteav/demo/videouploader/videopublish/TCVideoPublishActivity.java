@@ -1,7 +1,10 @@
 package com.tencent.liteav.demo.videouploader.videopublish;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -35,10 +38,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-/**
- * Created by vinsonswang on 2018/3/26.
- */
 
 public class TCVideoPublishActivity extends FragmentActivity implements View.OnClickListener, ITXVodPlayListener {
     private final String TAG = "TCVideoPublishActivity";
@@ -95,8 +94,11 @@ public class TCVideoPublishActivity extends FragmentActivity implements View.OnC
 
     private void initData() {
         mVideoPath = getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH);
-        mCoverImagePath = "/sdcard/cover.jpg";
-        final Bitmap coverBitmap = TXVideoInfoReader.getInstance().getSampleImage(0, mVideoPath);
+        File sdcardDir = getExternalFilesDir(null);
+        if (sdcardDir != null) {
+            mCoverImagePath = sdcardDir.getAbsolutePath() + "/cover.jpg";
+        }
+        final Bitmap coverBitmap = TXVideoInfoReader.getInstance(this).getSampleImage(0, mVideoPath);
         if(coverBitmap != null){
             mIvCover.setImageBitmap(coverBitmap);
             new Thread(new Runnable() {
@@ -176,6 +178,10 @@ public class TCVideoPublishActivity extends FragmentActivity implements View.OnC
     }
 
     private void publishVideo() {
+        if (!isNetworkAvailable(this)){
+            Toast.makeText(this, "没有网络链接", Toast.LENGTH_SHORT).show();
+            return;
+        }
         stopPlay(false);
         if (mWorkLoadingProgress == null) {
             initWorkLoadingProgress();
@@ -293,7 +299,12 @@ public class TCVideoPublishActivity extends FragmentActivity implements View.OnC
         if (f.exists()) {
             f.delete();
         }
+        File parent = f.getParentFile();
+        if (!parent.exists()) {
+            parent.mkdirs();
+        }
         try {
+            f.createNewFile();
             FileOutputStream out = new FileOutputStream(f);
             bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.flush();
@@ -313,5 +324,20 @@ public class TCVideoPublishActivity extends FragmentActivity implements View.OnC
         if (mWorkLoadingProgress != null) {
             mWorkLoadingProgress.setOnClickStopListener(null);
         }
+    }
+
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null) {
+            NetworkInfo info = connectivity.getActiveNetworkInfo();
+            if (info != null && info.isConnected()) {
+                // 当前网络是连接的
+                if (info.getState() == NetworkInfo.State.CONNECTED) {
+                    // 当前所连接的网络可用
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

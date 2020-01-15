@@ -12,6 +12,7 @@ import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,11 +20,10 @@ import java.io.FileOutputStream;
 import java.security.MessageDigest;
 import java.util.UUID;
 
-/**
- * Created by carolsuo on 2017/10/31.
- */
-
 public class TVCUtils {
+    private static final String TAG = "TVCUtils";
+    private static String g_simulate_idfa = "";
+
     private static String byteArrayToHexString(byte[] data) {
         char[] out = new char[data.length << 1];
 
@@ -100,22 +100,25 @@ public class TVCUtils {
 
     // SimulateIDFA
     public  static String getSimulateIDFA(Context context) {
-        return doRead(context) + ";" + getOrigMacAddr(context) + ";" + getOrigAndroidID(context);
-    }
+        if (g_simulate_idfa != null && g_simulate_idfa.length() > 0) {
+            return g_simulate_idfa;
+        }
 
-    public static String getDevUUID(Context context) {
-        return getDevUUID(context, getSimulateIDFA(context));
-    }
+        String idfa = null;
+        String idfaInSP = null;
+        String idfaInFile = null;
 
-    public static String getDevUUID(Context context, String simulateIDFA) {
-        // get dev uuid from SharedPreferences
+        File sdcardDir = context.getExternalFilesDir(null);
+        if (sdcardDir == null) {
+            return g_simulate_idfa;
+        }
+        //读SP
         SharedPreferences sp = context.getSharedPreferences("com.tencent.ugcpublish.dev_uuid", Context.MODE_PRIVATE);
-        String userIdFromSp = sp.getString("com.tencent.ugcpublish.key_dev_uuid", "");
+        idfaInSP = sp.getString("key_user_id", "");
 
-        // get dev uuid from file
-        String userIdFromFile = "";
         try {
-            String userIdFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/txrtmp/spuid";
+            //读文件
+            String userIdFilePath = sdcardDir.getAbsolutePath() + "/txrtmp/spuid";
             File userIdFile = new File(userIdFilePath);
             if (userIdFile.exists()) {
                 FileInputStream fin = new FileInputStream(userIdFile);
@@ -123,47 +126,62 @@ public class TVCUtils {
                 if (length > 0) {
                     byte[] buffer = new byte[length];
                     fin.read(buffer);
-                    userIdFromFile = new String(buffer, "UTF-8");
+                    idfaInFile = new String(buffer, "UTF-8");
                 }
                 fin.close();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "read UUID from file failed! reason: " + e.getMessage());
         }
 
-        String userId = "";
-        if (!userIdFromSp.isEmpty()) userId = userIdFromSp;
-        if (!userIdFromFile.isEmpty()) userId = userIdFromFile;
-
-        if (userId.isEmpty()) {
-            userId = string2Md5(simulateIDFA + UUID.randomUUID().toString());
+        if (idfaInSP != null && idfaInSP.length() > 0) {
+            idfa = idfaInSP;
+        } else if (idfaInFile != null && idfaInFile.length() > 0) {
+            idfa = idfaInFile;
         }
-        if (userIdFromFile.isEmpty()){
-            userIdFromFile = userId;
-            // set dev uuid to file
-            try{
-                String userIdDirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/txrtmp";
+
+        if (idfa == null || idfa.length() == 0) {
+            //UUID：16进制字符串(UTC毫秒时间(6字节) + MD5(应用包名 + 系统生成UUID)(16字节)
+            idfa = "";
+            long utcTimeMS = System.currentTimeMillis();
+            String packetName = getPackageName(context);
+            for (int i = 5; i >= 0; --i) {
+                idfa += String.format("%02x", (byte)((utcTimeMS >> (i*8)) & 0xff));
+            }
+            idfa += string2Md5(packetName + UUID.randomUUID().toString());
+        }
+
+        g_simulate_idfa = idfa;
+        Log.i(TAG, "UUID:" + g_simulate_idfa);
+        if (idfaInFile == null || !idfaInFile.equals(idfa)) {
+            try {
+                //存文件
+                String userIdDirPath = sdcardDir.getAbsolutePath() + "/txrtmp";
                 File userIdDir = new File(userIdDirPath);
                 if (!userIdDir.exists()) userIdDir.mkdir();
-                String userIdFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/txrtmp/spuid";
+                String userIdFilePath = sdcardDir.getAbsolutePath() + "/txrtmp/spuid";
                 File userIdFile = new File(userIdFilePath);
                 if (!userIdFile.exists()) userIdFile.createNewFile();
                 FileOutputStream fout = new FileOutputStream(userIdFile);
-                byte [] bytes = userId.getBytes();
+                byte[] bytes = idfa.getBytes();
                 fout.write(bytes);
                 fout.close();
-            } catch(Exception e){
-                e.printStackTrace();
+            } catch (Exception e) {
+                Log.e(TAG, "write UUID to file failed! reason: " + e.getMessage());
             }
         }
-        if (!userIdFromSp.equals(userIdFromFile)) {
-            // set dev uuid to SharedPreferences
+
+        if (idfaInSP == null || !idfaInSP.equals(idfa)) {
+            //存SP
             SharedPreferences.Editor editor = sp.edit();
-            editor.putString("key_user_id", userId);
+            editor.putString("key_user_id", idfa);
             editor.commit();
         }
+        return g_simulate_idfa;
+    }
 
-        return userId;
+    public static String getDevUUID(Context context) {
+        return getSimulateIDFA(context);
     }
 
     /*

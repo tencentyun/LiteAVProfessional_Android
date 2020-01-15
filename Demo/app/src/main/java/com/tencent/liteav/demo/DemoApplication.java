@@ -3,6 +3,7 @@ package com.tencent.liteav.demo;
 import android.support.multidex.MultiDexApplication;
 
 import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.qcloud.ugckit.UGCKit;
 import com.tencent.rtmp.TXLiveBase;
 import com.tencent.ugc.TXUGCBase;
 
@@ -20,8 +21,8 @@ public class DemoApplication extends MultiDexApplication {
     private static DemoApplication instance;
 
     // 如何获取License? 请参考官网指引 https://cloud.tencent.com/document/product/454/34750
-    String licenceUrl = "http://download-1252463788.cossh.myqcloud.com/xiaoshipin/licence_android/RDM_Enterprise.license";
-    String licenseKey = "9bc74ac7bfd07ea392e8fdff2ba5678a";
+    String licenceUrl = "";
+    String licenseKey = "";
 
     @Override
     public void onCreate() {
@@ -35,8 +36,12 @@ public class DemoApplication extends MultiDexApplication {
         strategy.setAppVersion(TXLiveBase.getSDKVersionStr());
         CrashReport.initCrashReport(getApplicationContext(),strategy);
 
+        UGCKit.init(this);
         TXLiveBase.getInstance().setLicence(instance, licenceUrl, licenseKey);
-        TXUGCBase.getInstance().setLicence(instance, licenceUrl, licenseKey);
+
+        // 短视频licence设置
+        TXUGCBase.getInstance().setLicence(this, licenceUrl, licenseKey);
+        UGCKit.init(this);
 
         closeAndroidPDialog();
 //        File file = getFilesDir();

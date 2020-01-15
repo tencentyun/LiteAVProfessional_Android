@@ -34,6 +34,7 @@ public class TCConstants {
      */
     public static final String VIDEO_EDITER_PATH = "key_video_editer_path"; // 路径的key
     public static final String VIDEO_EDITER_IMPORT = "key_video_editer_import";
+    public static final String VIDEO_EDITER_URI = "key_video_editer_uri_path";
 
     public static final int VIDEO_RECORD_TYPE_PUBLISH = 1;   // 推流端录制
     public static final int VIDEO_RECORD_TYPE_PLAY = 2;   // 播放端录制

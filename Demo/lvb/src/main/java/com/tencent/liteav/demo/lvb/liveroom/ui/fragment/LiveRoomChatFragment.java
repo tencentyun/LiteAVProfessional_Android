@@ -37,8 +37,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tencent.liteav.demo.beauty.BeautyPanel;
 import com.tencent.liteav.demo.lvb.R;
-import com.tencent.liteav.demo.lvb.common.view.BeautySettingPannel;
 import com.tencent.liteav.demo.lvb.liveroom.roomutil.misc.HintDialog;
 import com.tencent.liteav.demo.lvb.liveroom.roomutil.widget.SwipeAnimationController;
 import com.tencent.liteav.demo.lvb.liveroom.roomutil.widget.TextMsgInputDialog;
@@ -62,7 +62,7 @@ import java.util.TimerTask;
 
 import static com.tencent.liteav.demo.lvb.liveroom.roomutil.commondef.MLVBCommonDef.LiveRoomErrorCode.ERROR_LICENSE_INVALID;
 
-public class LiveRoomChatFragment extends Fragment implements BeautySettingPannel.IOnBeautyParamsChangeListener, IMLVBLiveRoomListener {
+public class LiveRoomChatFragment extends Fragment implements IMLVBLiveRoomListener {
 
     private static final String TAG = LiveRoomChatFragment.class.getSimpleName();
 
@@ -80,12 +80,12 @@ public class LiveRoomChatFragment extends Fragment implements BeautySettingPanne
 
     private ListView                                        mChatListView;
     private ArrayList<RoomListViewAdapter.TextChatMsg>                          mChatMsgList;
-    private RoomListViewAdapter.ChatMessageAdapter mChatMsgAdapter;
+    private RoomListViewAdapter.ChatMessageAdapter          mChatMsgAdapter;
     
     private Button                                          mBtnLinkMic;
     private Button                                          mBtnPK;
     private LinearLayout                                    mOperatorLayout;
-    private BeautySettingPannel mBeautyPannelView;
+    private BeautyPanel                                     mBeautyPanelView;
     private TextMsgInputDialog                              mTextMsgInputDialog;
     private SwipeAnimationController                        mSwipeAnimationController;
 
@@ -180,14 +180,18 @@ public class LiveRoomChatFragment extends Fragment implements BeautySettingPanne
         });
 
         //美颜p图部分
-        mBeautyPannelView = (BeautySettingPannel) view.findViewById(R.id.layoutFaceBeauty);
-        mBeautyPannelView.setBeautyParamsChangeListener(this);
+        mBeautyPanelView = (BeautyPanel) view.findViewById(R.id.layoutFaceBeauty);
+
+        MLVBLiveRoom liveRoom = mActivityInterface.getLiveRoom();
+        LiveRoomBeautyKit manager = new LiveRoomBeautyKit(liveRoom);
+        mBeautyPanelView.setProxy(manager);
+
         mOperatorLayout = (LinearLayout) view.findViewById(R.id.controller_container);
         view.findViewById(R.id.rtmproom_beauty_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBeautyPannelView.setVisibility(mBeautyPannelView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
-                mOperatorLayout.setVisibility(mBeautyPannelView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
+                mBeautyPanelView.setVisibility(mBeautyPanelView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
+                mOperatorLayout.setVisibility(mBeautyPanelView.getVisibility() == View.VISIBLE ? View.INVISIBLE : View.VISIBLE);
                 showOnlinePushers(false);
             }
         });
@@ -277,7 +281,7 @@ public class LiveRoomChatFragment extends Fragment implements BeautySettingPanne
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 mOperatorLayout.setVisibility(View.VISIBLE);
-                mBeautyPannelView.setVisibility(View.INVISIBLE);
+                mBeautyPanelView.setVisibility(View.INVISIBLE);
                 showOnlinePushers(false);
                 return false;
             }
@@ -291,7 +295,7 @@ public class LiveRoomChatFragment extends Fragment implements BeautySettingPanne
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 mOperatorLayout.setVisibility(View.VISIBLE);
-                mBeautyPannelView.setVisibility(View.INVISIBLE);
+                mBeautyPanelView.setVisibility(View.INVISIBLE);
                 showOnlinePushers(false);
                 return mSwipeAnimationController.processEvent(event);
             }
@@ -301,7 +305,7 @@ public class LiveRoomChatFragment extends Fragment implements BeautySettingPanne
             @Override
             public void onClick(View v) {
                 mOperatorLayout.setVisibility(View.VISIBLE);
-                mBeautyPannelView.setVisibility(View.INVISIBLE);
+                mBeautyPanelView.setVisibility(View.INVISIBLE);
                 showOnlinePushers(false);
             }
         });
@@ -908,93 +912,6 @@ public class LiveRoomChatFragment extends Fragment implements BeautySettingPanne
     @Override
     public void onRecvRoomCustomMsg(final String roomID, final String userID, final String userName, final String userAvatar, final String cmd, final String message) {
         //do nothing
-    }
-
-    @Override
-    public void onBeautyParamsChange(BeautySettingPannel.BeautyParams params, int key) {
-        MLVBLiveRoom liveRoom = mActivityInterface.getLiveRoom();
-        switch (key) {
-            case BeautySettingPannel.BEAUTYPARAM_EXPOSURE:
-                if (liveRoom != null) {
-                    liveRoom.setExposureCompensation(params.mExposure);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_BEAUTY:
-                mBeautyStyle = params.mBeautyStyle;
-                mBeautyLevel = params.mBeautyLevel;
-                if (liveRoom != null) {
-                    liveRoom.setBeautyStyle(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_WHITE:
-                mWhiteningLevel = params.mWhiteLevel;
-                if (liveRoom != null) {
-                    liveRoom.setBeautyStyle(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_BIG_EYE:
-                if (liveRoom != null) {
-                    liveRoom.setEyeScaleLevel(params.mBigEyeLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACE_LIFT:
-                if (liveRoom != null) {
-                    liveRoom.setFaceSlimLevel(params.mFaceSlimLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FILTER:
-                if (liveRoom != null) {
-                    liveRoom.setFilter(params.mFilterBmp);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_GREEN:
-                if (liveRoom != null) {
-                    liveRoom.setGreenScreenFile(params.mGreenFile);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_MOTION_TMPL:
-                if (liveRoom != null) {
-                    liveRoom.setMotionTmpl(params.mMotionTmplPath);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_RUDDY:
-                mRuddyLevel = params.mRuddyLevel;
-                if (liveRoom != null) {
-                    liveRoom.setBeautyStyle(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-//            case BeautySettingPannel.BEAUTYPARAM_BEAUTY_STYLE:
-//                mBeautyStyle = params.mBeautyStyle;
-//                if (liveRoom != null) {
-//                    liveRoom.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-//                }
-//                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACEV:
-                if (liveRoom != null) {
-                    liveRoom.setFaceVLevel(params.mFaceVLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACESHORT:
-                if (liveRoom != null) {
-                    liveRoom.setFaceShortLevel(params.mFaceShortLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_CHINSLIME:
-                if (liveRoom != null) {
-                    liveRoom.setChinLevel(params.mChinSlimLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_NOSESCALE:
-                if (liveRoom != null) {
-                    liveRoom.setNoseSlimLevel(params.mNoseScaleLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FILTER_MIX_LEVEL:
-                if (liveRoom != null) {
-                    liveRoom.setFilterConcentration(params.mFilterMixLevel/10.f);
-                }
-                break;
-        }
     }
 
     private void startLinkMic() {

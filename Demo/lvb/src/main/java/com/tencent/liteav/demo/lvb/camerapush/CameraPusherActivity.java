@@ -50,9 +50,10 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.tencent.liteav.demo.beauty.BeautyPanel;
 import com.tencent.liteav.demo.lvb.R;
 import com.tencent.liteav.demo.lvb.common.activity.QRCodeScanActivity;
-import com.tencent.liteav.demo.lvb.common.view.BeautySettingPannel;
+import com.tencent.liteav.demo.lvb.common.utils.FileUtils;
 import com.tencent.liteav.demo.lvb.common.view.TXPushVisibleLogView;
 import com.tencent.rtmp.ITXLivePushListener;
 import com.tencent.rtmp.TXLiveConstants;
@@ -90,7 +91,7 @@ import okhttp3.Response;
  * 2. 场景化配置参考：{@link PusherSettingFragment} 与 {@link #setPushScene(int, boolean)} 您可以根据您的 App 使用设定不同的推流场景，SDK 内部会自动选择相关配置，让您可以快速搭建
  *    注：一般客户建议直接使用场景化配置；若您是专业级客户，推荐您参考 {@link TXLivePushConfig} 进行个性化配置
  *
- * 3. 美颜功能使用参考: {@link BeautySettingPannel} 与 {@link #onBeautyParamsChange(BeautySettingPannel.BeautyParams, int)}
+ * 3. 美颜功能使用参考: {@link BeautyPanel}
  *
  * 4. 性能数据查看参考： {@link #onNetStatus(Bundle)}
  *
@@ -108,7 +109,7 @@ import okhttp3.Response;
  *
  * 10. BGM功能: {@link PusherBGMFragment}
  */
-public class CameraPusherActivity extends Activity implements ITXLivePushListener, BeautySettingPannel.IOnBeautyParamsChangeListener,
+public class CameraPusherActivity extends Activity implements ITXLivePushListener,
         PusherSettingFragment.OnSettingChangeListener, PusherMoreFragment.OnMoreChangeListener, PusherBGMFragment.OnBGMControllCallback, TXLivePusher.OnBGMNotify {
     private static final String TAG = CameraPusherActivity.class.getSimpleName();
     /**
@@ -122,7 +123,7 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
      * 控件
      */
     private TextView                        mTvNetBusyTips;                 // 网络繁忙Tips
-    private BeautySettingPannel             mBeautyPannelView;              // 美颜模块pannel
+    private BeautyPanel mBeautyPanelView;              // 美颜模块pannel
     private EditText                        mEtRTMPURL;                     // RTMP URL链接的View
     private Button                          mBtnStartPush;                  // 开启推流的按钮
     private PusherMoreFragment              mPushMoreFragment;              // 更多Fragment
@@ -140,7 +141,7 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
     private int                             mBeautyStyle    = TXLiveConstants.BEAUTY_STYLE_SMOOTH; // 美颜样式
     private int                             mWhiteningLevel = 3;            // 美白等级
     private int                             mRuddyLevel     = 2;            // 红润等级
-
+    private boolean                         mFrontCamera    = true;
     /**
      * 其他参数
      */
@@ -170,6 +171,7 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setTheme(R.style.BeautyTheme);
         setContentView(R.layout.activity_camera_pusher);
         checkPublishPermission();  // 检查权限
         initPusher();              // 初始化 SDK 推流器
@@ -243,10 +245,10 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
         findViewById(R.id.pusher_btn_beauty).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mBeautyPannelView.isShown()) {
-                    mBeautyPannelView.setVisibility(View.GONE);
+                if (mBeautyPanelView.isShown()) {
+                    mBeautyPanelView.setVisibility(View.GONE);
                 } else {
-                    mBeautyPannelView.setVisibility(View.VISIBLE);
+                    mBeautyPanelView.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -314,9 +316,11 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
                 if (v.getTag() == null || (Boolean) v.getTag()) {
                     v.setTag(false);
                     v.setBackgroundResource(R.mipmap.camera_back);
+                    mFrontCamera = false;
                 } else {
                     v.setTag(true);
                     v.setBackgroundResource(R.mipmap.camera_front);
+                    mFrontCamera = true;
                 }
                 mLivePusher.switchCamera();
             }
@@ -328,8 +332,7 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
      */
     private void initMainView() {
         mPusherView = (TXCloudVideoView) findViewById(R.id.pusher_tx_cloud_view);
-        mBeautyPannelView = (BeautySettingPannel) findViewById(R.id.pusher_beauty_pannel);
-        mBeautyPannelView.setBeautyParamsChangeListener(this);
+        mBeautyPanelView = (BeautyPanel) findViewById(R.id.pusher_beauty_pannel);
         mTvNetBusyTips = (TextView) findViewById(R.id.pusher_tv_net_error_warning);
         mLlQrCode = (LinearLayout) findViewById(R.id.pusher_ll_code_viewer);
         mIvAccRTMP = (ImageView) findViewById(R.id.pusher_iv_rtmp_acc_url);
@@ -347,6 +350,9 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
                 }
             }
         });
+
+        PusherBeautyKit manager = new PusherBeautyKit(mLivePusher);
+        mBeautyPanelView.setProxy(manager);
     }
 
 
@@ -774,6 +780,9 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
         }
         mLivePusher.setRenderRotation(renderRotation);
 
+        //根据activity方向调整横竖屏
+        setRotationForActivity();
+
         // 是否开启观众端镜像观看
         mLivePusher.setMirror(mPushMoreFragment.isMirrorEnable());
 
@@ -793,6 +802,10 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
         // 是否打开手势放大预览画面
         mLivePushConfig.setEnableZoom(mPushMoreFragment.isZoomEnable());
 
+        mLivePushConfig.enableAudioEarMonitoring(mPushSettingFragment.isEarmonitoringEnable());
+
+        mLivePushConfig.enablePureAudioPush(mPushMoreFragment.isPureAudio());
+
         // 设置推流配置
         mLivePusher.setConfig(mLivePushConfig);
 
@@ -801,6 +814,7 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
 
         // 设置本地预览View
         mLivePusher.startCameraPreview(mPusherView);
+        if (!mFrontCamera) mLivePusher.switchCamera();
         // 发起推流
         int ret = mLivePusher.startPusher(tRTMPURL.trim());
         if (ret == -5) {
@@ -1007,92 +1021,6 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
 
     /////////////////////////////////////////////////////////////////////////////////
     //
-    //                      美颜模块相关
-    //
-    /////////////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public void onBeautyParamsChange(BeautySettingPannel.BeautyParams params, int key) {
-        switch (key) {
-            case BeautySettingPannel.BEAUTYPARAM_EXPOSURE:
-                if (mLivePusher != null) {
-                    mLivePusher.setExposureCompensation(params.mExposure);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_BEAUTY:
-                mBeautyStyle = params.mBeautyStyle;
-                mBeautyLevel = params.mBeautyLevel;
-                if (mLivePusher != null) {
-                    mLivePusher.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_WHITE:
-                mWhiteningLevel = params.mWhiteLevel;
-                if (mLivePusher != null) {
-                    mLivePusher.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_BIG_EYE:
-                if (mLivePusher != null) {
-                    mLivePusher.setEyeScaleLevel(params.mBigEyeLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACE_LIFT:
-                if (mLivePusher != null) {
-                    mLivePusher.setFaceSlimLevel(params.mFaceSlimLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FILTER:
-                if (mLivePusher != null) {
-                    mLivePusher.setFilter(params.mFilterBmp);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_GREEN:
-                if (mLivePusher != null) {
-                    mLivePusher.setGreenScreenFile(params.mGreenFile);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_MOTION_TMPL:
-                if (mLivePusher != null) {
-                    mLivePusher.setMotionTmpl(params.mMotionTmplPath);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_RUDDY:
-                mRuddyLevel = params.mRuddyLevel;
-                if (mLivePusher != null) {
-                    mLivePusher.setBeautyFilter(mBeautyStyle, mBeautyLevel, mWhiteningLevel, mRuddyLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACEV:
-                if (mLivePusher != null) {
-                    mLivePusher.setFaceVLevel(params.mFaceVLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FACESHORT:
-                if (mLivePusher != null) {
-                    mLivePusher.setFaceShortLevel(params.mFaceShortLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_CHINSLIME:
-                if (mLivePusher != null) {
-                    mLivePusher.setChinLevel(params.mChinSlimLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_NOSESCALE:
-                if (mLivePusher != null) {
-                    mLivePusher.setNoseSlimLevel(params.mNoseScaleLevel);
-                }
-                break;
-            case BeautySettingPannel.BEAUTYPARAM_FILTER_MIX_LEVEL:
-                if (mLivePusher != null) {
-                    mLivePusher.setSpecialRatio(params.mFilterMixLevel / 10.f);
-                }
-                break;
-        }
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////
-    //
     //                      MoreFragment功能回调
     //
     /////////////////////////////////////////////////////////////////////////////////
@@ -1100,6 +1028,7 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
     public void onPrivateModeChange(boolean enable) {
         // 隐私模式下，会进入垫片推流
         if (mLivePusher.isPushing()) {
+            mBeautyPanelView.setMotionTmplEnable(enable);
             if (enable) {
                 mLivePusher.pausePusher();
             } else {
@@ -1234,12 +1163,23 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
                 @Override
                 public void onSnapshot(final Bitmap bmp) {
                     if (mLivePusher.isPushing()) {
-                        saveAndSharePic(bmp);
+                        if (bmp != null) {
+                            saveAndSharePic(bmp);
+                        } else {
+                            Toast.makeText(CameraPusherActivity.this, "截图失败", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Toast.makeText(CameraPusherActivity.this, "截图失败，请先发起推流", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
+        }
+    }
+
+    @Override
+    public void onSendMessage(String msg) {
+        if (mLivePusher != null) {
+            mLivePusher.sendMessageEx(msg.getBytes());
         }
     }
 
@@ -1293,6 +1233,17 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
             mLivePusher.setVoiceChangerType(type);
         }
     }
+    /**
+     * 耳返开关
+     * @param enable
+     */
+    @Override
+    public  void onEarmonitoringChange(boolean enable){
+        if (mLivePusher != null) {
+            mLivePusher.getConfig().enableAudioEarMonitoring(enable);
+            mLivePusher.setConfig(mLivePusher.getConfig());
+        }
+    }
 
     /**
      * 设置推流场景
@@ -1325,6 +1276,12 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
                 if (mLivePusher != null) {
                     mLivePusher.setVideoQuality(TXLiveConstants.VIDEO_QUALITY_SUPER_DEFINITION, autoBitrate, autoResolution);
                     mCurrentVideoResolution = TXLiveConstants.VIDEO_RESOLUTION_TYPE_720_1280;
+                }
+                break;
+            case TXLiveConstants.VIDEO_QUALITY_ULTRA_DEFINITION: /*1080p*/
+                if (mLivePusher != null) {
+                    mLivePusher.setVideoQuality(TXLiveConstants.VIDEO_QUALITY_ULTRA_DEFINITION, autoBitrate, autoResolution);
+                    mCurrentVideoResolution = TXLiveConstants.VIDEO_RESOLUTION_TYPE_1080_1920;
                 }
                 break;
             case TXLiveConstants.VIDEO_QUALITY_LINKMIC_MAIN_PUBLISHER: /*连麦大主播*/
@@ -1640,7 +1597,14 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
             public void run() {
                 String bitmapFileName = UUID.randomUUID().toString();//通过UUID生成字符串文件名
                 FileOutputStream out = null;
-                final File file = new File("/sdcard/test/pusher/" + bitmapFileName + ".png");
+
+                File sdcardDir = getExternalFilesDir(null);
+                if (sdcardDir == null) {
+                    Log.e(TAG, "sdcardDir is null");
+                    return;
+                }
+                final String path = sdcardDir + File.separator + bitmapFileName + ".png";
+                final File file = new File(path);
                 try {
                     file.getParentFile().mkdirs();
                     if (!file.exists()) {
@@ -1667,10 +1631,11 @@ public class CameraPusherActivity extends Activity implements ITXLivePushListene
                             Toast.makeText(CameraPusherActivity.this, "截图成功", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_SEND);//设置分享行为
-                            intent.setType("image/*");  //设置分享内容的类型
-                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-                            intent = Intent.createChooser(intent, "图片分享");
-                            startActivity(intent);
+                            Uri uri = FileUtils.getUri(CameraPusherActivity.this,"com.tencent.liteav.demo", file);
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            intent.setType("image/*");
+                            intent.putExtra(Intent.EXTRA_STREAM, uri);
+                            startActivity(Intent.createChooser(intent, "图片分享"));
                         }
                     });
                 } else {

@@ -1,5 +1,6 @@
 package com.tencent.liteav.demo.videouploader.common.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -10,10 +11,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by yuejiaoli on 2017/10/11.
- */
-
 public class TCEditerUtil {
 
     /**
@@ -21,8 +18,12 @@ public class TCEditerUtil {
      *
      * @return
      */
-    public static String generateVideoPath() {
-        String outputPath = Environment.getExternalStorageDirectory() + File.separator + TCConstants.DEFAULT_MEDIA_PACK_FOLDER;
+    public static String generateVideoPath(Context context) {
+        File sdcardDir = context.getExternalFilesDir(null);
+        if (sdcardDir == null) {
+            return null;
+        }
+        String outputPath = sdcardDir + File.separator + TCConstants.DEFAULT_MEDIA_PACK_FOLDER;
         File outputFolder = new File(outputPath);
 
         if (!outputFolder.exists()) {

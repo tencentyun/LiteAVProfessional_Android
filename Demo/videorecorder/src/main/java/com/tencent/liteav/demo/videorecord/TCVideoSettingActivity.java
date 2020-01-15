@@ -23,7 +23,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.tencent.liteav.basic.log.TXCLog;
-import com.tencent.liteav.demo.videorecord.utils.TCConstants;
+import com.tencent.qcloud.ugckit.UGCKit;
+import com.tencent.qcloud.ugckit.UGCKitConstants;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.ugc.TXRecordCommon;
 
@@ -44,7 +45,7 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
     private RadioGroup rgVideoQuality, rgVideoResolution, rgVideoAspectRatio;
     private RadioButton rbVideoQualitySD, rbVideoQualityHD, rbVideoQualitySSD, rbVideoQulityCustom,
             rbVideoResolution360p, rbVideoResolution540p, rbVideoResolution720p,
-            rbVideoAspectRatio11, rbVideoAspectRatio34, rbVideoAspectRatio916;
+            rbVideoAspectRatio11, rbVideoAspectRatio34, rbVideoAspectRatio916,rbVideoAspectRatio43;
     private TextView tvRecommendResolution, tvRecommendBitrate, tvRecommendFps, tvRecommendGop;
     private Button btnOK;
     private ImageButton btnLink;
@@ -64,8 +65,6 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_video_settings);
-
-        TXCLog.init();
 
         initData();
 
@@ -145,6 +144,7 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
         rbVideoAspectRatio34 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_3_4);
         rbVideoAspectRatio916 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_9_16);
         rbVideoAspectRatio169 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_16_9);
+        rbVideoAspectRatio43 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_4_3);
 
         tvRecommendResolution = (TextView) findViewById(R.id.tv_recommend_resolution);
         tvRecommendBitrate = (TextView) findViewById(R.id.tv_recommend_bitrate);
@@ -208,6 +208,9 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
                     mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_9_16;
                 } else if (i == rbVideoAspectRatio169.getId()) {
                     mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_16_9;
+                }
+                else if(i == rbVideoAspectRatio43.getId()){
+                    mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_4_3;
                 }
             }
         });
@@ -396,23 +399,24 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
 
     private void startVideoRecordActivity() {
         Intent intent = new Intent(this, TCVideoRecordActivity.class);
-        intent.putExtra(TCConstants.RECORD_CONFIG_MIN_DURATION, 5 * 1000);
-        intent.putExtra(TCConstants.RECORD_CONFIG_MAX_DURATION, 60 * 1000);
-        intent.putExtra(TCConstants.RECORD_CONFIG_ASPECT_RATIO, mAspectRatio);
+        intent.putExtra(UGCKitConstants.RECORD_CONFIG_MIN_DURATION, 5 * 1000);
+        intent.putExtra(UGCKitConstants.RECORD_CONFIG_MAX_DURATION, 60 * 1000);
+        intent.putExtra(UGCKitConstants.RECORD_CONFIG_ASPECT_RATIO, mAspectRatio);
 
         if (mRecommendQuality != -1) {
             // 提供的三挡设置
-            intent.putExtra(TCConstants.RECORD_CONFIG_RECOMMEND_QUALITY, mRecommendQuality);
+            intent.putExtra(UGCKitConstants.RECORD_CONFIG_RECOMMEND_QUALITY, mRecommendQuality);
         } else {
             // 自定义设置
-            intent.putExtra(TCConstants.RECORD_CONFIG_RESOLUTION, mRecordResolution);
-            intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, mBiteRate);
-            intent.putExtra(TCConstants.RECORD_CONFIG_FPS, mFps);
-            intent.putExtra(TCConstants.RECORD_CONFIG_GOP, mGop);
+            intent.putExtra(UGCKitConstants.RECORD_CONFIG_RESOLUTION, mRecordResolution);
+            intent.putExtra(UGCKitConstants.RECORD_CONFIG_BITE_RATE, mBiteRate);
+            intent.putExtra(UGCKitConstants.RECORD_CONFIG_FPS, mFps);
+            intent.putExtra(UGCKitConstants.RECORD_CONFIG_GOP, mGop);
         }
-        intent.putExtra(TCConstants.RECORD_CONFIG_HOME_ORIENTATION, TXLiveConstants.VIDEO_ANGLE_HOME_DOWN); // 竖屏录制
-        intent.putExtra(TCConstants.RECORD_CONFIG_TOUCH_FOCUS, cbTouchFocus.isChecked());
-        intent.putExtra(TCConstants.RECORD_CONFIG_NEED_EDITER, cbEdit.isChecked());
+        // 竖屏录制
+        intent.putExtra(UGCKitConstants.RECORD_CONFIG_HOME_ORIENTATION, TXLiveConstants.VIDEO_ANGLE_HOME_DOWN);
+        intent.putExtra(UGCKitConstants.RECORD_CONFIG_TOUCH_FOCUS, cbTouchFocus.isChecked());
+        intent.putExtra(UGCKitConstants.RECORD_CONFIG_NEED_EDITER, cbEdit.isChecked());
         startActivity(intent);
     }
 

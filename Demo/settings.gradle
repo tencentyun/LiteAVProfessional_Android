@@ -1,5 +1,7 @@
 include ':app'
 
+include ':beauty'
+include ':ugckit'
 include ':libsuperplayer'
 include ':player'
 include ':lvb'
@@ -8,6 +10,8 @@ include ':videorecorder'
 include ':videoediter'
 include ':videojoiner'
 include ':videouploader'
+include ':trtcvoiceroom'
+include ':trtcaudiocalldemo'
 
 
 

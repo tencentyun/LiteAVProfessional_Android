@@ -11,9 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCUtils;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCVideoFileInfo;
 import com.tencent.liteav.demo.videojoiner.swipemenu.SwipeMenuAdapter;
+import com.tencent.qcloud.ugckit.module.picker.data.TCVideoFileInfo;
+import com.tencent.qcloud.ugckit.utils.DateTimeUtil;
 
 import java.io.File;
 import java.util.List;
@@ -58,9 +58,9 @@ public class MenuAdapter extends SwipeMenuAdapter<MenuAdapter.DefaultViewHolder>
     public void onBindViewHolder(MenuAdapter.DefaultViewHolder holder, int position) {
         TCVideoFileInfo fileInfo = mTCVideoFileInfoList.get(position);
         holder.setTitle(fileInfo.getFileName());
-        holder.setDuration(TCUtils.duration(fileInfo.getDuration()));
+        holder.setDuration(DateTimeUtil.duration(fileInfo.getDuration()));
         holder.setOnDeleteListener(mOnDeleteListener);
-        Glide.with(mContext).load(Uri.fromFile(new File(fileInfo.getFilePath()))).into(holder.ivThumb);
+        Glide.with(mContext).load(fileInfo.getFileUri()).into(holder.ivThumb);
     }
 
     static class DefaultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

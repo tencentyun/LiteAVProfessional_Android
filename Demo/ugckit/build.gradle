@@ -1,0 +1,69 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+
+        renderscriptTargetApi = 14
+        renderscriptSupportModeEnabled = true
+        multiDexEnabled = true
+
+        ndk {
+            abiFilters rootProject.ext.ndkAbi
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles.add(file('proguard-rules.pro'))
+            signingConfig signingConfigs.debug
+        }
+    }
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    packagingOptions {
+        pickFirst '**/libc++_shared.so'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar'], dir: 'src/main/jniLibs')
+    compile 'com.android.support:design:25.4.0'
+    compile 'com.android.support:recyclerview-v7:25.4.0'
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile "com.tencent.liteav:LiteAVSDK_Professional:$rootProject.ext.liteavsdk_version"
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'de.hdodenhof:circleimageview:2.2.0'
+    compile 'com.github.castorflex.verticalviewpager:library:19.0.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.android.support:support-annotations:24.2.0'
+    compile 'com.tencent.bugly:crashreport:3.1.0'
+    compile 'com.tencent.bugly:nativecrashreport:3.7.0'
+    compile 'com.squareup.okhttp3:okhttp:3.11.0'
+    compile 'com.squareup.okio:okio:1.13.0'
+    compile('com.tencent.qcloud:cosxml:5.4.21') {
+        exclude group: 'com.tencent.qcloud', module: 'mtaUtils' //关闭 mta 上报功能}
+    }
+    compile project(':beauty')
+}

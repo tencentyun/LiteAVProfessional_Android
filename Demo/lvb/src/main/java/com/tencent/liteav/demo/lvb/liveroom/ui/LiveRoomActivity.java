@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tencent.liteav.demo.lvb.R;
-import com.tencent.liteav.demo.lvb.liveroom.debug.GenerateTestUserSig;
 import com.tencent.liteav.demo.lvb.liveroom.roomutil.misc.CommonAppCompatActivity;
 import com.tencent.liteav.demo.lvb.liveroom.IMLVBLiveRoomListener;
 import com.tencent.liteav.demo.lvb.liveroom.MLVBLiveRoom;
@@ -61,7 +60,7 @@ public class LiveRoomActivity extends CommonAppCompatActivity implements LiveRoo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setTheme(R.style.BeautyTheme);
         setContentView(R.layout.activity_live_room);
 
         findViewById(R.id.liveroom_back_button).setOnClickListener(new View.OnClickListener() {
@@ -126,7 +125,7 @@ public class LiveRoomActivity extends CommonAppCompatActivity implements LiveRoo
         liveRoom = MLVBLiveRoom.sharedInstance(this.getApplicationContext());
         liveRoom.setListener(new MLVBLiveRoomListener());
 
-        internalInitializeLiveRoom();
+        initializeLiveRoom();
     }
 
     @Override
@@ -179,26 +178,111 @@ public class LiveRoomActivity extends CommonAppCompatActivity implements LiveRoo
 
     }
 
+    private class LoginInfoResponse {
+        public int code;
+        public String message;
+        public int sdkAppID;
+        public String accType;
+        public String userID;
+        public String userSig;
+    }
 
-    private void internalInitializeLiveRoom() {
+    private static class HttpInterceptorLog implements HttpLoggingInterceptor.Logger{
+        @Override
+        public void log(String message) {
+            Log.i("HttpRequest", message+"\n");
+        }
+    }
+
+    private void initializeLiveRoom() {
         setTitle("连接中...");
 
         SharedPreferences sp = getSharedPreferences("com.tencent.demo", Context.MODE_PRIVATE);
         String userIdFromSp = sp.getString("userID", "");
-        if (TextUtils.isEmpty(userIdFromSp)) {
-            userIdFromSp = String.valueOf(System.currentTimeMillis());
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putString("userID", userIdFromSp);
-            editor.commit();
+        String loginInfoCgi = "https://room.qcloud.com/weapp/"+"utils/get_login_info";
+        if (!TextUtils.isEmpty(userIdFromSp)) {
+            loginInfoCgi = loginInfoCgi + "?userID=" + userIdFromSp;
         }
+        String userNameFromSp = sp.getString("userName", "");
+        if (!TextUtils.isEmpty(userNameFromSp)) {
+            userName = userNameFromSp;
+        }
+        else {
+            userName = NameGenerator.getRandomName();
+            sp.edit().putString("userName", userName).commit();
+        }
+        final Request request = new Request.Builder()
+                .url(loginInfoCgi)
+                .build();
 
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(new HttpLoggingInterceptor(new HttpInterceptorLog()).setLevel(HttpLoggingInterceptor.Level.BODY))
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, final IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setTitle("获取登录信息失败，点击重试");
+                        printGlobalLog(String.format("[Activity]获取登录信息失败{%s}", e.getMessage()));
+                        retryInitRoomRunnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(LiveRoomActivity.this, "重试...", Toast.LENGTH_SHORT).show();
+                                initializeLiveRoom();
+                            }
+                        };
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(final Call call, final okhttp3.Response response) throws IOException {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String strBody = response.body().string();
+                            LoginInfoResponse resp = new Gson().fromJson(strBody, LoginInfoResponse.class);
+                            if (resp.code != 0){
+                                setTitle("获取登录信息失败");
+                                printGlobalLog(String.format("[Activity]获取登录信息失败：{%s}", resp.message));
+                                retryInitRoomRunnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(LiveRoomActivity.this, "重试...", Toast.LENGTH_SHORT).show();
+                                        initializeLiveRoom();
+                                    }
+                                };
+                            } else {
+                                SharedPreferences sp = getSharedPreferences("com.tencent.demo", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sp.edit();
+                                editor.putString("userID", resp.userID);
+                                editor.commit();
+                                internalInitializeLiveRoom(resp);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void internalInitializeLiveRoom(LoginInfoResponse resp) {
         LoginInfo loginInfo       = new LoginInfo();
-        loginInfo.sdkAppID       = GenerateTestUserSig.SDKAPPID;
-        loginInfo.userID         = userIdFromSp;
-        loginInfo.userSig        = GenerateTestUserSig.genTestUserSig(userIdFromSp);
+        loginInfo.sdkAppID       = resp.sdkAppID;
+        loginInfo.userID         = resp.userID;
+        loginInfo.userSig        = resp.userSig;
         loginInfo.userName       = userName;
         loginInfo.userAvatar     = userAvatar;
-        LiveRoomActivity.this.userId = userIdFromSp;
+        LiveRoomActivity.this.userId = resp.userID;
 
         liveRoom.login(loginInfo, new IMLVBLiveRoomListener.LoginCallback() {
             @Override
@@ -209,7 +293,7 @@ public class LiveRoomActivity extends CommonAppCompatActivity implements LiveRoo
                             @Override
                             public void run() {
                                 Toast.makeText(LiveRoomActivity.this, "重试...", Toast.LENGTH_SHORT).show();
-                                internalInitializeLiveRoom();
+                        initializeLiveRoom();
                             }
                 };
             }

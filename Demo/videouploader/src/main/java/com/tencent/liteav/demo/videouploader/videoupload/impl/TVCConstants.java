@@ -8,7 +8,7 @@ public class TVCConstants {
     public static String VOD_SERVER_HOST = "vod2.qcloud.com";
     public static String VOD_SERVER_HOST_BAK = "vod2.dnsv1.com";
 
-    // 最大连接次数
+    // 最大重试次数
     public static int MAX_REQUEST_COUNT = 2;
 
     //网络类型

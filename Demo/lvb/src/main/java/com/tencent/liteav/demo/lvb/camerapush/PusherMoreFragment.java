@@ -6,11 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.tencent.liteav.demo.lvb.R;
@@ -29,10 +31,11 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
     private static final String SP_KEY_WARTER_MARK  = "sp_key_water_mark";
     private static final String SP_KEY_FOCUS        = "sp_key_focus";
     private static final String SP_KEY_ZOOM         = "sp_key_zoom";
+    private static final String SP_KEY_PURE_AUDIO   = "sp_key_pure_audio";
 
     private boolean mPrivateModel = false, mMuteAudio = false, mIsPortrait = true,
                     mMirrorEnable = false, mFlashEnable = false, mDebugInfo = false, mWaterMarkEnable = true,
-                    mFocusEnable = true, mZoomEnable = false;
+                    mFocusEnable = true, mZoomEnable = false, mPureAudio = false;
     // 回调
     private WeakReference<OnMoreChangeListener> mWefSettingListener;
 
@@ -60,7 +63,7 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +99,9 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
         CheckBox cbZoom = ((CheckBox) view.findViewById(R.id.pusher_cb_zoom));
         cbZoom.setOnCheckedChangeListener(this);
         cbZoom.setChecked(mZoomEnable);
+        CheckBox cbAudio = ((CheckBox) view.findViewById(R.id.pusher_cb_pure_audio));
+        cbAudio.setOnCheckedChangeListener(this);
+        cbAudio.setChecked(mPureAudio);
 
         mLlOrientation = (LinearLayout) view.findViewById(R.id.pusher_ll_orientation);
         mCbOrientation = ((CheckBox) view.findViewById(R.id.pusher_cb_orientation));
@@ -109,9 +115,24 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
         view.findViewById(R.id.pusher_btn_snapshot).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OnMoreChangeListener listener = getLisener();
+                OnMoreChangeListener listener = getListener();
                 if (listener != null) {
                     listener.onClickSnapshot();
+                }
+            }
+        });
+
+        view.findViewById(R.id.btn_send).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OnMoreChangeListener listener = getListener();
+                if (listener != null) {
+                    EditText editText = (EditText) view.findViewById(R.id.et_message);
+                    String message = editText.getText().toString().trim();
+                    if (TextUtils.isEmpty(message)) {
+                        return;
+                    }
+                    listener.onSendMessage(message);
                 }
             }
         });
@@ -121,7 +142,7 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
         mWefSettingListener = new WeakReference<>(listener);
     }
 
-    private OnMoreChangeListener getLisener() {
+    private OnMoreChangeListener getListener() {
         if (mWefSettingListener != null)
             return mWefSettingListener.get();
         return null;
@@ -135,7 +156,7 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (!buttonView.isPressed()) return;
-        OnMoreChangeListener listener = getLisener();
+        OnMoreChangeListener listener = getListener();
         if (listener == null) return;
         int id = buttonView.getId();
         if (id == R.id.pusher_cb_private_mode) {
@@ -165,6 +186,8 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
         } else if (id == R.id.pusher_cb_orientation) {
             mIsPortrait = !isChecked;
             listener.onOrientationChange(mIsPortrait);
+        } else if (id == R.id.pusher_cb_pure_audio) {
+            mPureAudio = isChecked;
         }
     }
 
@@ -250,6 +273,11 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
          * 点击截图
          */
         void onClickSnapshot();
+
+        /**
+         * 发送sei消息
+         */
+        void onSendMessage(String string);
     }
 
 
@@ -288,6 +316,7 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
                     .putBoolean(SP_KEY_WARTER_MARK, mWaterMarkEnable)
                     .putBoolean(SP_KEY_FOCUS, mFocusEnable)
                     .putBoolean(SP_KEY_ZOOM, mZoomEnable)
+                    .putBoolean(SP_KEY_PURE_AUDIO, mPureAudio)
                     .apply();
         } catch (Exception e) {
             e.printStackTrace();
@@ -305,6 +334,7 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
             mWaterMarkEnable = s.getBoolean(SP_KEY_WARTER_MARK, mWaterMarkEnable);
             mFocusEnable = s.getBoolean(SP_KEY_FOCUS, mFocusEnable);
             mZoomEnable = s.getBoolean(SP_KEY_ZOOM, mZoomEnable);
+            mPureAudio = s.getBoolean(SP_KEY_PURE_AUDIO, mPureAudio);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -324,6 +354,10 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
 
     public boolean isMirrorEnable() {
         return mMirrorEnable;
+    }
+
+    public boolean isPureAudio() {
+        return mPureAudio;
     }
 
     public boolean isFlashEnable() {
@@ -360,6 +394,7 @@ public class PusherMoreFragment extends DialogFragment implements CompoundButton
                 ", mZoomEnable=" + mZoomEnable +
                 ", mWefSettingListener=" + mWefSettingListener +
                 ", mCbOrientation=" + mCbOrientation +
+                ", mPureAudio=" + mPureAudio +
                 '}';
     }
 }

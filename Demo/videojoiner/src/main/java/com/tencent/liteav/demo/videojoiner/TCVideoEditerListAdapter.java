@@ -1,7 +1,6 @@
 package com.tencent.liteav.demo.videojoiner;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCUtils;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCVideoFileInfo;
+import com.tencent.qcloud.ugckit.module.picker.data.TCVideoFileInfo;
+import com.tencent.qcloud.ugckit.utils.DateTimeUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class TCVideoEditerListAdapter extends RecyclerView.Adapter<TCVideoEditerListAdapter.ViewHolder> {
@@ -40,9 +38,9 @@ public class TCVideoEditerListAdapter extends RecyclerView.Adapter<TCVideoEditer
         if(fileInfo.getFileType() == TCVideoFileInfo.FILE_TYPE_PICTURE){
             holder.duration.setText("");
         }else{
-            holder.duration.setText(TCUtils.formattedTime(fileInfo.getDuration() / 1000));
+            holder.duration.setText(DateTimeUtil.formattedTime(fileInfo.getDuration() / 1000));
         }
-        Glide.with(mContext).load(Uri.fromFile(new File(fileInfo.getFilePath()))).dontAnimate().into(holder.thumb);
+        Glide.with(mContext).load(fileInfo.getFileUri()).dontAnimate().into(holder.thumb);
         holder.thumb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,3 +146,4 @@ public class TCVideoEditerListAdapter extends RecyclerView.Adapter<TCVideoEditer
     }
 
 }
+

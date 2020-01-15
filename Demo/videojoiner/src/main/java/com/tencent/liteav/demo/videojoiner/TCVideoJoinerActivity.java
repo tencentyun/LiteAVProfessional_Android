@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.tencent.liteav.demo.videojoiner.common.utils.TCConstants;
-import com.tencent.liteav.demo.videojoiner.common.utils.TCVideoFileInfo;
 import com.tencent.liteav.demo.videojoiner.swipemenu.Closeable;
 import com.tencent.liteav.demo.videojoiner.swipemenu.OnSwipeMenuItemClickListener;
 import com.tencent.liteav.demo.videojoiner.swipemenu.SwipeMenu;
@@ -21,6 +19,8 @@ import com.tencent.liteav.demo.videojoiner.swipemenu.SwipeMenuCreator;
 import com.tencent.liteav.demo.videojoiner.swipemenu.SwipeMenuItem;
 import com.tencent.liteav.demo.videojoiner.swipemenu.SwipeMenuRecyclerView;
 import com.tencent.liteav.demo.videojoiner.swipemenu.touch.OnItemMoveListener;
+import com.tencent.qcloud.ugckit.UGCKitConstants;
+import com.tencent.qcloud.ugckit.module.picker.data.TCVideoFileInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +41,7 @@ public class TCVideoJoinerActivity extends Activity implements View.OnClickListe
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_video_joiner);
-        mTCVideoFileInfoList = (ArrayList<TCVideoFileInfo>) getIntent().getSerializableExtra(TCConstants.INTENT_KEY_MULTI_CHOOSE);
+        mTCVideoFileInfoList = getIntent().getParcelableArrayListExtra(UGCKitConstants.INTENT_KEY_MULTI_CHOOSE);
         if (mTCVideoFileInfoList == null || mTCVideoFileInfoList.size() == 0) {
             finish();
             return;
@@ -115,7 +115,7 @@ public class TCVideoJoinerActivity extends Activity implements View.OnClickListe
                 return;
             }
             Intent intent = new Intent(TCVideoJoinerActivity.this, TCVideoJoinerPreviewActivity.class);
-            intent.putExtra(TCConstants.INTENT_KEY_MULTI_CHOOSE, mTCVideoFileInfoList);
+            intent.putExtra(UGCKitConstants.INTENT_KEY_MULTI_CHOOSE, mTCVideoFileInfoList);
             startActivity(intent);
             finish();
 

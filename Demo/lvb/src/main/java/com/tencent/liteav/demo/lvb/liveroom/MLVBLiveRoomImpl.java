@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import com.tencent.imsdk.TIMUserProfile;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.liteav.basic.log.TXCLog;
+import com.tencent.liteav.beauty.TXBeautyManager;
 import com.tencent.liteav.demo.lvb.liveroom.roomutil.commondef.AnchorInfo;
 import com.tencent.liteav.demo.lvb.liveroom.roomutil.commondef.AudienceInfo;
 import com.tencent.liteav.demo.lvb.liveroom.roomutil.commondef.LoginInfo;
@@ -59,7 +60,6 @@ public class MLVBLiveRoomImpl extends MLVBLiveRoom implements HttpRequests.Heart
     protected static final int              LIVEROOM_ROLE_PLAYER    = 2;
 
     protected static MLVBLiveRoomImpl       mInstance = null;
-//    protected static final String         mServerDomain = "http://150.109.42.33:5601/weapp/live_room"; //RoomService后台域名
     protected static final String           mServerDomain = "https://liveroom.qcloud.com/weapp/live_room"; //RoomService后台域名
 
     protected Context                       mAppContext = null;
@@ -1543,6 +1543,14 @@ public class MLVBLiveRoomImpl extends MLVBLiveRoom implements HttpRequests.Heart
         }
     }
 
+    @Override
+    public TXBeautyManager getBeautyManager() {
+        if (mTXLivePusher == null) {
+            mTXLivePusher = new TXLivePusher(mAppContext);
+        }
+        return mTXLivePusher.getBeautyManager();
+    }
+
     /**
      * 设置美颜、美白、红润效果级别
      *
@@ -2289,16 +2297,16 @@ public class MLVBLiveRoomImpl extends MLVBLiveRoom implements HttpRequests.Heart
 
     protected void initLivePusher(boolean frontCamera) {
         if (mTXLivePusher == null) {
-            TXLivePushConfig config = new TXLivePushConfig();
-            config.setFrontCamera(frontCamera);
-            config.enableScreenCaptureAutoRotate(mScreenAutoEnable);// 是否开启屏幕自适应
-            config.setPauseFlag(TXLiveConstants.PAUSE_FLAG_PAUSE_VIDEO | TXLiveConstants.PAUSE_FLAG_PAUSE_AUDIO);
             mTXLivePusher = new TXLivePusher(mAppContext);
-            mTXLivePusher.setConfig(config);
-            mTXLivePusher.setBeautyFilter(TXLiveConstants.BEAUTY_STYLE_SMOOTH, 5, 3, 2);
-            mTXLivePushListener = new TXLivePushListenerImpl();
-            mTXLivePusher.setPushListener(mTXLivePushListener);
         }
+        TXLivePushConfig config = new TXLivePushConfig();
+        config.setFrontCamera(frontCamera);
+        config.enableScreenCaptureAutoRotate(mScreenAutoEnable);// 是否开启屏幕自适应
+        config.setPauseFlag(TXLiveConstants.PAUSE_FLAG_PAUSE_VIDEO | TXLiveConstants.PAUSE_FLAG_PAUSE_AUDIO);
+        mTXLivePusher.setConfig(config);
+        mTXLivePusher.setBeautyFilter(TXLiveConstants.BEAUTY_STYLE_SMOOTH, 5, 3, 2);
+        mTXLivePushListener = new TXLivePushListenerImpl();
+        mTXLivePusher.setPushListener(mTXLivePushListener);
     }
 
     protected void unInitLivePusher() {
@@ -3132,6 +3140,10 @@ public class MLVBLiveRoomImpl extends MLVBLiveRoom implements HttpRequests.Heart
                 callbackOnThread(mCallback, "onError", event, msg);
             } else if (event == TXLiveConstants.PUSH_ERR_NET_DISCONNECT || event == TXLiveConstants.PUSH_ERR_INVALID_ADDRESS) {
                 String msg = "[LivePusher] 推流失败[网络断开]";
+                TXCLog.e(TAG,msg);
+                callbackOnThread(mCallback, "onError", event, msg);
+            } else if (event == TXLiveConstants.PUSH_ERR_SCREEN_CAPTURE_START_FAILED) {
+                String msg = "[LivePusher] 推流失败[录屏启动失败]";
                 TXCLog.e(TAG,msg);
                 callbackOnThread(mCallback, "onError", event, msg);
             }

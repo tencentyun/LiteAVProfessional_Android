@@ -62,9 +62,9 @@
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
         android:background="@color/colorAccent"
         android:text="开始录制"
         android:textColor="@color/colorTextWhite"
@@ -76,10 +76,10 @@
         android:layout_above="@id/btn_ok"
         android:layout_below="@id/video_settings_bar"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="25dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="25dp">
+        android:layout_marginBottom="25dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,8 +97,8 @@
                 android:id="@+id/rg_video_aspect_ratio"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginRight="50dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="50dp"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -121,6 +121,19 @@
                     android:background="@drawable/selector_radio_bg"
                     android:button="@null"
                     android:gravity="center"
+                    android:text="3:4"
+                    android:textColor="@color/text_settings_color"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_video_aspect_ratio_4_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_bg"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
                     android:text="4:3"
                     android:textColor="@color/text_settings_color"
                     android:textSize="16sp" />
@@ -134,7 +147,7 @@
                     android:button="@null"
                     android:checked="true"
                     android:gravity="center"
-                    android:text="16:9"
+                    android:text="9:16"
                     android:textColor="@color/text_settings_color"
                     android:textSize="16sp" />
 
@@ -147,9 +160,10 @@
                     android:button="@null"
                     android:checked="true"
                     android:gravity="center"
-                    android:text="9:16"
+                    android:text="16:9"
                     android:textColor="@color/text_settings_color"
                     android:textSize="16sp" />
+
             </RadioGroup>
 
             <!-- 推荐配置和自定义配置 -->
@@ -458,20 +472,21 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <TextView
-                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginTop="15dp"
                     android:text="开启手动对焦"
                     android:textColor="@color/record_settings_tip" />
 
                 <CheckBox
                     android:id="@+id/cb_touch_focus"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:checked="false" />
 
             </RelativeLayout>
@@ -479,20 +494,21 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
+
                 <TextView
-                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginTop="15dp"
                     android:text="录制完是否进入编辑"
                     android:textColor="@color/record_settings_tip" />
 
                 <CheckBox
                     android:id="@+id/cb_edit"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:checked="false" />
             </RelativeLayout>
         </LinearLayout>

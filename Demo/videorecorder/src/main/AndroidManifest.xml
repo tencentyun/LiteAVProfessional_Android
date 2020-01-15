@@ -8,7 +8,8 @@
         <activity
             android:name=".TCVideoRecordActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:theme="@style/RecordActivityTheme" />
         <activity
             android:name=".TCVideoRecordSmartActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
@@ -17,7 +18,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".videopreview.TCVideoPreviewActivity"
+            android:name=".TCRecordPreviewActivity"
             android:screenOrientation="portrait" />
     </application>
 

@@ -3,6 +3,7 @@ package com.tencent.liteav.demo;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,25 +13,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.tencent.liteav.demo.trtcvoiceroom.CreateVoiceRoomActivity;
 import com.tencent.liteav.demo.common.widget.expandableadapter.BaseExpandableRecyclerViewAdapter;
 import com.tencent.liteav.demo.lvb.camerapush.CameraPusherActivity;
-import com.tencent.liteav.demo.lvb.camerapush.LivePublisherSurfaceActivity;
 import com.tencent.liteav.demo.lvb.liveplayer.LivePlayerActivity;
-import com.tencent.liteav.demo.lvb.liveplayer.LivePlayerSurfaceActivity;
 import com.tencent.liteav.demo.lvb.liveroom.ui.LiveRoomActivity;
 import com.tencent.liteav.demo.player.VodPlayerActivity;
 import com.tencent.liteav.demo.player.superplayer.SuperPlayerActivity;
-import com.tencent.liteav.demo.trtc.TRTCNewActivity;
-import com.tencent.liteav.demo.videoediter.TCVideoEditChooseActivity;
+import com.tencent.liteav.demo.trtc.TRTCNewRoomActivity;
+import com.tencent.liteav.demo.videoediter.TCVideoPickerActivity;
 import com.tencent.liteav.demo.videojoiner.TCVideoJoinChooseActivity;
 import com.tencent.liteav.demo.videorecord.TCVideoSettingActivity;
+import com.tencent.liteav.trtcaudiocalldemo.demo.CreateAudioCallActivity;
 import com.tencent.rtmp.TXLiveBase;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class MainActivity extends Activity {
 
@@ -58,16 +64,19 @@ public class MainActivity extends Activity {
         mMainTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                File logFile = getLastModifiedLogFile();
-                if (logFile != null) {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("application/octet-stream");
-                    //intent.setPackage("com.tencent.mobileqq");
-                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(logFile));
-                    startActivity(Intent.createChooser(intent, "分享日志"));
-                } else {
-                    Toast.makeText(MainActivity.this.getApplicationContext(), "日志文件不存在！", Toast.LENGTH_SHORT);
-                }
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        File logFile = getLogFile();
+                        if (logFile != null) {
+                            Intent intent = new Intent(Intent.ACTION_SEND);
+                            intent.setType("application/octet-stream");
+                            //intent.setPackage("com.tencent.mobileqq");
+                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(logFile));
+                            startActivity(Intent.createChooser(intent, "分享日志"));
+                        }
+                    }
+                });
                 return false;
             }
         });
@@ -108,31 +117,7 @@ public class MainActivity extends Activity {
                 }
                 Intent intent = new Intent(MainActivity.this, childItem.getTargetClass());
                 intent.putExtra("TITLE", childItem.mName);
-                if (childItem.mIconId == R.drawable.play) {
-                    intent.putExtra("PLAY_TYPE", LivePlayerActivity.ACTIVITY_TYPE_VOD_PLAY);
-                } else if (childItem.mIconId == R.drawable.live) {
-                    intent.putExtra("PLAY_TYPE", LivePlayerActivity.ACTIVITY_TYPE_LIVE_PLAY);
-                } else if (childItem.mIconId == R.drawable.mic) {
-                    intent.putExtra("PLAY_TYPE", LivePlayerActivity.ACTIVITY_TYPE_LINK_MIC);
-                } else if (childItem.mIconId == R.drawable.cut) {
-                    intent.putExtra("CHOOSE_TYPE", TCVideoJoinChooseActivity.TYPE_SINGLE_CHOOSE);
-                } else if (childItem.mIconId == R.drawable.composite) {
-                    intent.putExtra("CHOOSE_TYPE", TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE);
-                } else if (childItem.mIconId == R.drawable.realtime_play) {
-                    intent.putExtra("PLAY_TYPE", LivePlayerActivity.ACTIVITY_TYPE_REALTIME_PLAY);
-                } else if (childItem.mIconId == R.drawable.update) {
-                    intent.putExtra("CHOOSE_TYPE", TCVideoJoinChooseActivity.TYPE_PUBLISH_CHOOSE);
-                } else if (childItem.mIconId == R.drawable.short_video_picture) {
-                    intent.putExtra("CHOOSE_TYPE", TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE_PICTURE);
-                }
-
-//                if (childItem.mTargetClass == TRTCNewActivity.class) {
-                    if (childItem.mName.equals("腾讯云视频通话")) {
-                        intent.putExtra("TYPE", 0); // 0 for 视频通话
-                    } else {
-                        intent.putExtra("TYPE", 1); // 1 for 直播
-                    }
-//                }
+                intent.putExtra("TYPE", childItem.mType);
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -145,20 +130,19 @@ public class MainActivity extends Activity {
 
         // 直播
         List<ChildBean> pusherChildList = new ArrayList<>();
-        pusherChildList.add(new ChildBean("MLVBLiveRoom", R.drawable.room_live, LiveRoomActivity.class));
-        pusherChildList.add(new ChildBean("摄像头推流", R.drawable.push, CameraPusherActivity.class));
-        pusherChildList.add(new ChildBean("直播拉流", R.drawable.live, LivePlayerActivity.class));
+        pusherChildList.add(new ChildBean("MLVBLiveRoom", R.drawable.room_live, 0, LiveRoomActivity.class));
+        pusherChildList.add(new ChildBean("摄像头推流", R.drawable.push, 0, CameraPusherActivity.class));
+        pusherChildList.add(new ChildBean("直播拉流", R.drawable.live, LivePlayerActivity.ACTIVITY_TYPE_LIVE_PLAY, LivePlayerActivity.class));
         if (pusherChildList.size() != 0) {
             // 这个是网页链接，配合build.sh避免在如ugc_smart版中出现
-            pusherChildList.add(new ChildBean("小直播", R.drawable.xiaozhibo, null));
+            pusherChildList.add(new ChildBean("小直播", R.drawable.xiaozhibo, 0, null));
             GroupBean pusherGroupBean = new GroupBean("移动直播", R.drawable.room_live, pusherChildList);
             groupList.add(pusherGroupBean);
         }
 
         // 初始化播放器
         List<ChildBean> playerChildList = new ArrayList<>();
-        playerChildList.add(new ChildBean("超级播放器", R.drawable.play, SuperPlayerActivity.class));
-//        playerChildList.add(new ChildBean("低延时播放", R.drawable.realtime_play, LivePlayerActivity.class));// 不用了
+        playerChildList.add(new ChildBean("超级播放器", R.drawable.play, LivePlayerActivity.ACTIVITY_TYPE_VOD_PLAY, SuperPlayerActivity.class));
         if (playerChildList.size() != 0) {
             GroupBean playerGroupBean = new GroupBean("播放器", R.drawable.composite, playerChildList);
             groupList.add(playerGroupBean);
@@ -166,23 +150,25 @@ public class MainActivity extends Activity {
 
         // 短视频
         List<ChildBean> shortVideoChildList = new ArrayList<>();
-        shortVideoChildList.add(new ChildBean("视频录制", R.drawable.video, TCVideoSettingActivity.class));
-        shortVideoChildList.add(new ChildBean("特效编辑", R.drawable.cut, TCVideoEditChooseActivity.class));
-        shortVideoChildList.add(new ChildBean("视频拼接", R.drawable.composite, TCVideoJoinChooseActivity.class));
-        shortVideoChildList.add(new ChildBean("图片转场", R.drawable.short_video_picture, TCVideoJoinChooseActivity.class));
-        shortVideoChildList.add(new ChildBean("视频上传", R.drawable.update, TCVideoJoinChooseActivity.class));
+        shortVideoChildList.add(new ChildBean("视频录制", R.drawable.video, 0, TCVideoSettingActivity.class));
+        shortVideoChildList.add(new ChildBean("特效编辑", R.drawable.cut, 0, TCVideoPickerActivity.class));
+        shortVideoChildList.add(new ChildBean("视频拼接", R.drawable.composite, TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE, TCVideoJoinChooseActivity.class));
+        shortVideoChildList.add(new ChildBean("图片转场", R.drawable.short_video_picture, TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE_PICTURE, TCVideoJoinChooseActivity.class));
+        shortVideoChildList.add(new ChildBean("视频上传", R.drawable.update, TCVideoJoinChooseActivity.TYPE_PUBLISH_CHOOSE, TCVideoJoinChooseActivity.class));
 
         if (shortVideoChildList.size() != 0) {
             // 这个是网页链接，配合build.sh避免在其他版本中出现
-            shortVideoChildList.add(new ChildBean("小视频", R.drawable.xiaoshipin, null));
+            shortVideoChildList.add(new ChildBean("小视频", R.drawable.xiaoshipin, 0, null));
             GroupBean shortVideoGroupBean = new GroupBean("短视频", R.drawable.video, shortVideoChildList);
             groupList.add(shortVideoGroupBean);
         }
 
         // 视频通话
         List<ChildBean> videoConnectChildList = new ArrayList<>();
-        videoConnectChildList.add(new ChildBean("腾讯云视频通话", R.drawable.room_multi, TRTCNewActivity.class));
-        videoConnectChildList.add(new ChildBean("万人低延时直播间", R.drawable.room_multi, TRTCNewActivity.class));
+        videoConnectChildList.add(new ChildBean("视频通话", R.drawable.room_multi, TRTCNewRoomActivity.TRTC_VOICECALL, TRTCNewRoomActivity.class));
+        videoConnectChildList.add(new ChildBean("视频互动直播", R.drawable.room_multi, TRTCNewRoomActivity.TRTC_LIVE, TRTCNewRoomActivity.class));
+        videoConnectChildList.add(new ChildBean("语音通话", R.drawable.room_multi, 0, CreateAudioCallActivity.class));
+        videoConnectChildList.add(new ChildBean("语音聊天室", R.drawable.room_multi, 0, CreateVoiceRoomActivity.class));
         if (videoConnectChildList.size() != 0) {
             GroupBean videoConnectGroupBean = new GroupBean("实时音视频 TRTC", R.drawable.room_multi, videoConnectChildList);
             groupList.add(videoConnectGroupBean);
@@ -191,11 +177,8 @@ public class MainActivity extends Activity {
 
         // 调试工具
         List<ChildBean> debugChildList = new ArrayList<>();
-        debugChildList.add(new ChildBean("RTMP 推流 (Surface)", R.drawable.push, LivePublisherSurfaceActivity.class));
-        debugChildList.add(new ChildBean("直播播放器 (Surface)", R.drawable.live, LivePlayerSurfaceActivity.class));
-        debugChildList.add(new ChildBean("点播播放器", R.drawable.play, VodPlayerActivity.class));
-//        debugChildList.add(new ChildBean("在线答题室", R.drawable.room_qa, AnswerRoomActivity.class));
-//        debugChildList.add(new ChildBean("答题播放器", R.drawable.room_qa, AnswerPlayerActivity.class));
+        debugChildList.add(new ChildBean("点播播放器", R.drawable.play, LivePlayerActivity.ACTIVITY_TYPE_VOD_PLAY, VodPlayerActivity.class));
+
         if (debugChildList.size() != 0) {
             GroupBean debugGroupBean = new GroupBean("调试工具", R.drawable.debug, debugChildList);
             groupList.add(debugGroupBean);
@@ -349,12 +332,13 @@ public class MainActivity extends Activity {
         public String mName;
         public int mIconId;
         public Class mTargetClass;
+        public int mType;
 
-
-        public ChildBean(String name, int iconId, Class targetActivityClass) {
+        public ChildBean(String name, int iconId, int type, Class targetActivityClass) {
             this.mName = name;
             this.mIconId = iconId;
             this.mTargetClass = targetActivityClass;
+            this.mType = type;
         }
 
         public String getName() {
@@ -373,25 +357,73 @@ public class MainActivity extends Activity {
     }
 
 
-    private File getLastModifiedLogFile() {
-        File retFile = null;
+    private File getLogFile() {
+        File sdcardDir = getExternalFilesDir(null);
+        if (sdcardDir == null) {
+            return null;
+        }
 
-        File directory = new File("/sdcard/log/tencent/liteav");
+        String path = sdcardDir.getAbsolutePath() + "/log/tencent/liteav";
+        List<String> logs = new ArrayList<>();
+        File directory = new File(path);
         if (directory != null && directory.exists() && directory.isDirectory()) {
             long lastModify = 0;
             File files[] = directory.listFiles();
             if (files != null && files.length > 0) {
                 for (File file : files) {
                     if (file.getName().endsWith("xlog")) {
-                        if (file.lastModified() > lastModify) {
-                            retFile = file;
-                            lastModify = file.lastModified();
-                        }
+                        logs.add(file.getAbsolutePath());
                     }
                 }
             }
         }
 
-        return retFile;
+
+        String zipPath = path + "/liteavLog.zip";
+        return zip(logs, zipPath);
+    }
+
+    private File zip(List<String> files, String zipFileName) {
+        File zipFile = new File(zipFileName);
+        zipFile.deleteOnExit();
+        InputStream is = null;
+        ZipOutputStream zos = null;
+
+        try {
+            zos = new ZipOutputStream(new FileOutputStream(zipFile));
+            zos.setComment("LiteAV log");
+            for (String path : files) {
+                File file = new File(path);
+                try {
+                    if(file.length() == 0 || file.length() > 8 * 1024 * 1024) continue;
+
+                    is = new FileInputStream(file);
+                    zos.putNextEntry(new ZipEntry(file.getName()));
+                    byte[] buffer = new byte[8 * 1024];
+                    int length = 0;
+                    while ((length = is.read(buffer)) != -1) {
+                        zos.write(buffer, 0, length);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        is.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            Log.w(TAG, "zip log error");
+            zipFile = null;
+        } finally {
+            try {
+                zos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return zipFile;
     }
 }
