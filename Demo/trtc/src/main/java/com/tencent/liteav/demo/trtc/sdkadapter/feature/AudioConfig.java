@@ -28,8 +28,8 @@ public class AudioConfig implements Serializable {
     private boolean mEnableAudio           = true;
     // 耳返开关
     private boolean mEnableEarMonitoring   = false;
-    // 免提模式 true 免提 false 听筒
-    private boolean mAudioHandFreeMode     = true;
+    // 听筒模式 true 听筒 false 免提
+    private boolean mAudioEarpieceMode     = false;
     // 是否打开音量提示，界面上表示为底下的音量条
     private boolean mAudioVolumeEvaluation = true;
     // 采集音量
@@ -55,7 +55,7 @@ public class AudioConfig implements Serializable {
         this.mAGC = other.mAGC;
         this.mANS = other.mANS;
         this.mEnableAudio = other.mEnableAudio;
-        this.mAudioHandFreeMode = other.mAudioHandFreeMode;
+        this.mAudioEarpieceMode = other.mAudioEarpieceMode;
         this.mAudioVolumeEvaluation = other.mAudioVolumeEvaluation;
         this.mSaveFlag = other.mSaveFlag;
         this.mRecording = other.mRecording;
@@ -112,12 +112,12 @@ public class AudioConfig implements Serializable {
         return mEnableEarMonitoring;
     }
 
-    public boolean isAudioHandFreeMode() {
-        return mAudioHandFreeMode;
+    public boolean isAudioEarpieceMode() {
+        return mAudioEarpieceMode;
     }
 
-    public void setAudioHandFreeMode(boolean audioHandFreeMode) {
-        mAudioHandFreeMode = audioHandFreeMode;
+    public void setAudioEarpieceMode(boolean audioEarpieceMode) {
+        mAudioEarpieceMode = audioEarpieceMode;
     }
 
     public boolean isAudioVolumeEvaluation() {

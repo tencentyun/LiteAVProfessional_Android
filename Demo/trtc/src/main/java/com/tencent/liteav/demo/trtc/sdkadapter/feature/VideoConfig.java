@@ -49,14 +49,16 @@ public class VideoConfig implements Serializable {
     private              boolean mPriorSmall         = false;
     // 重力感应
     private              boolean mEnableGSensorMode  = false;
-    // 是否打开云端混流
-    private              boolean mEnableCloudMixture = true;
+    // 云端混流模式
+    private              int mCloudMixtureMode      = TRTCCloudDef.TRTC_TranscodingConfigMode_Manual;
     // 本地视频旋转角
     private              int     mLocalRotation      = TRTCCloudDef.TRTC_VIDEO_ROTATION_0;
     // 自定义流Id
     private              String  mCustomLiveId;
     // 当前是否处于混流状态
     private transient    boolean mCurIsMix           = false;
+    // 是否已经暂停屏幕采集
+    private              boolean mIsScreenCapturePaused = false;
 
     /**
      * 是否默认保存到本地，第二次启动的时候，会自动从本地加载
@@ -84,12 +86,12 @@ public class VideoConfig implements Serializable {
         mPublishVideo = publishVideo;
     }
 
-    public boolean isEnableCloudMixture() {
-        return mEnableCloudMixture;
+    public int getCloudMixtureMode() {
+        return mCloudMixtureMode;
     }
 
-    public void setEnableCloudMixture(boolean enableCloudMixture) {
-        mEnableCloudMixture = enableCloudMixture;
+    public void setCloudMixtureMode(int mode) {
+        mCloudMixtureMode = mode;
     }
 
     public void copyFromSetting(VideoConfig other) {
@@ -108,9 +110,10 @@ public class VideoConfig implements Serializable {
         this.mEnableSmall = other.mEnableSmall;
         this.mPriorSmall = other.mPriorSmall;
         this.mEnableGSensorMode = other.mEnableGSensorMode;
-        this.mEnableCloudMixture = other.mEnableCloudMixture;
+        this.mCloudMixtureMode = other.mCloudMixtureMode;
         this.mLocalRotation = other.mLocalRotation;
         this.mCustomLiveId = other.mCustomLiveId;
+        this.mIsScreenCapturePaused = other.mIsScreenCapturePaused;
         this.mSaveFlag = other.mSaveFlag;
     }
 
@@ -248,6 +251,14 @@ public class VideoConfig implements Serializable {
 
     public void setSaveFlag(boolean saveFlag) {
         mSaveFlag = saveFlag;
+    }
+
+    public void setScreenCapturePaused(boolean paused) {
+        mIsScreenCapturePaused = paused;
+    }
+
+    public boolean isScreenCapturePaused() {
+        return mIsScreenCapturePaused;
     }
 
     public void saveCache() {

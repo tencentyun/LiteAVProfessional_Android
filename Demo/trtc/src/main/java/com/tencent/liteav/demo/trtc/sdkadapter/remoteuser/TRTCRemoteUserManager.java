@@ -352,12 +352,94 @@ public class TRTCRemoteUserManager {
      * 更新混流参数
      */
     public void updateCloudMixtureParams() {
-        VideoConfig videoConfig = ConfigHelper.getInstance().getVideoConfig();
-        if (!videoConfig.isEnableCloudMixture()) {
-            ConfigHelper.getInstance().getVideoConfig().setCurIsMix(false);
-            return;
+        int mode = ConfigHelper.getInstance().getVideoConfig().getCloudMixtureMode();
+        switch (mode) {
+            case TRTCCloudDef.TRTC_TranscodingConfigMode_Unknown:
+                ConfigHelper.getInstance().getVideoConfig().setCurIsMix(false);
+                mTRTCCloud.setMixTranscodingConfig(null);
+                break;
+            case TRTCCloudDef.TRTC_TranscodingConfigMode_Manual:
+                updateCloudMixtureManual();
+                ConfigHelper.getInstance().getVideoConfig().setCurIsMix(true);
+                break;
+            case TRTCCloudDef.TRTC_TranscodingConfigMode_Template_PureAudio:
+                updateCloudMixturePureAudio();
+                ConfigHelper.getInstance().getVideoConfig().setCurIsMix(true);
+                break;
+            case TRTCCloudDef.TRTC_TranscodingConfigMode_Template_PresetLayout:
+                updateCloudMixturePresetLayout();
+                ConfigHelper.getInstance().getVideoConfig().setCurIsMix(true);
+                break;
         }
+    }
 
+    /**
+     * 界面相关回调
+     */
+    public interface IView {
+        TXCloudVideoView getRemoteUserViewById(String userId, int steamType);
+
+        void onRemoteViewStatusUpdate(String userId, boolean enable);
+
+        void onSnapshotRemoteView(Bitmap bm);
+    }
+
+    /**
+     * 混流相关参数
+     */
+    private static class TRTCVideoStream {
+        public String userId;
+        public int    streamType;
+    }
+
+    private void updateCloudMixtureManual() {
+        ArrayList<TRTCVideoStream> local = new ArrayList<>();
+        TRTCVideoStream user = new TRTCVideoStream();
+        user.userId = mMixUserId;
+        user.streamType = TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG;
+        local.add(user);
+        updateCloudMixture(TRTCCloudDef.TRTC_TranscodingConfigMode_Manual, local, mTRTCVideoStreams);
+    }
+
+    private void updateCloudMixturePureAudio() {
+        TRTCCloudDef.TRTCTranscodingConfig config = new TRTCCloudDef.TRTCTranscodingConfig();
+        config.mode = TRTCCloudDef.TRTC_TranscodingConfigMode_Template_PureAudio;
+        ///【字段含义】腾讯云直播 AppID
+        ///【推荐取值】请在 [实时音视频控制台](https://console.cloud.tencent.com/rav) 选择已经创建的应用，单击【帐号信息】后，在“直播信息”中获取
+        config.appId = 1252463788;
+        ///【字段含义】腾讯云直播 bizid
+        ///【推荐取值】请在 [实时音视频控制台](https://console.cloud.tencent.com/rav) 选择已经创建的应用，单击【帐号信息】后，在“直播信息”中获取
+        config.bizId = 3891;
+        config.audioSampleRate = 48000;
+        config.audioBitrate = 64;
+        config.audioChannels = 1;
+
+        mTRTCCloud.setMixTranscodingConfig(config);
+    }
+
+    private void updateCloudMixturePresetLayout() {
+        ArrayList<TRTCVideoStream> local = new ArrayList<>();
+        TRTCVideoStream user = new TRTCVideoStream();
+        user.userId = "$PLACE_HOLDER_LOCAL_MAIN$";
+        user.streamType = TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG;
+        local.add(user);
+
+        user = new TRTCVideoStream();
+        user.userId = "$PLACE_HOLDER_LOCAL_SUB$";
+        user.streamType = TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB;
+        local.add(user);
+
+        ArrayList<TRTCVideoStream> remote = new ArrayList<>();
+        for (int index=0;index < 6;++index) {
+            TRTCVideoStream stream = new TRTCVideoStream();
+            stream.userId = "$PLACE_HOLDER_REMOTE$";
+            stream.streamType = TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG;
+            remote.add(stream);
+        }
+        updateCloudMixture(TRTCCloudDef.TRTC_TranscodingConfigMode_Template_PresetLayout, local, remote);
+    }
+
+    private void updateCloudMixture(int mode, ArrayList<TRTCVideoStream> localList, ArrayList<TRTCVideoStream> remoteList) {
         // 背景大画面宽高
         int videoWidth  = 720;
         int videoHeight = 1280;
@@ -370,7 +452,7 @@ public class TRTCRemoteUserManager {
         int offsetY = 50;
 
         int bitrate = 200;
-
+        VideoConfig videoConfig = ConfigHelper.getInstance().getVideoConfig();
         int resolution = videoConfig.getVideoResolution();
         switch (resolution) {
             case TRTCCloudDef.TRTC_VIDEO_RESOLUTION_160_160: {
@@ -443,6 +525,7 @@ public class TRTCRemoteUserManager {
         }
 
         TRTCCloudDef.TRTCTranscodingConfig config = new TRTCCloudDef.TRTCTranscodingConfig();
+        config.mode = mode;
         ///【字段含义】腾讯云直播 AppID
         ///【推荐取值】请在 [实时音视频控制台](https://console.cloud.tencent.com/rav) 选择已经创建的应用，单击【帐号信息】后，在“直播信息”中获取
         config.appId = 1252463788;
@@ -458,22 +541,27 @@ public class TRTCRemoteUserManager {
         config.audioBitrate = 64;
         config.audioChannels = 1;
 
-        // 设置混流后主播的画面位置
-        TRTCCloudDef.TRTCMixUser mixUser = new TRTCCloudDef.TRTCMixUser();
-        mixUser.userId = mMixUserId; // 以主播uid为broadcaster为例
-        mixUser.zOrder = 1;
-        mixUser.x = 0;
-        mixUser.y = 0;
-        mixUser.width = videoWidth;
-        mixUser.height = videoHeight;
-
         config.mixUsers = new ArrayList<>();
-        config.mixUsers.add(mixUser);
+
+        for (TRTCVideoStream userStream : localList) {
+            // 设置混流后主播的画面位置
+            TRTCCloudDef.TRTCMixUser mixUser = new TRTCCloudDef.TRTCMixUser();
+            mixUser.userId = userStream.userId;
+            mixUser.streamType = userStream.streamType;
+            mixUser.zOrder = 1;
+            mixUser.x = 0;
+            mixUser.y = 0;
+            mixUser.width = videoWidth;
+            mixUser.height = videoHeight;
+
+            config.mixUsers.add(mixUser);
+        }
+
 
         // 设置混流后各个小画面的位置
         int index = 0;
-        TXLog.i(TAG, "updateCloudMixtureParams " + mTRTCVideoStreams.size());
-        for (TRTCVideoStream userStream : mTRTCVideoStreams) {
+        TXLog.i(TAG, "updateCloudMixtureParams " + remoteList.size());
+        for (TRTCVideoStream userStream : remoteList) {
             TRTCCloudDef.TRTCMixUser _mixUser = new TRTCCloudDef.TRTCMixUser();
             PkConfig                 pkConfig = ConfigHelper.getInstance().getPkConfig();
             if (pkConfig.isConnected() && userStream.userId.equalsIgnoreCase(pkConfig.getConnectUserName())) {
@@ -504,25 +592,5 @@ public class TRTCRemoteUserManager {
         }
 
         mTRTCCloud.setMixTranscodingConfig(config);
-        videoConfig.setCurIsMix(true);
-    }
-
-    /**
-     * 界面相关回调
-     */
-    public interface IView {
-        TXCloudVideoView getRemoteUserViewById(String userId, int steamType);
-
-        void onRemoteViewStatusUpdate(String userId, boolean enable);
-
-        void onSnapshotRemoteView(Bitmap bm);
-    }
-
-    /**
-     * 混流相关参数
-     */
-    private static class TRTCVideoStream {
-        public String userId;
-        public int    streamType;
     }
 }

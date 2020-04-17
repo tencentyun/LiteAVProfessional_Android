@@ -34,7 +34,7 @@ public class AudioSettingFragment extends BaseSettingFragment {
     private CheckBoxSettingItem    mANSItem;
     private CheckBoxSettingItem    mAudioCaptureItem;
     private CheckBoxSettingItem    mAudioEarMonitoringItem;
-    private CheckBoxSettingItem    mAudioHandFreeModeItem;
+    private CheckBoxSettingItem    mAudioEarpieceModeItem;
     private CheckBoxSettingItem    mAudioVolumeEvaluationItem;
     private AudioConfig            mAudioConfig;
     private CustomSettingItem      mRecordItem;
@@ -154,16 +154,20 @@ public class AudioSettingFragment extends BaseSettingFragment {
         mSettingItemList.add(mAudioEarMonitoringItem);
 
         itemText =
-                new BaseSettingItem.ItemText("免提模式", "");
-        mAudioHandFreeModeItem = new CheckBoxSettingItem(getContext(), itemText,
+                new BaseSettingItem.ItemText("听筒模式", "");
+        mAudioEarpieceModeItem = new CheckBoxSettingItem(getContext(), itemText,
                 new CheckBoxSettingItem.ClickListener() {
                     @Override
                     public void onClick() {
-                        mAudioConfig.setAudioHandFreeMode(mAudioHandFreeModeItem.getChecked());
-                        mTRTCCloudManager.enableAudioHandFree(mAudioConfig.isAudioHandFreeMode());
+                        mAudioConfig.setAudioEarpieceMode(mAudioEarpieceModeItem.getChecked());
+                        if (mAudioConfig.isAudioEarpieceMode()) {
+                            mTRTCCloudManager.enableAudioHandFree(false);
+                        } else {
+                            mTRTCCloudManager.enableAudioHandFree(true);
+                        }
                     }
                 });
-        mSettingItemList.add(mAudioHandFreeModeItem);
+        mSettingItemList.add(mAudioEarpieceModeItem);
 
         itemText =
                 new BaseSettingItem.ItemText("音量提示", "");
@@ -235,8 +239,9 @@ public class AudioSettingFragment extends BaseSettingFragment {
         mANSItem.setCheck(mAudioConfig.isANS());
         mAudioCaptureItem.setCheck(mAudioConfig.isEnableAudio());
         mAudioEarMonitoringItem.setCheck(mAudioConfig.isEnableEarMonitoring());
-        //mAudioHandFreeModeItem.setCheck(mAudioConfig.isAudioHandFreeMode());
-        mAudioHandFreeModeItem.setCheck(mTRTCCloudManager.mIsAudioHandFreeMode);
+
+        mAudioEarpieceModeItem.setCheck(mAudioConfig.isAudioEarpieceMode());
+
         mAudioVolumeEvaluationItem.setCheck(mAudioConfig.isAudioVolumeEvaluation());
     }
 

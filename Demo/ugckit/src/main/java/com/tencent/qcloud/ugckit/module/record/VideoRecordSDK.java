@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
 import com.tencent.qcloud.ugckit.R;
 import com.tencent.liteav.demo.beauty.BeautyParams;
 import com.tencent.qcloud.ugckit.UGCKit;
@@ -42,6 +43,10 @@ public class VideoRecordSDK implements TXRecordCommon.ITXVideoRecordListener {
     public static int STATE_STOP = 2;
     public static int STATE_RESUME = 3;
     public static int STATE_PAUSE = 4;
+
+    public static int START_RECORD_SUCC = 0;
+    public static int START_RECORD_FAIL = -1;
+
     private OnVideoRecordListener mOnVideoRecordListener;
     private OnRestoreDraftListener mOnRestoreDraftListener;
     private String mRecordVideoPath;
@@ -167,8 +172,8 @@ public class VideoRecordSDK implements TXRecordCommon.ITXVideoRecordListener {
             mRecordSDK.getBeautyManager().setNosePositionLevel(beautyParams.mNosePositionLevel);
             mRecordSDK.getBeautyManager().setLipsThicknessLevel(beautyParams.mLipsThicknessLevel);
             mRecordSDK.getBeautyManager().setFaceBeautyLevel(beautyParams.mFaceBeautyLevel);
-            mRecordSDK.setGreenScreenFile(beautyParams.mGreenFile, true);
-            mRecordSDK.setSpecialRatio(beautyParams.mFilterMixLevel / 10.f);
+            mRecordSDK.getBeautyManager().setGreenScreenFile(beautyParams.mGreenFile);
+            mRecordSDK.getBeautyManager().setFilterStrength(beautyParams.mFilterStrength / 10.f);
         }
     }
 
@@ -333,7 +338,7 @@ public class VideoRecordSDK implements TXRecordCommon.ITXVideoRecordListener {
     /**
      * 开始录制
      */
-    public void startRecord() {
+    public int startRecord() {
         Log.d(TAG, "startRecord mCurrentState" + mCurrentState);
         if (mCurrentState == STATE_STOP) {
             String customVideoPath = VideoPathUtil.getCustomVideoOutputPath();
@@ -344,22 +349,32 @@ public class VideoRecordSDK implements TXRecordCommon.ITXVideoRecordListener {
             if (mRecordSDK != null) {
                 retCode = mRecordSDK.startRecord(customVideoPath, customCoverPath);
             }
+            Log.d(TAG, "startRecord retCode:" + retCode);
+            if (retCode != TXRecordCommon.START_RECORD_OK) {
+                if (retCode == TXRecordCommon.START_RECORD_ERR_NOT_INIT) {
+                    ToastUtil.toastShortMessage(UGCKit.getAppContext().getString(R.string.start_record_not_init));
+                } else if (retCode == TXRecordCommon.START_RECORD_ERR_IS_IN_RECORDING) {
+                    ToastUtil.toastShortMessage(UGCKit.getAppContext().getString(R.string.start_record_not_finish));
+                } else if (retCode == TXRecordCommon.START_RECORD_ERR_VIDEO_PATH_IS_EMPTY) {
+                    ToastUtil.toastShortMessage(UGCKit.getAppContext().getString(R.string.start_record_path_empty));
+                } else if (retCode == TXRecordCommon.START_RECORD_ERR_API_IS_LOWER_THAN_18) {
+                    ToastUtil.toastShortMessage(UGCKit.getAppContext().getString(R.string.start_record_version_below));
+                }
+                // 增加了TXUgcSDK.licence校验的返回错误码
+                else if (retCode == TXRecordCommon.START_RECORD_ERR_LICENCE_VERIFICATION_FAILED) {
+                    ToastUtil.toastShortMessage("licence校验失败，请调用TXUGCBase.getLicenceInfo(Context context)获取licence信息");
+                }
+                return START_RECORD_FAIL;
+            }
             LogReport.getInstance().reportStartRecord(retCode);
 
-            if (retCode != 0) {
-                ToastUtil.toastShortMessage(UGCKit.getAppContext().getResources().getString(R.string.tc_video_record_activity_start_record_record_failed_tip) + retCode);
-                if (mRecordSDK != null) {
-                    mRecordSDK.setVideoRecordListener(null);
-                    mRecordSDK.stopRecord();
-                }
-                return;
-            }
             RecordMusicManager.getInstance().startMusic();
         } else if (mCurrentState == STATE_PAUSE) {
             resumeRecord();
         }
 
         mCurrentState = STATE_START;
+        return START_RECORD_SUCC;
     }
 
     /**
@@ -446,12 +461,6 @@ public class VideoRecordSDK implements TXRecordCommon.ITXVideoRecordListener {
                           float rightSpecialRatio, float leftRatio) {
         if (mRecordSDK != null) {
             mRecordSDK.setFilter(leftBmp, leftSpecialRatio, rightBmp, rightSpecialRatio, leftRatio);
-        }
-    }
-
-    public void setSpecialRatio(float specialRatio) {
-        if (mRecordSDK != null) {
-            mRecordSDK.setSpecialRatio(specialRatio);
         }
     }
 

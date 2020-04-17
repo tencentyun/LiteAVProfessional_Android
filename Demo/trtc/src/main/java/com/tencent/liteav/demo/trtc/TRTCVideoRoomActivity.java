@@ -41,9 +41,11 @@ import com.tencent.liteav.demo.trtc.sdkadapter.feature.PkConfig;
 import com.tencent.liteav.demo.trtc.sdkadapter.feature.VideoConfig;
 import com.tencent.liteav.demo.trtc.sdkadapter.remoteuser.RemoteUserConfigHelper;
 import com.tencent.liteav.demo.trtc.sdkadapter.remoteuser.TRTCRemoteUserManager;
+import com.tencent.liteav.demo.trtc.utils.FileUtils;
 import com.tencent.liteav.demo.trtc.widget.bgm.BgmSettingFragmentDialog;
 import com.tencent.liteav.demo.trtc.widget.cdnplay.CdnPlayerSettingFragmentDialog;
 import com.tencent.liteav.demo.trtc.widget.feature.FeatureSettingFragmentDialog;
+import com.tencent.liteav.demo.trtc.widget.feature.VideoSettingFragment;
 import com.tencent.liteav.demo.trtc.widget.remoteuser.RemoteUserManagerFragmentDialog;
 import com.tencent.liteav.demo.trtc.widget.videolayout.TRTCVideoLayoutManager;
 import com.tencent.rtmp.ITXLivePlayListener;
@@ -53,6 +55,7 @@ import com.tencent.trtc.TRTCCloud;
 import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCStatistics;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
@@ -71,7 +74,8 @@ import java.util.ArrayList;
  * 5. {@link com.tencent.liteav.demo.trtc.widget.remoteuser} 文件夹是远程用户管理的设置界面
  * 6. {@link com.tencent.liteav.demo.trtc.widget.cdnplay} 文件夹是cdn播放的设置界面
  */
-public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnClickListener, TRTCCloudManagerListener, TRTCCloudManager.IView, TRTCRemoteUserManager.IView, ITXLivePlayListener {
+public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnClickListener, TRTCCloudManagerListener, TRTCCloudManager.IView, TRTCRemoteUserManager.IView, ITXLivePlayListener,
+        VideoSettingFragment.VideoSettingListener {
     public static final String KEY_SDK_APP_ID      = "sdk_app_id";
     public static final String KEY_ROOM_ID         = "room_id";
     public static final String KEY_USER_ID         = "user_id";
@@ -82,10 +86,11 @@ public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnC
     public static final String KEY_VIDEO_FILE_PATH = "file_path";
     public static final String KEY_RECEIVED_VIDEO  = "auto_received_video";
     public static final String KEY_RECEIVED_AUDIO  = "auto_received_audio";
+    public static final String KEY_SCREEN_CAPTURE  = "screen_capture";
 
     private static final String TAG                    = "TRTCVideoRoomActivity";
     public static final  String KEY_AUDIO_VOLUMETYOE   = "auto_audio_volumeType";
-    public static final  String KEY_AUDIO_HANDFREEMODE = "HandFreeMode";
+    public static final  String KEY_AUDIO_EARPIECEMODE = "EarpieceMode";
 
     /**
      * 【关键】TRTC SDK 组件
@@ -141,7 +146,11 @@ public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnC
     private boolean              mReceivedVideo            = true;
     private boolean              mReceivedAudio            = true;
     private int                  mVolumeType               = 0;
-    private boolean              mIsAudioHandFreeMode      = true;
+    private boolean              mIsAudioEarpieceMode      = false;
+    private TXCloudVideoView     mLocalVideoView = null;
+
+    // 录屏相关
+    private boolean            mIsScreenCapture = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -161,10 +170,11 @@ public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnC
         String userSig  = intent.getStringExtra(KEY_USER_SIG);
         int    role     = intent.getIntExtra(KEY_ROLE, TRTCCloudDef.TRTCRoleAnchor);
         mIsCustomCaptureAndRender = intent.getBooleanExtra(KEY_CUSTOM_CAPTURE, false);
+        mIsScreenCapture = intent.getBooleanExtra(KEY_SCREEN_CAPTURE, false);
         mReceivedVideo = intent.getBooleanExtra(KEY_RECEIVED_VIDEO, true);
         mReceivedAudio = intent.getBooleanExtra(KEY_RECEIVED_AUDIO, true);
         mVolumeType = intent.getIntExtra(KEY_AUDIO_VOLUMETYOE, 0);
-        mIsAudioHandFreeMode = intent.getBooleanExtra(KEY_AUDIO_HANDFREEMODE, true);
+        mIsAudioEarpieceMode = intent.getBooleanExtra(KEY_AUDIO_EARPIECEMODE, false);
         Log.d(TAG, "onCreate, intent.getIntExtra  mVolumeType " + mVolumeType);
         //        // 若您的项目有纯音频的旁路直播需求，请配置参数。
         //        // 配置该参数后，音频达到服务器，即开始自动旁路；
@@ -201,17 +211,11 @@ public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnC
         initViews();
         // 初始化外部采集和渲染
         if (mIsCustomCaptureAndRender) {
-            initCustomCapture();
+            mVideoFilePath = getIntent().getStringExtra(KEY_VIDEO_FILE_PATH);
         }
 
         // 开始进房
         enterRoom();
-    }
-
-    private void initCustomCapture() {
-        mVideoFilePath = getIntent().getStringExtra(KEY_VIDEO_FILE_PATH);
-        mCustomCapture = new TestSendCustomData(this, mVideoFilePath, true);
-        mCustomRender = new TestRenderVideoFrame(mTRTCParams.userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
     }
 
     private void enterRoom() {
@@ -260,7 +264,7 @@ public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnC
         findViewById(R.id.trtc_ib_back).setOnClickListener(this);
         findViewById(R.id.trtc_iv_music).setOnClickListener(this);
         mTvRoomId = (TextView) findViewById(R.id.trtc_tv_room_id);
-        mTvRoomId.setText(String.valueOf(mTRTCParams.roomId));
+        mTvRoomId.setText(String.valueOf(mTRTCParams.roomId&0x0FFFFFFFFL));
         mCdnPlayView = (TXCloudVideoView) findViewById(R.id.trtc_cdn_play_view);
         mCdnPlayViewGroup = (Group) findViewById(R.id.trtc_cdn_view_group);
         mCdnPlayViewGroup.setVisibility(View.GONE);
@@ -329,7 +333,11 @@ public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnC
         mTRTCCloudManager.setTRTCListener(this);
         mTRTCCloudManager.initTRTCManager(mIsCustomCaptureAndRender, mReceivedAudio, mReceivedVideo);
         mTRTCCloudManager.setSystemVolumeType(mVolumeType);
-        mTRTCCloudManager.enableAudioHandFree(mIsAudioHandFreeMode);
+
+        ConfigHelper.getInstance().getAudioConfig().setAudioEarpieceMode(mIsAudioEarpieceMode);
+        if (mIsAudioEarpieceMode) {
+            mTRTCCloudManager.enableAudioHandFree(false);
+        }
 
         mTRTCRemoteUserManager = new TRTCRemoteUserManager(mTRTCCloud, this, mIsCustomCaptureAndRender);
         mTRTCRemoteUserManager.setMixUserId(mTRTCParams.userId);
@@ -528,38 +536,47 @@ public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnC
     }
 
     private void startLocalPreview() {
-        TXCloudVideoView localVideoView = mTRTCVideoLayout.allocCloudVideoView(mTRTCParams.userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
-        if (!mIsCustomCaptureAndRender) {
+        if (mLocalVideoView == null) {
+            mLocalVideoView = mTRTCVideoLayout.allocCloudVideoView(mTRTCParams.userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+        }
+        if (mIsScreenCapture) {
+            mTRTCCloudManager.startScreenCapture();
+        } else if (!mIsCustomCaptureAndRender) {
             // 开启本地预览
-            mTRTCCloudManager.setLocalPreviewView(localVideoView);
+            mTRTCCloudManager.setLocalPreviewView(mLocalVideoView);
             mTRTCCloudManager.startLocalPreview();
         } else {
-            if (mCustomCapture != null) {
-                mCustomCapture.start();
-            }
-            // 设置 TRTC SDK 的状态为本地自定义渲染，视频格式为纹理
-            mTRTCCloudManager.setLocalVideoRenderListener(mCustomRender);
-            if (mCustomRender != null) {
+            mTRTCCloudManager.setVideoCustomCaptureEnabled(true);
+            if (mCustomCapture == null && mCustomRender == null) {
+                mCustomCapture = new TestSendCustomData(this, mVideoFilePath, true);
+                mCustomRender = new TestRenderVideoFrame(mTRTCParams.userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+                // 设置 TRTC SDK 的状态为本地自定义渲染，视频格式为纹理
+                mTRTCCloudManager.setLocalVideoRenderListener(mCustomRender);
                 TextureView textureView = new TextureView(this);
-                localVideoView.addVideoView(textureView);
+                mLocalVideoView.addVideoView(textureView);
+                mCustomCapture.start();
                 mCustomRender.start(textureView);
             }
         }
     }
 
     private void stopLocalPreview() {
-        if (!mIsCustomCaptureAndRender) {
-            // 关闭本地预览
-            mTRTCCloudManager.stopLocalPreview();
-        } else {
-            if (mCustomCapture != null) {
-                mCustomCapture.stop();
-            }
-            if (mCustomRender != null) {
-                mCustomRender.stop();
-            }
+        mTRTCCloudManager.stopScreenCapture();
+        // 关闭本地预览
+        mTRTCCloudManager.stopLocalPreview();
+        if (mCustomCapture != null) {
+            mCustomCapture.stop();
+            mCustomCapture = null;
         }
-        mTRTCVideoLayout.recyclerCloudViewView(mTRTCParams.userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+        if (mCustomRender != null) {
+            mCustomRender.stop();
+            mCustomRender = null;
+        }
+        mTRTCCloudManager.setVideoCustomCaptureEnabled(false);
+        if (mLocalVideoView != null) {
+            mTRTCVideoLayout.recyclerCloudViewView(mTRTCParams.userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+            mLocalVideoView = null;
+        }
     }
 
     /**
@@ -617,7 +634,9 @@ public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnC
             // 根据当前视频流的状态，展示相关的 UI 逻辑。
             mTRTCVideoLayout.updateVideoStatus(userId, available);
         }
-        mTRTCRemoteUserManager.updateCloudMixtureParams();
+        if (ConfigHelper.getInstance().getVideoConfig().getCloudMixtureMode() == TRTCCloudDef.TRTC_TranscodingConfigMode_Manual) {
+            mTRTCRemoteUserManager.updateCloudMixtureParams();
+        }
     }
 
     /**
@@ -667,12 +686,12 @@ public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnC
      * 有新的主播{@link TRTCCloudDef#TRTCRoleAnchor}加入了当前视频房间
      * 该方法会在主播加入房间的时候进行回调，此时音频数据会自动拉取下来，但是视频需要有 View 承载才会开始渲染。
      * 为了更好的交互体验，Demo 选择在 onUserVideoAvailable 中，申请 View 并且开始渲染。
-     * 您可以根据实际需求，选择在 onUserEnter 还是 onUserVideoAvailable 中发起渲染。
+     * 您可以根据实际需求，选择在 onRemoteUserEnterRoom 还是 onUserVideoAvailable 中发起渲染。
      *
      * @param userId 用户标识
      */
     @Override
-    public void onUserEnter(String userId) {
+    public void onRemoteUserEnterRoom(String userId) {
     }
 
     /**
@@ -685,13 +704,15 @@ public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnC
      * @param reason 离开原因代码，区分用户是正常离开，还是由于网络断线等原因离开。
      */
     @Override
-    public void onUserExit(String userId, int reason) {
+    public void onRemoteUserLeaveRoom(String userId, int reason) {
         mTRTCRemoteUserManager.removeRemoteUser(userId);
         // 回收分配的渲染的View
         mTRTCVideoLayout.recyclerCloudViewView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
         mTRTCVideoLayout.recyclerCloudViewView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB);
         // 更新混流参数
-        mTRTCRemoteUserManager.updateCloudMixtureParams();
+        if (ConfigHelper.getInstance().getVideoConfig().getCloudMixtureMode() == TRTCCloudDef.TRTC_TranscodingConfigMode_Manual) {
+            mTRTCRemoteUserManager.updateCloudMixtureParams();
+        }
     }
 
     /**
@@ -963,5 +984,23 @@ public class TRTCVideoRoomActivity extends AppCompatActivity implements View.OnC
                 }
             }
         });
+    }
+
+    @Override
+    public void onStartCapture(boolean isCamera, boolean isCustomCapture, boolean isScreenCapture) {
+        mIsScreenCapture = isScreenCapture;
+        mIsCustomCaptureAndRender = isCustomCapture;
+
+        // 将视频拷贝到本地
+        mVideoFilePath = new File(getFilesDir(), "out_rotate_with_180.mp4").getAbsolutePath();
+        if (mIsCustomCaptureAndRender && !new File(mVideoFilePath).exists()) {
+            FileUtils.copyFilesFromAssets(this, "out_rotate_with_180.mp4", mVideoFilePath);
+        }
+        startLocalPreview();
+    }
+
+    @Override
+    public void onStopCapture() {
+        stopLocalPreview();
     }
 }

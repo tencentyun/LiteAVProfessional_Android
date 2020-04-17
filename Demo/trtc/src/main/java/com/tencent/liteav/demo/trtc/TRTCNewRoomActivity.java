@@ -34,7 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tencent.liteav.demo.trtc.TRTCVideoRoomActivity.KEY_AUDIO_HANDFREEMODE;
+import static com.tencent.liteav.demo.trtc.TRTCVideoRoomActivity.KEY_AUDIO_EARPIECEMODE;
 import static com.tencent.liteav.demo.trtc.TRTCVideoRoomActivity.KEY_AUDIO_VOLUMETYOE;
 import static com.tencent.liteav.demo.trtc.TRTCVideoRoomActivity.KEY_RECEIVED_AUDIO;
 import static com.tencent.liteav.demo.trtc.TRTCVideoRoomActivity.KEY_RECEIVED_VIDEO;
@@ -83,8 +83,8 @@ public class TRTCNewRoomActivity extends Activity {
     private              RadioButtonSettingItem mAudioReceivedItem;
     private              RadioButtonSettingItem mAudioVolumeTypeItem;
     private              int                    mAudioVolumeType     = TRTCCloudDef.TRTCSystemVolumeTypeAuto;
-    private              CheckBoxSettingItem    mAudioHandFreeModeItem;
-    private              boolean                mIsAudioHandFreeMode = true;
+    private              CheckBoxSettingItem    mAudioEarpieceModeItem;
+    private              boolean               mIsAudioEarpieceMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +97,7 @@ public class TRTCNewRoomActivity extends Activity {
         final EditText etUserId = (EditText) findViewById(R.id.et_user_name);
         loadUserInfo(etRoomId, etUserId);
         mSettingItemList = new ArrayList<>();
-        BaseSettingItem.ItemText itemText =
-                new BaseSettingItem.ItemText("视频输入", "前摄像头", "视频文件");
+        BaseSettingItem.ItemText itemText = new BaseSettingItem.ItemText("视频输入", "前摄像头", "视频文件", "录屏");
         mInputItem = new RadioButtonSettingItem(this, itemText,
                 new RadioButtonSettingItem.SelectedListener() {
                     @Override
@@ -107,12 +106,12 @@ public class TRTCNewRoomActivity extends Activity {
                             return;
                         }
                         // 这里会设置选择视频文件的时候音量类型默认使用媒体音量
-                        if (index == 0) {
-                            mAudioVolumeTypeItem.setSelect(INDEX_AUDIO_VOLUME_TYPE_NO_SELECTED);
-                            mAudioVolumeTypeItem.getView().setVisibility(View.VISIBLE);
-                        } else {
+                        if (index == 1) {
                             mAudioVolumeTypeItem.setSelect(INDEX_AUDIO_VOLUME_TYPE_MEDIA);
                             mAudioVolumeTypeItem.getView().setVisibility(View.GONE);
+                        } else {
+                            mAudioVolumeTypeItem.setSelect(INDEX_AUDIO_VOLUME_TYPE_NO_SELECTED);
+                            mAudioVolumeTypeItem.getView().setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -159,18 +158,18 @@ public class TRTCNewRoomActivity extends Activity {
         mSettingItemList.add(mAudioVolumeTypeItem);
 
         itemText =
-                new BaseSettingItem.ItemText("免提模式", "");
-        mAudioHandFreeModeItem = new CheckBoxSettingItem(this, itemText,
+                new BaseSettingItem.ItemText("听筒模式", "");
+        mAudioEarpieceModeItem = new CheckBoxSettingItem(this, itemText,
                 new CheckBoxSettingItem.ClickListener() {
                     @Override
                     public void onClick() {
-                        mIsAudioHandFreeMode = mAudioHandFreeModeItem.getChecked();
-                        Log.e(TAG, "startJoinRoomInternal getChecked() SetAudioRoute:" + mIsAudioHandFreeMode);
+                        mIsAudioEarpieceMode = mAudioEarpieceModeItem.getChecked();
+                        Log.e(TAG, "startJoinRoomInternal getChecked() SetAudioRoute:" + mIsAudioEarpieceMode);
                     }
                 });
-        mSettingItemList.add(mAudioHandFreeModeItem);
+        mSettingItemList.add(mAudioEarpieceModeItem);
 
-        mAudioHandFreeModeItem.setCheck(mIsAudioHandFreeMode);
+        mAudioEarpieceModeItem.setCheck(mIsAudioEarpieceMode);
         mAudioVolumeTypeItem.setSelect(INDEX_AUDIO_VOLUME_TYPE_NO_SELECTED);
 
         // 将这些view添加到对应的容器中
@@ -223,7 +222,7 @@ public class TRTCNewRoomActivity extends Activity {
         final EditText etUserId = (EditText) findViewById(R.id.et_user_name);
         int            roomId   = 123;
         try {
-            roomId = Integer.valueOf(etRoomId.getText().toString());
+            roomId = Long.valueOf(etRoomId.getText().toString()).intValue();
         } catch (Exception e) {
             Toast.makeText(this, "请输入有效的房间号", Toast.LENGTH_SHORT).show();
             return;
@@ -283,10 +282,13 @@ public class TRTCNewRoomActivity extends Activity {
         }
 
         // 是否使用外部采集
-        boolean isCustomVideoCapture = (mInputItem.getSelected() == 1);
-        if (TextUtils.isEmpty(mVideoFile)) isCustomVideoCapture = false;
-        intent.putExtra(TRTCVideoRoomActivity.KEY_CUSTOM_CAPTURE, isCustomVideoCapture);
-        intent.putExtra(TRTCVideoRoomActivity.KEY_VIDEO_FILE_PATH, mVideoFile);
+        if (mInputItem.getSelected() == 1 && !TextUtils.isEmpty(mVideoFile)) {
+            intent.putExtra(TRTCVideoRoomActivity.KEY_CUSTOM_CAPTURE, true);
+            intent.putExtra(TRTCVideoRoomActivity.KEY_VIDEO_FILE_PATH, mVideoFile);
+        } else if (mInputItem.getSelected() == 2) {
+            intent.putExtra(TRTCVideoRoomActivity.KEY_SCREEN_CAPTURE, true);
+        }
+
         // 接收模式
         mReceivedVideo = (mVideoReceivedItem.getSelected() == 0);
         mReceivedAudio = (mAudioReceivedItem.getSelected() == 0);
@@ -308,8 +310,8 @@ public class TRTCNewRoomActivity extends Activity {
 
         intent.putExtra(KEY_AUDIO_VOLUMETYOE, mAudioVolumeType);
 
-        Log.e(TAG, "startJoinRoomInternal SetAudioRoute:" + mIsAudioHandFreeMode);
-        intent.putExtra(KEY_AUDIO_HANDFREEMODE, mIsAudioHandFreeMode);
+        Log.e(TAG, "startJoinRoomInternal EarpieceMode:" + mIsAudioEarpieceMode);
+        intent.putExtra(KEY_AUDIO_EARPIECEMODE, mIsAudioEarpieceMode);
         intent.putExtra(KEY_RECEIVED_VIDEO, mReceivedVideo);
         intent.putExtra(KEY_RECEIVED_AUDIO, mReceivedAudio);
         startActivity(intent);

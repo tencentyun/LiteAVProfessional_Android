@@ -6,7 +6,7 @@ package com.tencent.liteav.demo.player.server;
 
 public class Const {
     public static final String SERVER_IP = "http://demo.vod2.myqcloud.com/shortvideo";
-    public static final String ADDRESS_SIG = SERVER_IP;
+    public static final String ADDRESS_SIG = SERVER_IP + "/api/v1/misc/upload/signature";
     public static final String ADDRESS_VIDEO_LIST = SERVER_IP + "/api/v1/resource/videos";
     public static final String ADDRESS_VIDEO_INFO = SERVER_IP + "/api/v1/resource/videos/#";
     public static final String ADDRESS_VIDEO_REPORT = SERVER_IP + "/api/v1/resource/videos/"; // /api/v1/resource/videos/#file_id

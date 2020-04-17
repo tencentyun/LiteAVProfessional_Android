@@ -9,10 +9,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Environment;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.tencent.liteav.basic.util.TXCTimeUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -141,12 +142,16 @@ public class TVCUtils {
         }
 
         if (idfa == null || idfa.length() == 0) {
-            //UUID：16进制字符串(UTC毫秒时间(6字节) + MD5(应用包名 + 系统生成UUID)(16字节)
+            //UUID：16进制字符串(UTC毫秒时间(6字节) + 以开机到现在的时间戳为种子的随机数(4字节) + MD5(应用包名 + 系统生成UUID)(16字节)
             idfa = "";
             long utcTimeMS = System.currentTimeMillis();
+            long tickTimeMS = TXCTimeUtil.getTimeTick();
             String packetName = getPackageName(context);
             for (int i = 5; i >= 0; --i) {
                 idfa += String.format("%02x", (byte)((utcTimeMS >> (i*8)) & 0xff));
+            }
+            for (int i = 3; i >= 0; --i) {
+                idfa += String.format("%02x", (byte)((tickTimeMS >> (i*8)) & 0xff));
             }
             idfa += string2Md5(packetName + UUID.randomUUID().toString());
         }

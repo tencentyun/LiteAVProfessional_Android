@@ -1,11 +1,13 @@
 package com.tencent.liteav.demo.trtc.widget.feature;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.blankj.utilcode.util.SizeUtils;
 import com.tencent.liteav.demo.trtc.R;
@@ -21,6 +23,7 @@ import com.tencent.liteav.demo.trtc.widget.settingitem.SelectionSettingItem;
 import com.tencent.trtc.TRTCCloudDef;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.tencent.trtc.TRTCCloudDef.TRTC_VIDEO_MIRROR_TYPE_AUTO;
@@ -37,6 +40,13 @@ import static com.tencent.trtc.TRTCCloudDef.TRTC_VIDEO_ROTATION_90;
  */
 public class VideoSettingFragment extends BaseSettingFragment {
     private static final String                 TAG = VideoSettingFragment.class.getName();
+
+    public interface VideoSettingListener {
+        void onStartCapture(boolean isCamera, boolean isCustomCapture, boolean isScreenCapture);
+
+        void onStopCapture();
+    }
+
     /**
      * 界面相关
      */
@@ -53,12 +63,15 @@ public class VideoSettingFragment extends BaseSettingFragment {
     private              RadioButtonSettingItem mRotationItem;
     private              CheckBoxSettingItem    mRemoteMirrorItem;
     private              CheckBoxSettingItem    mWatermark;
+    private              CheckBoxSettingItem    mPauseScreenCaptureItem;
     private              CheckBoxSettingItem    publishVideoItem;
+    private              RadioButtonSettingItem mInputSourceItem;
 
     private VideoConfig                        mVideoConfig;
     private ArrayList<TRTCSettingBitrateTable> paramArray;
     private int                                mAppScene = TRTCCloudDef.TRTC_APP_SCENE_VIDEOCALL;
     private int                                mCurRes;
+    private VideoSettingListener               mVideoSettingListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +79,11 @@ public class VideoSettingFragment extends BaseSettingFragment {
         initData();
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mVideoSettingListener = (VideoSettingListener) activity;
+    }
 
     private void initData() {
         boolean isVideoCall = mAppScene == TRTCCloudDef.TRTC_APP_SCENE_VIDEOCALL;
@@ -279,11 +297,52 @@ public class VideoSettingFragment extends BaseSettingFragment {
                 });
         mSettingItemList.add(mWatermark);
 
+        itemText = new BaseSettingItem.ItemText("暂停屏幕采集", "");
+        mPauseScreenCaptureItem = new CheckBoxSettingItem(getContext(), itemText,
+                new CheckBoxSettingItem.ClickListener() {
+                    @Override
+                    public void onClick() {
+                        mVideoConfig.setScreenCapturePaused(mPauseScreenCaptureItem.getChecked());
+                        if (mPauseScreenCaptureItem.getChecked()) {
+                            mTRTCCloudManager.pauseScreenCapture();
+                        } else {
+                            mTRTCCloudManager.resumeScreenCapture();
+                        }
+                    }
+                });
+        mSettingItemList.add(mPauseScreenCaptureItem);
+
         itemText =
                 new BaseSettingItem.ItemText("本地视频截图", "");
         CustomSettingItem snapshotItem = new CustomSettingItem(getContext(), itemText, createSnapshotButton());
         snapshotItem.setAlign(CustomSettingItem.ALIGN_RIGHT);
         mSettingItemList.add(snapshotItem);
+
+        itemText = new BaseSettingItem.ItemText("采集输入源", "摄像头", "自定义输入", "录屏");
+        mInputSourceItem = new RadioButtonSettingItem(getContext(), itemText, null);
+        mSettingItemList.add(mInputSourceItem);
+
+        itemText = new BaseSettingItem.ItemText("采集源开关");
+        Button startView = new Button(getContext());
+        startView.setText("开启");
+        startView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int index = mInputSourceItem.getSelected();
+                mVideoSettingListener.onStartCapture(index == 0, index == 1, index == 2);
+            }
+        });
+        Button stopView = new Button(getContext());
+        stopView.setText("停止");
+        stopView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mVideoSettingListener.onStopCapture();
+            }
+        });
+        CustomSettingItem captureSwitchs = new CustomSettingItem(getContext(), itemText, Arrays.<View>asList(startView, stopView));
+        captureSwitchs.setAlign(CustomSettingItem.ALIGN_CENTER);
+        mSettingItemList.add(captureSwitchs);
 
         updateItem();
 
@@ -344,6 +403,7 @@ public class VideoSettingFragment extends BaseSettingFragment {
         mRemoteMirrorItem.setCheck(mVideoConfig.isRemoteMirror());
         publishVideoItem.setCheck(mVideoConfig.isPublishVideo());
         mWatermark.setCheck(mVideoConfig.isWatermark());
+        mPauseScreenCaptureItem.setCheck(mVideoConfig.isScreenCapturePaused());
     }
 
     @Override

@@ -656,9 +656,9 @@ public class TVCClient {
                     txReport(TVCConstants.UPLOAD_EVENT_ID_COS_UPLOAD, errCode, 0, String.valueOf(e.errorCode), "CosXmlClientException:" + e.getMessage(), reqTime, System.currentTimeMillis() - reqTime, uploadInfo.getFileSize(), uploadInfo.getFileType(), uploadInfo.getFileName(), "","", 0,0);
                 } catch (CosXmlServiceException e) {
                     Log.w(TAG,"CosXmlServiceException =" + e.toString());
-                    txReport(TVCConstants.UPLOAD_EVENT_ID_COS_UPLOAD, TVCConstants.ERR_UPLOAD_VIDEO_FAILED, 0, e.getErrorCode(), "CosXmlServiceException:" + e.getMessage(), reqTime, System.currentTimeMillis() - reqTime, uploadInfo.getFileSize(), uploadInfo.getFileType(), uploadInfo.getFileName(), "", e.getRequestId(), tcpConenctionTimeCost, recvRspTimeCost);
+                    txReport(TVCConstants.UPLOAD_EVENT_ID_COS_UPLOAD, TVCConstants.ERR_UPLOAD_VIDEO_FAILED, 0, e.getErrorCode() == null? "": e.getErrorCode(), "CosXmlServiceException:" + e.getMessage(), reqTime, System.currentTimeMillis() - reqTime, uploadInfo.getFileSize(), uploadInfo.getFileType(), uploadInfo.getFileName(), "", e.getRequestId(), tcpConenctionTimeCost, recvRspTimeCost);
                     // 临时密钥过期，重新申请一次临时密钥，不中断上传
-                    if(e.getErrorCode().equalsIgnoreCase("RequestTimeTooSkewed")) {
+                    if(e.getErrorCode() != null && e.getErrorCode().equalsIgnoreCase("RequestTimeTooSkewed")) {
                         applyUploadUGC(uploadInfo, vodSessionKey);
                     } else {
                         notifyUploadFailed(TVCConstants.ERR_UPLOAD_VIDEO_FAILED, "cos upload video error:" + e.getMessage());

@@ -72,8 +72,8 @@ public class TRTCCloudManager {
     /**
      * 音频相关
      */
-    public int     mVolumeType          = 0;
-    public boolean mIsAudioHandFreeMode = true;
+    public int      mVolumeType          = 0;
+    public boolean mIsAudioEarpieceMode = false;
 
     /**
      * @param context    上下文
@@ -158,23 +158,11 @@ public class TRTCCloudManager {
         // 设置视频旋转角
         setLocalVideoRotation(videoConfig.getLocalRotation());
 
-        // 是否开启免提
-        //enableAudioHandFree(audioConfig.isAudioHandFreeMode());
-
         // 是否开启重力感应
         enableGSensor(videoConfig.isEnableGSensorMode());
 
-        // 是否开启媒体音量
-        //setSystemVolumeType(audioConfig.getAudioVolumeType());
-
         // 采样率设置
         enable16KSampleRate(audioConfig.isEnable16KSampleRate());
-
-        // AGC设置
-        enableAGC(audioConfig.isAGC());
-
-        // ANS设置
-        enableANS(audioConfig.isANS());
 
         // 是否开启推流画面镜像
         enableVideoEncMirror(videoConfig.isRemoteMirror());
@@ -208,6 +196,10 @@ public class TRTCCloudManager {
         setBigSteam();
         setQosParam();
         setSmallSteam();
+    }
+
+    public void setVideoCustomCaptureEnabled(boolean enabled) {
+        mTRTCCloud.enableCustomVideoCapture(enabled);
     }
 
     public void setBigSteam() {
@@ -305,7 +297,7 @@ public class TRTCCloudManager {
             // 听筒
             mTRTCCloud.setAudioRoute(TRTCCloudDef.TRTC_AUDIO_ROUTE_EARPIECE);
         }
-        mIsAudioHandFreeMode = bEnable;
+        mIsAudioEarpieceMode = !bEnable;
     }
 
     /**
@@ -363,6 +355,20 @@ public class TRTCCloudManager {
             ToastUtils.showLong("无法找到一个空闲的 View 进行预览，本地预览失败。");
         }
         mTRTCCloud.startLocalPreview(mIsFontCamera, mLocalPreviewView);
+    }
+
+    /**
+     * 开启屏幕采集
+     */
+    public void startScreenCapture() {
+        mTRTCCloud.startScreenCapture();
+    }
+
+    /**
+     * 恢复屏幕采集
+     */
+    public void resumeScreenCapture() {
+        mTRTCCloud.resumeScreenCapture();
     }
 
     public void switchCamera() {
@@ -503,6 +509,20 @@ public class TRTCCloudManager {
      */
     public void stopLocalPreview() {
         mTRTCCloud.stopLocalPreview();
+    }
+
+    /**
+     * 停止屏幕采集
+     */
+    public void stopScreenCapture() {
+        mTRTCCloud.stopScreenCapture();
+    }
+
+    /**
+     * 暂停屏幕采集
+     */
+    public void pauseScreenCapture() {
+        mTRTCCloud.pauseScreenCapture();
     }
 
     /**

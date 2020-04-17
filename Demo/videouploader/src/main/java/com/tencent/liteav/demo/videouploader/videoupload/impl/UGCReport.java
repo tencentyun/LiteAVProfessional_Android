@@ -152,6 +152,10 @@ public class UGCReport {
                 reportAll();
             }
         };
+        if (mTimer == null) {
+            mTimer = new Timer(true);
+            mTimer.schedule(reportTask, 10 * 000, 10 * 1000);
+        }
     }
 
     private synchronized void reportAll() {
@@ -174,11 +178,6 @@ public class UGCReport {
     }
 
     public void addReportInfo(ReportInfo info) {
-        if (mTimer == null) {
-            mTimer = new Timer(true);
-            mTimer.schedule(reportTask, 10 * 000, 10 * 1000);
-        }
-
         ReportInfo newInfo = new ReportInfo(info);
 
         synchronized (reportCaches) {

@@ -16,21 +16,21 @@ public class TRTCBeautyKit implements IBeautyKit {
     @Override
     public void setFilter(Bitmap filterImage, int index) {
         if (mTRTCCloud != null) {
-            mTRTCCloud.setFilter(filterImage);
+            mTRTCCloud.getBeautyManager().setFilter(filterImage);
         }
     }
 
     @Override
-    public void setSpecialRatio(float specialRatio) {
+    public void setFilterStrength(float strength) {
         if (mTRTCCloud != null) {
-            mTRTCCloud.setFilterConcentration(specialRatio / 10.0f);
+            mTRTCCloud.getBeautyManager().setFilterStrength(strength / 10.0f);
         }
     }
 
     @Override
-    public void setGreenScreenFile(String path, boolean isLoop) {
+    public void setGreenScreenFile(String path) {
         if (mTRTCCloud != null) {
-            mTRTCCloud.setGreenScreenFile(path);
+            mTRTCCloud.getBeautyManager().setGreenScreenFile(path);
         }
     }
 

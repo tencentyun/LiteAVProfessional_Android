@@ -21,6 +21,8 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import static java.util.concurrent.TimeUnit.MICROSECONDS;
+
 /**
  * 解码逻辑
  */
@@ -100,7 +102,11 @@ public class Decoder extends ProvidedStage<Frame> {
     @Override
     protected void recycleBuffers(List<Frame> canReuseBuffers) {
         for (Frame frame : canReuseBuffers) {
-            mMediaCodec.releaseOutputBuffer(frame.bufferIndex, mNativeWindow != null);
+            if (mNativeWindow != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mMediaCodec.releaseOutputBuffer(frame.bufferIndex, MICROSECONDS.toNanos(frame.presentationTimeUs));
+            } else {
+                mMediaCodec.releaseOutputBuffer(frame.bufferIndex, mNativeWindow != null);
+            }
             // Log.v(TAG, String.format("[%d] destroy output buffer %d", mExtractor.getTraceIndex(),
             //        frame.presentationTimeUs));
         }

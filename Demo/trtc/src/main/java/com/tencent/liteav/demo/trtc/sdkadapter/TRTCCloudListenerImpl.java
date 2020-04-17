@@ -3,6 +3,7 @@ package com.tencent.liteav.demo.trtc.sdkadapter;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
 import com.tencent.trtc.TRTCStatistics;
@@ -52,16 +53,16 @@ public class TRTCCloudListenerImpl extends TRTCCloudListener {
     }
 
     @Override
-    public void onUserEnter(String userId) {
+    public void onRemoteUserEnterRoom(String userId) {
         Log.i(TAG, "onRemoteUserEnterRoom: userId = " + userId);
     }
 
     @Override
-    public void onUserExit(String userId, int reason) {
+    public void onRemoteUserLeaveRoom(String userId, int reason) {
         Log.i(TAG, "onRemoteUserLeaveRoom: userId = " + userId + " reason = " + reason);
         TRTCCloudManagerListener listener = mWefListener.get();
         if (listener != null) {
-            listener.onUserExit(userId, reason);
+            listener.onRemoteUserLeaveRoom(userId, reason);
         }
     }
 
@@ -160,5 +161,25 @@ public class TRTCCloudListenerImpl extends TRTCCloudListener {
         if (listener != null) {
             listener.onRecvSEIMsg(userId, data);
         }
+    }
+
+    @Override
+    public void onScreenCaptureStarted() {
+        TXCLog.i(TAG, "onScreenCaptureStarted");
+    }
+
+    @Override
+    public void onScreenCapturePaused() {
+        TXCLog.i(TAG, "onScreenCapturePaused");
+    }
+
+    @Override
+    public void onScreenCaptureResumed() {
+        TXCLog.i(TAG, "onScreenCaptureResumed");
+    }
+
+    @Override
+    public void onScreenCaptureStopped(int reason) {
+        TXCLog.i(TAG, "onScreenCaptureStopped");
     }
 }

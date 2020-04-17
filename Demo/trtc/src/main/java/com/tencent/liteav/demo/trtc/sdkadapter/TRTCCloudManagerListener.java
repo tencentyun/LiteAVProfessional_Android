@@ -30,11 +30,11 @@ public interface TRTCCloudManagerListener {
      * 有新的主播{@link TRTCCloudDef#TRTCRoleAnchor}加入了当前视频房间
      * 该方法会在主播加入房间的时候进行回调，此时音频数据会自动拉取下来，但是视频需要有 View 承载才会开始渲染。
      * 为了更好的交互体验，Demo 选择在 onUserVideoAvailable 中，申请 View 并且开始渲染。
-     * 您可以根据实际需求，选择在 onUserEnter 还是 onUserVideoAvailable 中发起渲染。
+     * 您可以根据实际需求，选择在 onRemoteUserEnterRoom 还是 onUserVideoAvailable 中发起渲染。
      *
      * @param userId 用户标识
      */
-    void onUserEnter(String userId);
+    void onRemoteUserEnterRoom(String userId);
 
     /**
      * 主播{@link TRTCCloudDef#TRTCRoleAnchor}离开了当前视频房间
@@ -45,7 +45,7 @@ public interface TRTCCloudManagerListener {
      * @param userId 用户标识
      * @param reason 离开原因代码，区分用户是正常离开，还是由于网络断线等原因离开。
      */
-    void onUserExit(String userId, int reason);
+    void onRemoteUserLeaveRoom(String userId, int reason);
 
     /**
      * 若当对应 userId 的主播有上行的视频流的时候，该方法会被回调，available 为 true；

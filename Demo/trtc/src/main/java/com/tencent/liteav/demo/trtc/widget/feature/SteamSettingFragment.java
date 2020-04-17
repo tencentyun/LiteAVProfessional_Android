@@ -18,6 +18,8 @@ import com.tencent.liteav.demo.trtc.utils.Utils;
 import com.tencent.liteav.demo.trtc.widget.BaseSettingFragment;
 import com.tencent.liteav.demo.trtc.widget.settingitem.BaseSettingItem;
 import com.tencent.liteav.demo.trtc.widget.settingitem.CheckBoxSettingItem;
+import com.tencent.liteav.demo.trtc.widget.settingitem.RadioButtonSettingItem;
+import com.tencent.trtc.TRTCCloudDef;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,7 @@ public class SteamSettingFragment extends BaseSettingFragment implements View.On
     private Button                mShare;
     private List<BaseSettingItem> mSettingItemList;
     private String                mPlayUrl;
-    private CheckBoxSettingItem   mMixItem;
+    private RadioButtonSettingItem   mMixItem;
     private VideoConfig           mVideoConfig;
 
     @Override
@@ -47,24 +49,46 @@ public class SteamSettingFragment extends BaseSettingFragment implements View.On
 
         mSettingItemList = new ArrayList<>();
         mVideoConfig = ConfigHelper.getInstance().getVideoConfig();
+
         BaseSettingItem.ItemText itemText =
-                new BaseSettingItem.ItemText("开启云端混流", "");
-        mMixItem = new CheckBoxSettingItem(getContext(), itemText,
-                new CheckBoxSettingItem.ClickListener() {
+                new BaseSettingItem.ItemText("云端画面混流", "关闭","手动", "音频","预设");
+        mMixItem = new RadioButtonSettingItem(getContext(), itemText,
+                new RadioButtonSettingItem.SelectedListener() {
                     @Override
-                    public void onClick() {
-                        boolean enable = mVideoConfig.isEnableCloudMixture();
-                        mVideoConfig.setEnableCloudMixture(!enable);
-                        if (mTRTCRemoteUserManager != null) {
-                            if (mVideoConfig.isEnableCloudMixture()) {
-                                mTRTCRemoteUserManager.updateCloudMixtureParams();
-                            } else {
-                                mTRTCRemoteUserManager.stopCloudMixture();
-                            }
+                    public void onSelected(int index) {
+                        switch (index) {
+                            case 0:
+                                mVideoConfig.setCloudMixtureMode(TRTCCloudDef.TRTC_TranscodingConfigMode_Unknown);
+                                break;
+                            case 1:
+                                mVideoConfig.setCloudMixtureMode(TRTCCloudDef.TRTC_TranscodingConfigMode_Manual);
+                                break;
+                            case 2:
+                                mVideoConfig.setCloudMixtureMode(TRTCCloudDef.TRTC_TranscodingConfigMode_Template_PureAudio);
+                                break;
+                            case 3:
+                                mVideoConfig.setCloudMixtureMode(TRTCCloudDef.TRTC_TranscodingConfigMode_Template_PresetLayout);
+                                break;
                         }
+                        if (mTRTCRemoteUserManager != null) mTRTCRemoteUserManager.updateCloudMixtureParams();
                     }
                 });
-        mMixItem.setCheck(mVideoConfig.isEnableCloudMixture());
+        int mode = ConfigHelper.getInstance().getVideoConfig().getCloudMixtureMode();
+        switch (mode) {
+            case TRTCCloudDef.TRTC_TranscodingConfigMode_Unknown:
+                mMixItem.setSelect(0);
+                break;
+            case TRTCCloudDef.TRTC_TranscodingConfigMode_Manual:
+                mMixItem.setSelect(1);
+                break;
+            case TRTCCloudDef.TRTC_TranscodingConfigMode_Template_PureAudio:
+                mMixItem.setSelect(2);
+                break;
+            case TRTCCloudDef.TRTC_TranscodingConfigMode_Template_PresetLayout:
+                mMixItem.setSelect(3);
+                break;
+        }
+
         mSettingItemList.add(mMixItem);
 
         // 将这些view添加到对应的容器中
