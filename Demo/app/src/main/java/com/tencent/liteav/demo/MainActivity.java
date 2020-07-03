@@ -1,6 +1,8 @@
 package com.tencent.liteav.demo;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,18 +16,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.tencent.liteav.demo.trtcvoiceroom.CreateVoiceRoomActivity;
+import com.tencent.liteav.demo.liveplayer.LivePlayerActivity;
+import com.tencent.liteav.demo.livepusher.cameralivepush.CameraPusherActivity;
+import com.tencent.liteav.demo.liveroom.ui.LiveRoomActivity;
+import com.tencent.liteav.demo.player.activity.SuperPlayerActivity;
 import com.tencent.liteav.demo.common.widget.expandableadapter.BaseExpandableRecyclerViewAdapter;
-import com.tencent.liteav.demo.lvb.camerapush.CameraPusherActivity;
-import com.tencent.liteav.demo.lvb.liveplayer.LivePlayerActivity;
-import com.tencent.liteav.demo.lvb.liveroom.ui.LiveRoomActivity;
-import com.tencent.liteav.demo.player.VodPlayerActivity;
-import com.tencent.liteav.demo.player.superplayer.SuperPlayerActivity;
-import com.tencent.liteav.demo.trtc.TRTCNewRoomActivity;
 import com.tencent.liteav.demo.videoediter.TCVideoPickerActivity;
 import com.tencent.liteav.demo.videojoiner.TCVideoJoinChooseActivity;
 import com.tencent.liteav.demo.videorecord.TCVideoSettingActivity;
-import com.tencent.liteav.trtcaudiocalldemo.demo.CreateAudioCallActivity;
+import com.tencent.liteav.liveroom.ui.liveroomlist.LiveRoomListActivity;
+import com.tencent.liteav.login.model.ProfileManager;
+import com.tencent.liteav.login.ui.LoginActivity;
+import com.tencent.liteav.meeting.ui.CreateMeetingActivity;
+import com.tencent.liteav.trtcaudiocalldemo.ui.TRTCAudioCallSelectContactActivity;
+import com.tencent.liteav.trtcvideocalldemo.ui.TRTCVideoCallSelectContactActivity;
+import com.tencent.liteav.trtcvoiceroom.ui.list.VoiceRoomListActivity;
 import com.tencent.rtmp.TXLiveBase;
 
 import java.io.File;
@@ -44,6 +49,8 @@ public class MainActivity extends Activity {
     private TextView mMainTitle, mTvVersion;
     private RecyclerView mRvList;
     private MainExpandableAdapter mAdapter;
+    private ImageView   mLogoutImg;
+    private AlertDialog mAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +65,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mTvVersion = (TextView) findViewById(R.id.main_tv_version);
-        mTvVersion.setText("视频云工具包 v" + TXLiveBase.getSDKVersionStr());
+        mTvVersion.setText("视频云工具包 v" + TXLiveBase.getSDKVersionStr()+"(7.4.281)");
 
         mMainTitle = (TextView) findViewById(R.id.main_title);
         mMainTitle.setOnLongClickListener(new View.OnLongClickListener() {
@@ -80,7 +87,14 @@ public class MainActivity extends Activity {
                 return false;
             }
         });
-
+        mLogoutImg = (ImageView) findViewById(R.id.img_logout);
+        mLogoutImg.setVisibility(View.VISIBLE);
+        mLogoutImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLogoutDialog();
+            }
+        });
 
         mRvList = (RecyclerView) findViewById(R.id.main_recycler_view);
         List<GroupBean> groupBeans = initGroupData();
@@ -124,6 +138,51 @@ public class MainActivity extends Activity {
         mRvList.setAdapter(mAdapter);
     }
 
+    private void showLogoutDialog() {
+        if (mAlertDialog == null) {
+            mAlertDialog = new AlertDialog.Builder(this, R.style.common_alert_dialog)
+                    .setMessage("确定要退出登录吗？")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 执行退出登录操作
+                            ProfileManager.getInstance().logout(new ProfileManager.ActionCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    stopService();
+                                    // 退出登录
+                                    startLoginActivity();
+                                }
+                                @Override
+                                public void onFailed(int code, String msg) {
+                                }
+                            });
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create();
+        }
+        if (!mAlertDialog.isShowing()) {
+            mAlertDialog.show();
+        }
+    }
+
+    private void stopService() {
+        Intent intent = new Intent(this, CallService.class);
+        stopService(intent);
+    }
+
+    private void startLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private List<GroupBean> initGroupData() {
         List<GroupBean> groupList = new ArrayList<>();
 
@@ -142,7 +201,7 @@ public class MainActivity extends Activity {
 
         // 初始化播放器
         List<ChildBean> playerChildList = new ArrayList<>();
-        playerChildList.add(new ChildBean("超级播放器", R.drawable.play, LivePlayerActivity.ACTIVITY_TYPE_VOD_PLAY, SuperPlayerActivity.class));
+        playerChildList.add(new ChildBean("超级播放器", R.drawable.play, 3, SuperPlayerActivity.class));
         if (playerChildList.size() != 0) {
             GroupBean playerGroupBean = new GroupBean("播放器", R.drawable.composite, playerChildList);
             groupList.add(playerGroupBean);
@@ -165,23 +224,14 @@ public class MainActivity extends Activity {
 
         // 视频通话
         List<ChildBean> videoConnectChildList = new ArrayList<>();
-        videoConnectChildList.add(new ChildBean("视频通话", R.drawable.room_multi, TRTCNewRoomActivity.TRTC_VOICECALL, TRTCNewRoomActivity.class));
-        videoConnectChildList.add(new ChildBean("视频互动直播", R.drawable.room_multi, TRTCNewRoomActivity.TRTC_LIVE, TRTCNewRoomActivity.class));
-        videoConnectChildList.add(new ChildBean("语音通话", R.drawable.room_multi, 0, CreateAudioCallActivity.class));
-        videoConnectChildList.add(new ChildBean("语音聊天室", R.drawable.room_multi, 0, CreateVoiceRoomActivity.class));
+        videoConnectChildList.add(new ChildBean("多人视频会议", R.drawable.multi_meeting, 0, CreateMeetingActivity.class));
+        videoConnectChildList.add(new ChildBean("语音聊天室", R.drawable.room_multi, 0, VoiceRoomListActivity.class));
+        videoConnectChildList.add(new ChildBean("视频互动直播", R.drawable.room_multi, 1, LiveRoomListActivity.class));
+        videoConnectChildList.add(new ChildBean("语音通话", R.drawable.room_multi, 0, TRTCAudioCallSelectContactActivity.class));
+        videoConnectChildList.add(new ChildBean("视频通话", R.drawable.room_multi, 0, TRTCVideoCallSelectContactActivity.class));
         if (videoConnectChildList.size() != 0) {
             GroupBean videoConnectGroupBean = new GroupBean("实时音视频 TRTC", R.drawable.room_multi, videoConnectChildList);
             groupList.add(videoConnectGroupBean);
-        }
-
-
-        // 调试工具
-        List<ChildBean> debugChildList = new ArrayList<>();
-        debugChildList.add(new ChildBean("点播播放器", R.drawable.play, LivePlayerActivity.ACTIVITY_TYPE_VOD_PLAY, VodPlayerActivity.class));
-
-        if (debugChildList.size() != 0) {
-            GroupBean debugGroupBean = new GroupBean("调试工具", R.drawable.debug, debugChildList);
-            groupList.add(debugGroupBean);
         }
 
         return groupList;

@@ -385,9 +385,7 @@ public class VideoRecordSDK implements TXRecordCommon.ITXVideoRecordListener {
         if (mRecordSDK != null) {
             mRecordSDK.resumeRecord();
         }
-
         RecordMusicManager.getInstance().resumeMusic();
-
         AudioFocusManager.getInstance().requestAudioFocus();
 
         mCurrentState = STATE_RESUME;
@@ -425,7 +423,7 @@ public class VideoRecordSDK implements TXRecordCommon.ITXVideoRecordListener {
             return;
         }
         if (mRecordSDK != null) {
-            mRecordSDK.pauseBGM();
+            mRecordSDK.stopBGM();
             mRecordSDK.stopRecord();
         }
         AudioFocusManager.getInstance().abandonAudioFocus();

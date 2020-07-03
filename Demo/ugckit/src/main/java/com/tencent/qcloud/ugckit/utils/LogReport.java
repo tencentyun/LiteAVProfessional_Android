@@ -32,7 +32,7 @@ import okhttp3.Response;
 public class LogReport {
     private static final String TAG = "LogReport";
     // ELK统计上报HOST
-    public static final String DEFAULT_ELK_HOST = "https://qcloud.com";
+    public static final String DEFAULT_ELK_HOST = "https://ilivelog.qcloud.com";
     /******************************
      * ELK统计上报事件
      ******************************/

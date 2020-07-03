@@ -1,33 +1,24 @@
 include ':app'
-
-include ':beauty'
+include ':login'
+include ':debug'
 include ':ugckit'
-include ':libsuperplayer'
-include ':player'
-include ':lvb'
-include ':trtc'
-include ':videorecorder'
-include ':videoediter'
-include ':videojoiner'
-include ':videouploader'
-include ':trtcvoiceroom'
+include ':beautysettingkit'
+//project(':beauty').projectDir = new File(settingsDir, '../../../../project/android/demo/liteav/beauty')
 include ':trtcaudiocalldemo'
+include ':trtcvideocalldemo'
+include ':trtcliveroomdemo'
+include ':trtcvoiceroomdemo'
+include ':trtcmeetingdemo'
+include ':audioeffectsettingkit'
 
+include ':ugcvideoeditdemo'
+include ':ugcvideorecorddemo'
+include ':ugcvideojoindemo'
+include ':ugcvideouploaddemo'
 
+include ':superplayerkit'
+include ':superplayerdemo'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+include ':liveplayerdemo'
+include ':livepusherdemo'
+include ':mlvbliveroomdemo'
