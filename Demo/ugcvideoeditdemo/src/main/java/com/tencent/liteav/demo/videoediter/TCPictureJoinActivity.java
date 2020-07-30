@@ -15,8 +15,8 @@ import java.util.ArrayList;
  * 图片生成视频类，用于设置图片转场动画，并生成一个视频，返回生成的视频路径
  */
 public class TCPictureJoinActivity extends FragmentActivity {
-
     private static final String TAG = "TCPictureJoinActivity";
+
     private UGCKitPictureJoin mUGCKitPictureJoin;
     private ArrayList<String> mPicPathList;
     private IPictureJoinKit.OnPictureJoinListener mOnPictureListener = new IPictureJoinKit.OnPictureJoinListener() {
@@ -37,7 +37,7 @@ public class TCPictureJoinActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.picture_join_layout);
+        setContentView(R.layout.ugcedit_picture_join_layout);
 
         mUGCKitPictureJoin = (UGCKitPictureJoin) findViewById(R.id.picture_transition);
         /**

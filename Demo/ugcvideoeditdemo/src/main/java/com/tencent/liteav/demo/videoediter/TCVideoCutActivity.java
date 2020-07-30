@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -19,21 +18,15 @@ import com.tencent.ugc.TXVideoEditConstants;
  * 腾讯云"视频裁剪" Demo
  */
 public class TCVideoCutActivity extends FragmentActivity {
-    private String TAG = "TCVideoCutActivity";
+    private static final String TAG = "TCVideoCutActivity";
+
     private UGCKitVideoCut mUGCKitVideoCut;
-    /**
-     * 视频路径
-     */
-    private String mVideoPath;
-    private String mVideoUri;
-    /**
-     * 视频分辨率[从录制跳转的视频才有此参数，生成视频时保持与录制设置同样的分辨率]
-     */
-    private int mVideoResolution = -1;
-    /**
-     * 视频自定义码率
-     */
-    private int mCustomBitrate;
+
+    private String mVideoPath;                // 视频路径
+    private String mVideoUri;                // 视频路径Uri
+    private int    mVideoResolution = -1;    // 视频分辨率[从录制跳转的视频才有此参数，生成视频时保持与录制设置同样的分辨率]
+    private int    mCustomBitrate;           //视频自定义码率
+
     private IVideoCutKit.OnCutListener mOnCutListener = new IVideoCutKit.OnCutListener() {
         /**
          * 视频裁剪进度条执行完成后调用
@@ -58,7 +51,7 @@ public class TCVideoCutActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_cut);
+        setContentView(R.layout.ugcedit_activity_video_cut);
         mUGCKitVideoCut = (UGCKitVideoCut) findViewById(R.id.video_cutter_layout);
 
         mVideoResolution = getIntent().getIntExtra(UGCKitConstants.VIDEO_RECORD_RESOLUTION, TXVideoEditConstants.VIDEO_COMPRESSED_720P);

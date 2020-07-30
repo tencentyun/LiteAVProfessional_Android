@@ -45,24 +45,22 @@ import java.util.List;
  * 2、缺点：导入视频相对于"快速导入"速度慢
  */
 public class TCVideoPickerActivity extends FragmentActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
-
     private static final String TAG = "TCVideoPickerActivity";
-    private RecyclerView mRecyclerView;
-    private TCVideoEditerListAdapter mAdapter;
-    // 全功能导入
-    private Button mBtnFullImport;
-    // 快速导入
-    private Button mBtnFastImport;
 
-    private HandlerThread mHandlerThread;
-    private Handler mHandler;
-    private LinearLayout mLlBack;
-    private ImageButton mBtnLink;
+    private RecyclerView mRecyclerView;
+    private Button       mButtonFullImport;      // 全功能导入
+    private Button       mButtonFastImport;      // 快速导入
+    private ImageButton  mButtonLink;
+    private LinearLayout mLayoutBack;
+
+    private TCVideoEditerListAdapter mAdapter;
+    private HandlerThread            mHandlerThread;
+    private Handler                  mHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_choose);
+        setContentView(R.layout.ugcedit_activity_video_choose);
         initView();
         initData();
         requestPermission();
@@ -139,10 +137,10 @@ public class TCVideoPickerActivity extends FragmentActivity implements View.OnCl
     }
 
     private void initView() {
-        mBtnFullImport = (Button) findViewById(R.id.btn_full_import);
-        mBtnFullImport.setOnClickListener(this);
-        mBtnFastImport = (Button) findViewById(R.id.btn_fast_import);
-        mBtnFastImport.setOnClickListener(this);
+        mButtonFullImport = (Button) findViewById(R.id.btn_full_import);
+        mButtonFullImport.setOnClickListener(this);
+        mButtonFastImport = (Button) findViewById(R.id.btn_fast_import);
+        mButtonFastImport.setOnClickListener(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
@@ -151,11 +149,11 @@ public class TCVideoPickerActivity extends FragmentActivity implements View.OnCl
 
         mAdapter.setMultiplePick(false);
 
-        mLlBack = (LinearLayout) findViewById(R.id.back_ll);
-        mBtnLink = (ImageButton) findViewById(R.id.webrtc_link_button);
+        mLayoutBack = (LinearLayout) findViewById(R.id.ll_back);
+        mButtonLink = (ImageButton) findViewById(R.id.ib_webrtc_link);
 
-        mLlBack.setOnClickListener(this);
-        mBtnLink.setOnClickListener(this);
+        mLayoutBack.setOnClickListener(this);
+        mButtonLink.setOnClickListener(this);
     }
 
 
@@ -171,9 +169,9 @@ public class TCVideoPickerActivity extends FragmentActivity implements View.OnCl
             // 全功能导入
             fastImport = false;
             doSelect(fastImport);
-        } else if (i == R.id.webrtc_link_button) {
+        } else if (i == R.id.ib_webrtc_link) {
             showCloudLink();
-        } else if (i == R.id.back_ll) {
+        } else if (i == R.id.ll_back) {
             finish();
         }
     }

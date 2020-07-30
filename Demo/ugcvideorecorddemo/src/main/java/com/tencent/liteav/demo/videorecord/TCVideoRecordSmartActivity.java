@@ -33,15 +33,16 @@ public class TCVideoRecordSmartActivity extends FragmentActivity implements Acti
 
     private static final String TAG = "TCVideoRecordSmartActivity";
     private UGCKitVideoRecord mUGCKitVideoRecord;
-    private int mMinDuration;
-    private int mMaxDuration;
-    private int mAspectRatio;
-    private int mRecommendQuality;
-    private int mVideoBitrate;
-    private int mResolution;
-    private int mFps;
-    private int mGop;
-    private int mOrientation;
+
+    private int     mMinDuration;
+    private int     mMaxDuration;
+    private int     mAspectRatio;
+    private int     mRecommendQuality;
+    private int     mVideoBitrate;
+    private int     mResolution;
+    private int     mFps;
+    private int     mGop;
+    private int     mOrientation;
     private boolean mTouchFocus;
     private boolean mNeedEdit;
 
@@ -51,7 +52,7 @@ public class TCVideoRecordSmartActivity extends FragmentActivity implements Acti
 
         initData();
         initWindowParam();
-        setContentView(R.layout.activity_video_record);
+        setContentView(R.layout.ugcrecord_activity_video_record);
 
         mUGCKitVideoRecord = (UGCKitVideoRecord) findViewById(R.id.video_record_layout);
 

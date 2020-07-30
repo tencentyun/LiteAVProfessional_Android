@@ -11,8 +11,10 @@ import com.tencent.qcloud.ugckit.module.effect.IVideoEffectKit;
 
 public class TCVideoEffectActivity extends FragmentActivity {
     private static final String TAG = "TCVideoEffectActivity";
+
     private int mFragmentType;
     private UGCKitVideoEffect mUGCKitVideoEffect;
+
     private IVideoEffectKit.OnVideoEffectListener mOnVideoEffectListener = new IVideoEffectKit.OnVideoEffectListener() {
         @Override
         public void onEffectApply() {
@@ -28,7 +30,7 @@ public class TCVideoEffectActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_effect);
+        setContentView(R.layout.ugcedit_activity_video_effect);
 
         mFragmentType = getIntent().getIntExtra(UGCKitConstants.KEY_FRAGMENT, 0);
 

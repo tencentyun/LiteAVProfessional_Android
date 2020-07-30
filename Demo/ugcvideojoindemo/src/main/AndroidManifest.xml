@@ -6,7 +6,7 @@
 
     <application>
         <activity
-            android:name=".TCVideoJoinerActivity"
+            android:name=".ui.TCVideoJoinerActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.tencent.liteav.demo.videojoiner" />
@@ -16,16 +16,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TCVideoJoinerPreviewActivity"
+            android:name=".ui.TCVideoJoinerPreviewActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".TCVideoJoinChooseActivity"
+            android:name=".ui.TCVideoJoinChooseActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".TCVideoPreviewActivity"
+            android:name=".ui.TCVideoPreviewActivity"
             android:screenOrientation="portrait" />
     </application>
 

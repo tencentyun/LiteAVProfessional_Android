@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="NumberProgressBar">
+    <declare-styleable name="UGCUploadNumberProgressBar">
         <attr name="progress_current" format="integer" />
         <attr name="progress_max" format="integer" />
         <attr name="progress_unreached_color" format="color" />
@@ -10,7 +10,7 @@
         <attr name="progress_text_size" format="dimension" />
         <attr name="progress_text_color" format="color" />
         <attr name="progress_text_offset" format="dimension" />
-        <attr name="progress_text_visibility" format="enum">
+        <attr name="ugcupload_progress_text_visibility" format="enum">
             <enum name="visible" value="0" />
             <enum name="invisible" value="1" />
         </attr>

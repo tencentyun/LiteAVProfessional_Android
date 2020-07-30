@@ -33,15 +33,16 @@ import java.util.List;
 public class TCVideoRecordActivity extends FragmentActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private UGCKitVideoRecord mUGCKitVideoRecord;
-    private int mMinDuration;
-    private int mMaxDuration;
-    private int mAspectRatio;
-    private int mRecommendQuality;
-    private int mVideoBitrate;
-    private int mResolution;
-    private int mFps;
-    private int mGop;
-    private int mOrientation;
+
+    private int     mMinDuration;
+    private int     mMaxDuration;
+    private int     mAspectRatio;
+    private int     mRecommendQuality;
+    private int     mVideoBitrate;
+    private int     mResolution;
+    private int     mFps;
+    private int     mGop;
+    private int     mOrientation;
     private boolean mTouchFocus;
     private boolean mNeedEdit;
 
@@ -51,7 +52,7 @@ public class TCVideoRecordActivity extends FragmentActivity implements ActivityC
 
         initData();
         initWindowParam();
-        setContentView(R.layout.activity_video_record);
+        setContentView(R.layout.ugcrecord_activity_video_record);
 
         mUGCKitVideoRecord = (UGCKitVideoRecord) findViewById(R.id.video_record_layout);
 
@@ -87,7 +88,7 @@ public class TCVideoRecordActivity extends FragmentActivity implements ActivityC
             public void onRecordCompleted(UGCKitResult result) {
                 // 下一步进行编辑：进行视频预处理，则不需要传出路径，下一步进行预览，需要路径
                 if (mNeedEdit) {
-                    startEditActivity();
+                    startEditActivity(result);
                 } else {
                     startPreviewActivity(result);
                 }
@@ -127,7 +128,7 @@ public class TCVideoRecordActivity extends FragmentActivity implements ActivityC
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
-    private void startEditActivity() {
+    private void startEditActivity(UGCKitResult ugcKitResult) {
         Intent intent = new Intent();
         intent.setAction("com.tencent.liteav.demo.videoediter");
         if (mRecommendQuality == TXRecordCommon.VIDEO_QUALITY_LOW) {
@@ -139,6 +140,7 @@ public class TCVideoRecordActivity extends FragmentActivity implements ActivityC
         } else {
             intent.putExtra(UGCKitConstants.VIDEO_RECORD_RESOLUTION, mResolution);
         }
+        intent.putExtra(UGCKitConstants.VIDEO_PATH, ugcKitResult.outputPath);
         startActivity(intent);
         finish();
     }

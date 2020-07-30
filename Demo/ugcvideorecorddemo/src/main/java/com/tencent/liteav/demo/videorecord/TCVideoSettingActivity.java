@@ -23,7 +23,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.tencent.liteav.basic.log.TXCLog;
-import com.tencent.qcloud.ugckit.UGCKit;
 import com.tencent.qcloud.ugckit.UGCKitConstants;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.ugc.TXRecordCommon;
@@ -39,32 +38,42 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
 
     private static final String TAG = "TCVideoSettingActivity";
 
-    private LinearLayout llBack;
-    private View rlBiterate, rlFps, rlGop;
-    private EditText etBitrate, etGop, etFps;
-    private RadioGroup rgVideoQuality, rgVideoResolution, rgVideoAspectRatio;
-    private RadioButton rbVideoQualitySD, rbVideoQualityHD, rbVideoQualitySSD, rbVideoQulityCustom,
-            rbVideoResolution360p, rbVideoResolution540p, rbVideoResolution720p,
-            rbVideoAspectRatio11, rbVideoAspectRatio34, rbVideoAspectRatio916,rbVideoAspectRatio43;
-    private TextView tvRecommendResolution, tvRecommendBitrate, tvRecommendFps, tvRecommendGop;
-    private Button btnOK;
-    private ImageButton btnLink;
+    private LinearLayout mLayoutBack;
+    private View         mLayoutBiterate;
+    private View         mLayoutFps;
+    private View         mLayoutGop;
+    private EditText     mEditBitrate;
+    private EditText     mEditGop;
+    private EditText     mEditFps;
+    private RadioGroup   mGroupVideoQuality;
+    private RadioGroup   mGroupVideoResolution;
+    private RadioGroup   mGroupVideoAspectRatio;
+    private TextView     mTextRecommendResolution;
+    private TextView     mTextRecommendBitrate;
+    private TextView     mTextRecommendFps;
+    private TextView     mTextRecommendGop;
+    private Button       mButtonOK;
+    private ImageButton  mButtonLink;
+    private CheckBox     mCheckBoxTouchFocus; // true：手动对焦；false： 自动对焦
+    private CheckBox     mCheckBoxEdit;
+    private RadioButton  mRadioVideoAspectRatio169;
 
+    private RadioButton mRadioVideoQualitySD, mRadioVideoQualityHD, mRadioVideoQualitySSD, mRadioVideoQulityCustom,
+            mRadioVideoResolution360p, mRadioVideoResolution540p, mRadioVideoResolution720p,
+            mRadioVideoAspectRatio11, mRadioVideoAspectRatio34, mRadioVideoAspectRatio916, mRadioVideoAspectRatio43;
+
+    private int mAspectRatio;               // 视频比例
+    private int mRecordResolution;          // 录制分辨率
+    private int mBiteRate = 2400;           // 码率
+    private int mFps      = 20;             // 帧率
+    private int mGop      = 3;              // 关键帧间隔
     private int mRecommendQuality = -1;
-    private int mAspectRatio; // 视频比例
-    private int mRecordResolution; // 录制分辨率
-    private int mBiteRate = 2400; // 码率
-    private int mFps = 20; // 帧率
-    private int mGop = 3; // 关键帧间隔
-    private CheckBox cbTouchFocus; // true：手动对焦；false： 自动对焦
-    private CheckBox cbEdit;
-    private RadioButton rbVideoAspectRatio169;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_video_settings);
+        setContentView(R.layout.ugcrecord_activity_video_settings);
 
         initData();
 
@@ -117,118 +126,118 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
     }
 
     private void initView() {
-        llBack = (LinearLayout) findViewById(R.id.back_ll);
+        mLayoutBack = (LinearLayout) findViewById(R.id.back_ll);
 
-        rlBiterate = findViewById(R.id.rl_bite_rate);
-        rlFps = findViewById(R.id.rl_fps);
-        rlGop = findViewById(R.id.rl_gop);
+        mLayoutBiterate = findViewById(R.id.rl_bite_rate);
+        mLayoutFps = findViewById(R.id.rl_fps);
+        mLayoutGop = findViewById(R.id.rl_gop);
 
-        etBitrate = (EditText) findViewById(R.id.et_biterate);
-        etFps = (EditText) findViewById(R.id.et_fps);
-        etGop = (EditText) findViewById(R.id.et_gop);
+        mEditBitrate = (EditText) findViewById(R.id.et_biterate);
+        mEditFps = (EditText) findViewById(R.id.et_fps);
+        mEditGop = (EditText) findViewById(R.id.et_gop);
 
-        rgVideoQuality = (RadioGroup) findViewById(R.id.rg_video_quality);
-        rgVideoResolution = (RadioGroup) findViewById(R.id.rg_video_resolution);
-        rgVideoAspectRatio = (RadioGroup) findViewById(R.id.rg_video_aspect_ratio);
+        mGroupVideoQuality = (RadioGroup) findViewById(R.id.rg_video_quality);
+        mGroupVideoResolution = (RadioGroup) findViewById(R.id.rg_video_resolution);
+        mGroupVideoAspectRatio = (RadioGroup) findViewById(R.id.rg_video_aspect_ratio);
 
-        rbVideoQualitySD = (RadioButton) findViewById(R.id.rb_video_quality_sd);
-        rbVideoQualityHD = (RadioButton) findViewById(R.id.rb_video_quality_hd);
-        rbVideoQualitySSD = (RadioButton) findViewById(R.id.rb_video_quality_super);
-        rbVideoQulityCustom = (RadioButton) findViewById(R.id.rb_video_quality_custom);
+        mRadioVideoQualitySD = (RadioButton) findViewById(R.id.rb_video_quality_sd);
+        mRadioVideoQualityHD = (RadioButton) findViewById(R.id.rb_video_quality_hd);
+        mRadioVideoQualitySSD = (RadioButton) findViewById(R.id.rb_video_quality_super);
+        mRadioVideoQulityCustom = (RadioButton) findViewById(R.id.rb_video_quality_custom);
 
-        rbVideoResolution360p = (RadioButton) findViewById(R.id.rb_video_resolution_360p);
-        rbVideoResolution540p = (RadioButton) findViewById(R.id.rb_video_resolution_540p);
-        rbVideoResolution720p = (RadioButton) findViewById(R.id.rb_video_resolution_720p);
+        mRadioVideoResolution360p = (RadioButton) findViewById(R.id.rb_video_resolution_360p);
+        mRadioVideoResolution540p = (RadioButton) findViewById(R.id.rb_video_resolution_540p);
+        mRadioVideoResolution720p = (RadioButton) findViewById(R.id.rb_video_resolution_720p);
 
-        rbVideoAspectRatio11 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_1_1);
-        rbVideoAspectRatio34 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_3_4);
-        rbVideoAspectRatio916 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_9_16);
-        rbVideoAspectRatio169 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_16_9);
-        rbVideoAspectRatio43 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_4_3);
+        mRadioVideoAspectRatio11 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_1_1);
+        mRadioVideoAspectRatio34 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_3_4);
+        mRadioVideoAspectRatio916 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_9_16);
+        mRadioVideoAspectRatio169 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_16_9);
+        mRadioVideoAspectRatio43 = (RadioButton) findViewById(R.id.rb_video_aspect_ratio_4_3);
 
-        tvRecommendResolution = (TextView) findViewById(R.id.tv_recommend_resolution);
-        tvRecommendBitrate = (TextView) findViewById(R.id.tv_recommend_bitrate);
-        tvRecommendFps = (TextView) findViewById(R.id.tv_recommend_fps);
-        tvRecommendGop = (TextView) findViewById(R.id.tv_recommend_gop);
+        mTextRecommendResolution = (TextView) findViewById(R.id.tv_recommend_resolution);
+        mTextRecommendBitrate = (TextView) findViewById(R.id.tv_recommend_bitrate);
+        mTextRecommendFps = (TextView) findViewById(R.id.tv_recommend_fps);
+        mTextRecommendGop = (TextView) findViewById(R.id.tv_recommend_gop);
 
-        btnOK = (Button) findViewById(R.id.btn_ok);
+        mButtonOK = (Button) findViewById(R.id.btn_ok);
 
-        cbTouchFocus = (CheckBox) findViewById(R.id.cb_touch_focus);
-        cbEdit = (CheckBox) findViewById(R.id.cb_edit);
+        mCheckBoxTouchFocus = (CheckBox) findViewById(R.id.cb_touch_focus);
+        mCheckBoxEdit = (CheckBox) findViewById(R.id.cb_edit);
 
-        btnLink = (ImageButton) findViewById(R.id.webrtc_link_button);
+        mButtonLink = (ImageButton) findViewById(R.id.webrtc_link_button);
     }
 
     private void initListener() {
-        llBack.setOnClickListener(this);
-        btnOK.setOnClickListener(this);
-        btnLink.setOnClickListener(this);
+        mLayoutBack.setOnClickListener(this);
+        mButtonOK.setOnClickListener(this);
+        mButtonLink.setOnClickListener(this);
 
-        etBitrate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mEditBitrate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    rlBiterate.setBackgroundResource(R.drawable.rect_bg_green);
+                    mLayoutBiterate.setBackgroundResource(R.drawable.ugckit_rect_bg_green);
                 } else {
-                    rlBiterate.setBackgroundResource(R.drawable.rect_bg_gray);
+                    mLayoutBiterate.setBackgroundResource(R.drawable.ugckit_rect_bg_gray);
                 }
             }
         });
 
-        etFps.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mEditFps.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    rlFps.setBackgroundResource(R.drawable.rect_bg_green);
+                    mLayoutFps.setBackgroundResource(R.drawable.ugckit_rect_bg_green);
                 } else {
-                    rlFps.setBackgroundResource(R.drawable.rect_bg_gray);
+                    mLayoutFps.setBackgroundResource(R.drawable.ugckit_rect_bg_gray);
                 }
             }
         });
 
-        etGop.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mEditGop.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
                 if (hasFocus) {
-                    rlGop.setBackgroundResource(R.drawable.rect_bg_green);
+                    mLayoutGop.setBackgroundResource(R.drawable.ugckit_rect_bg_green);
                 } else {
-                    rlGop.setBackgroundResource(R.drawable.rect_bg_gray);
+                    mLayoutGop.setBackgroundResource(R.drawable.ugckit_rect_bg_gray);
                 }
             }
         });
 
-        rgVideoAspectRatio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        mGroupVideoAspectRatio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                if (i == rbVideoAspectRatio11.getId()) {
+                if (i == mRadioVideoAspectRatio11.getId()) {
                     mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_1_1;
-                } else if (i == rbVideoAspectRatio34.getId()) {
+                } else if (i == mRadioVideoAspectRatio34.getId()) {
                     mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_3_4;
-                } else if (i == rbVideoAspectRatio916.getId()) {
+                } else if (i == mRadioVideoAspectRatio916.getId()) {
                     mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_9_16;
-                } else if (i == rbVideoAspectRatio169.getId()) {
+                } else if (i == mRadioVideoAspectRatio169.getId()) {
                     mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_16_9;
                 }
-                else if(i == rbVideoAspectRatio43.getId()){
+                else if(i == mRadioVideoAspectRatio43.getId()){
                     mAspectRatio = TXRecordCommon.VIDEO_ASPECT_RATIO_4_3;
                 }
             }
         });
 
-        rgVideoQuality.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        mGroupVideoQuality.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                if (i == rbVideoQualitySD.getId()) {
+                if (i == mRadioVideoQualitySD.getId()) {
                     mRecommendQuality = TXRecordCommon.VIDEO_QUALITY_LOW;
                     showRecommendQualitySet();
                     recommendQualitySD();
                     clearCustomBg();
-                } else if (i == rbVideoQualityHD.getId()) {
+                } else if (i == mRadioVideoQualityHD.getId()) {
                     mRecommendQuality = TXRecordCommon.VIDEO_QUALITY_MEDIUM;
                     showRecommendQualitySet();
                     recommendQualityHD();
                     clearCustomBg();
-                } else if (i == rbVideoQualitySSD.getId()) {
+                } else if (i == mRadioVideoQualitySSD.getId()) {
                     mRecommendQuality = TXRecordCommon.VIDEO_QUALITY_HIGH;
                     showRecommendQualitySet();
                     recommendQualitySSD();
@@ -241,12 +250,12 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
             }
         });
 
-        rgVideoResolution.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        mGroupVideoResolution.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                if (i == rbVideoResolution360p.getId()) {
+                if (i == mRadioVideoResolution360p.getId()) {
                     mRecordResolution = TXRecordCommon.VIDEO_RESOLUTION_360_640;
-                } else if (i == rbVideoResolution540p.getId()) {
+                } else if (i == mRadioVideoResolution540p.getId()) {
                     mRecordResolution = TXRecordCommon.VIDEO_RESOLUTION_540_960;
                 } else {
                     mRecordResolution = TXRecordCommon.VIDEO_RESOLUTION_720_1280;
@@ -256,61 +265,61 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
     }
 
     private void initViewStatus() {
-        rbVideoResolution540p.setChecked(true);
-        rbVideoAspectRatio916.setChecked(true);
+        mRadioVideoResolution540p.setChecked(true);
+        mRadioVideoAspectRatio916.setChecked(true);
 
-        rbVideoQualityHD.setChecked(true);
+        mRadioVideoQualityHD.setChecked(true);
     }
 
     private void recommendQualitySD() {
-        tvRecommendResolution.setText("360p");
-        tvRecommendBitrate.setText("2400");
-        tvRecommendFps.setText("20");
-        tvRecommendGop.setText("3");
+        mTextRecommendResolution.setText("360p");
+        mTextRecommendBitrate.setText("2400");
+        mTextRecommendFps.setText("20");
+        mTextRecommendGop.setText("3");
 
-        rbVideoResolution360p.setChecked(true);
+        mRadioVideoResolution360p.setChecked(true);
     }
 
     private void recommendQualityHD() {
-        tvRecommendResolution.setText("540p");
-        tvRecommendBitrate.setText("6500");
-        tvRecommendFps.setText("20");
-        tvRecommendGop.setText("3");
+        mTextRecommendResolution.setText("540p");
+        mTextRecommendBitrate.setText("6500");
+        mTextRecommendFps.setText("20");
+        mTextRecommendGop.setText("3");
 
-        rbVideoResolution540p.setChecked(true);
+        mRadioVideoResolution540p.setChecked(true);
     }
 
     private void recommendQualitySSD() {
-        tvRecommendResolution.setText("720p");
-        tvRecommendBitrate.setText("9600");
-        tvRecommendFps.setText("20");
-        tvRecommendGop.setText("3");
+        mTextRecommendResolution.setText("720p");
+        mTextRecommendBitrate.setText("9600");
+        mTextRecommendFps.setText("20");
+        mTextRecommendGop.setText("3");
 
-        rbVideoResolution720p.setChecked(true);
+        mRadioVideoResolution720p.setChecked(true);
     }
 
     private void showCustomQualitySet() {
-        rgVideoResolution.setVisibility(View.VISIBLE);
-        etBitrate.setVisibility(View.VISIBLE);
-        etFps.setVisibility(View.VISIBLE);
-        etGop.setVisibility(View.VISIBLE);
+        mGroupVideoResolution.setVisibility(View.VISIBLE);
+        mEditBitrate.setVisibility(View.VISIBLE);
+        mEditFps.setVisibility(View.VISIBLE);
+        mEditGop.setVisibility(View.VISIBLE);
 
-        tvRecommendGop.setVisibility(View.GONE);
-        tvRecommendResolution.setVisibility(View.GONE);
-        tvRecommendBitrate.setVisibility(View.GONE);
-        tvRecommendFps.setVisibility(View.GONE);
+        mTextRecommendGop.setVisibility(View.GONE);
+        mTextRecommendResolution.setVisibility(View.GONE);
+        mTextRecommendBitrate.setVisibility(View.GONE);
+        mTextRecommendFps.setVisibility(View.GONE);
     }
 
     private void showRecommendQualitySet() {
-        rgVideoResolution.setVisibility(View.GONE);
-        etBitrate.setVisibility(View.GONE);
-        etFps.setVisibility(View.GONE);
-        etGop.setVisibility(View.GONE);
+        mGroupVideoResolution.setVisibility(View.GONE);
+        mEditBitrate.setVisibility(View.GONE);
+        mEditFps.setVisibility(View.GONE);
+        mEditGop.setVisibility(View.GONE);
 
-        tvRecommendGop.setVisibility(View.VISIBLE);
-        tvRecommendResolution.setVisibility(View.VISIBLE);
-        tvRecommendBitrate.setVisibility(View.VISIBLE);
-        tvRecommendFps.setVisibility(View.VISIBLE);
+        mTextRecommendGop.setVisibility(View.VISIBLE);
+        mTextRecommendResolution.setVisibility(View.VISIBLE);
+        mTextRecommendBitrate.setVisibility(View.VISIBLE);
+        mTextRecommendFps.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -336,9 +345,9 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
     }
 
     private void clearCustomBg() {
-        rlBiterate.setBackgroundResource(R.drawable.rect_bg_gray);
-        rlFps.setBackgroundResource(R.drawable.rect_bg_gray);
-        rlGop.setBackgroundResource(R.drawable.rect_bg_gray);
+        mLayoutBiterate.setBackgroundResource(R.drawable.ugckit_rect_bg_gray);
+        mLayoutFps.setBackgroundResource(R.drawable.ugckit_rect_bg_gray);
+        mLayoutGop.setBackgroundResource(R.drawable.ugckit_rect_bg_gray);
     }
 
     private void getConfigData() {
@@ -347,9 +356,9 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
             return;
         }
 
-        String fps = etFps.getText().toString();
-        String gop = etGop.getText().toString();
-        String bitrate = etBitrate.getText().toString();
+        String fps = mEditFps.getText().toString();
+        String gop = mEditGop.getText().toString();
+        String bitrate = mEditBitrate.getText().toString();
 
         if (!TextUtils.isEmpty(bitrate)) {
             try {
@@ -415,8 +424,8 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
         }
         // 竖屏录制
         intent.putExtra(UGCKitConstants.RECORD_CONFIG_HOME_ORIENTATION, TXLiveConstants.VIDEO_ANGLE_HOME_DOWN);
-        intent.putExtra(UGCKitConstants.RECORD_CONFIG_TOUCH_FOCUS, cbTouchFocus.isChecked());
-        intent.putExtra(UGCKitConstants.RECORD_CONFIG_NEED_EDITER, cbEdit.isChecked());
+        intent.putExtra(UGCKitConstants.RECORD_CONFIG_TOUCH_FOCUS, mCheckBoxTouchFocus.isChecked());
+        intent.putExtra(UGCKitConstants.RECORD_CONFIG_NEED_EDITER, mCheckBoxEdit.isChecked());
         startActivity(intent);
     }
 

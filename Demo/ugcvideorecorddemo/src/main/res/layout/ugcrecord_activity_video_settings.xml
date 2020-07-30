@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#14171d">
+
+    <FrameLayout
+        android:id="@+id/video_settings_bar"
+        android:layout_width="match_parent"
+        android:layout_height="41dp">
+
+        <LinearLayout
+            android:id="@+id/back_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="41dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:src="@drawable/ugcrecord_btn_back_gray" />
+
+            <TextView
+                android:id="@+id/back_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:gravity="center_vertical"
+                android:text="返回"
+                android:textColor="#ffffff"
+                android:textSize="14dp" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="录制设置"
+            android:textColor="#ffffff"
+            android:textSize="18dp" />
+
+        <ImageButton
+            android:id="@+id/webrtc_link_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:background="@color/ugckit_transparent"
+            android:padding="10dp"
+            android:src="@drawable/ugcrecord_question_link" />
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="345dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@color/ugckit_color_accent"
+        android:text="开始录制"
+        android:textColor="@color/color_text_white"
+        android:textSize="@dimen/ugckit_h8" />
+
+    <ScrollView
+        android:layout_width="345dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btn_ok"
+        android:layout_below="@id/video_settings_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="25dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- 视频比例选择 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="视频比例"
+                android:textColor="@color/ugckit_record_settings_tip"
+                android:textSize="14sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_video_aspect_ratio"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="50dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_video_aspect_ratio_1_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="1:1"
+                    android:textColor="@color/ugcrecord_text_settings_color"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_video_aspect_ratio_3_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="3:4"
+                    android:textColor="@color/ugcrecord_text_settings_color"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_video_aspect_ratio_4_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_bg"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="4:3"
+                    android:textColor="@color/ugcrecord_text_settings_color"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_video_aspect_ratio_9_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_bg"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="9:16"
+                    android:textColor="@color/ugcrecord_text_settings_color"
+                    android:textSize="16sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_video_aspect_ratio_16_9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_bg"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="16:9"
+                    android:textColor="@color/ugcrecord_text_settings_color"
+                    android:textSize="16sp" />
+
+            </RadioGroup>
+
+            <!-- 推荐配置和自定义配置 -->
+            <!-- 推荐质量，标清、高清、超清 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="清晰度"
+                android:textColor="@color/ugckit_record_settings_tip"
+                android:textSize="14sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_video_quality"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_video_quality_sd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="标清"
+                    android:textColor="@color/ugcrecord_text_settings_color"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_video_quality_hd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="高清"
+                    android:textColor="@color/ugcrecord_text_settings_color"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_video_quality_super"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="超清"
+                    android:textColor="@color/ugcrecord_text_settings_color"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_video_quality_custom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_bg"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="自定义"
+                    android:textColor="@color/ugcrecord_text_settings_color"
+                    android:textSize="14sp" />
+            </RadioGroup>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp">
+
+                <RelativeLayout
+                    android:id="@+id/rl_resolution"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ugcrecord_rect_bg_gray"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_resolution_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:text="分辨率"
+                        android:textColor="@color/ugckit_record_settings_tip"
+                        android:textSize="14sp" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_video_resolution"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:layout_toRightOf="@id/tv_resolution_tip"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rb_video_resolution_360p"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_radio_bg"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="360p"
+                            android:textColor="@color/ugcrecord_text_settings_color"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/rb_video_resolution_540p"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_radio_bg"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="540p"
+                            android:textColor="@color/ugcrecord_text_settings_color"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/rb_video_resolution_720p"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_radio_bg"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="720p"
+                            android:textColor="@color/ugcrecord_text_settings_color"
+                            android:textSize="14sp" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/tv_recommend_resolution"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp"
+                        android:textColor="@color/ugckit_white"
+                        android:textSize="14sp"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_bite_rate"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/rl_resolution"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/ugcrecord_rect_bg_gray"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_biterate_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:text="码率(kbps)"
+                        android:textColor="@color/ugckit_record_settings_tip"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_recommend_bitrate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="15dp"
+                        android:textColor="@color/ugckit_white"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
+                    <EditText
+                        android:id="@+id/et_biterate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_toRightOf="@id/tv_biterate_tip"
+                        android:background="@null"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center_vertical|right"
+                        android:hint="建议600-12000，默认6500"
+                        android:inputType="number"
+                        android:textColor="@color/ugckit_white"
+                        android:textColorHint="@color/ugckit_color_gray4"
+                        android:textSize="14dp"
+                        android:theme="@style/UGCKitCustomEditText" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_fps"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/rl_bite_rate"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/ugcrecord_rect_bg_gray"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_fps_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:text="帧率(fps)"
+                        android:textColor="@color/ugckit_record_settings_tip"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/et_fps"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_toRightOf="@id/tv_fps_tip"
+                        android:background="@null"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center_vertical|right"
+                        android:hint="建议15-30，默认20"
+                        android:inputType="number"
+                        android:textColor="@color/ugckit_white"
+                        android:textColorHint="@color/ugckit_color_gray4"
+                        android:textSize="14sp"
+                        android:theme="@style/UGCKitCustomEditText" />
+
+                    <TextView
+                        android:id="@+id/tv_recommend_fps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="15dp"
+                        android:gravity="center_vertical|right"
+                        android:textColor="@color/ugckit_white"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_gop"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/rl_fps"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/ugcrecord_rect_bg_gray"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_gop_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:text="关键帧间隔(s)"
+                        android:textColor="@color/ugckit_record_settings_tip"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/et_gop"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_toRightOf="@id/tv_gop_tip"
+                        android:background="@null"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center_vertical|right"
+                        android:hint="建议1-10，默认3秒"
+                        android:inputType="number"
+                        android:textColor="@color/ugckit_white"
+                        android:textColorHint="@color/ugckit_color_gray4"
+                        android:textSize="14sp"
+                        android:theme="@style/UGCKitCustomEditText" />
+
+                    <TextView
+                        android:id="@+id/tv_recommend_gop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="15dp"
+                        android:textColor="@color/ugckit_white"
+                        android:textSize="14sp"
+                        android:visibility="visible" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="15dp"
+                    android:text="开启手动对焦"
+                    android:textColor="@color/ugckit_record_settings_tip" />
+
+                <CheckBox
+                    android:id="@+id/cb_touch_focus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:checked="false" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="15dp"
+                    android:text="录制完是否进入编辑"
+                    android:textColor="@color/ugckit_record_settings_tip" />
+
+                <CheckBox
+                    android:id="@+id/cb_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:checked="false" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

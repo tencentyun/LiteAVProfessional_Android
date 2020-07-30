@@ -13,7 +13,7 @@
             android:name=".TCVideoEditerActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/EditerActivityTheme">
+            android:theme="@style/UGCEditEditerActivityTheme">
             <intent-filter>
                 <action android:name="com.tencent.liteav.demo.videoediter" />
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +25,7 @@
             android:name=".TCVideoCutActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
-            android:theme="@style/EditerActivityTheme">
+            android:theme="@style/UGCEditEditerActivityTheme">
             <intent-filter>
                 <action android:name="com.tencent.liteav.demo.videocut" />
                 <action android:name="android.intent.action.MAIN" />
@@ -36,12 +36,12 @@
         <activity
             android:name=".TCVideoEffectActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/EditerActivityTheme" />
+            android:theme="@style/UGCEditEditerActivityTheme" />
 
         <activity
             android:name=".TCPictureJoinActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/PictureTransitionActivityStyle">
+            android:theme="@style/UGCEditPictureTransitionActivityStyle">
             <intent-filter>
                 <action android:name="com.tencent.liteav.demo.picturejoin" />
                 <action android:name="android.intent.action.MAIN" />
