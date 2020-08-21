@@ -28,8 +28,8 @@ import com.tencent.liteav.liveroom.ui.liveroomlist.LiveRoomListActivity;
 import com.tencent.liteav.login.model.ProfileManager;
 import com.tencent.liteav.login.ui.LoginActivity;
 import com.tencent.liteav.meeting.ui.CreateMeetingActivity;
-import com.tencent.liteav.trtcaudiocalldemo.ui.TRTCAudioCallSelectContactActivity;
-import com.tencent.liteav.trtcvideocalldemo.ui.TRTCVideoCallSelectContactActivity;
+import com.tencent.liteav.trtccalling.model.TRTCCalling;
+import com.tencent.liteav.trtccalling.ui.TRTCCallingEntranceActivity;
 import com.tencent.liteav.trtcvoiceroom.ui.list.VoiceRoomListActivity;
 import com.tencent.rtmp.TXLiveBase;
 
@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mTvVersion = (TextView) findViewById(R.id.main_tv_version);
-        mTvVersion.setText("视频云工具包 v" + TXLiveBase.getSDKVersionStr()+"(7.5.424)");
+        mTvVersion.setText("视频云工具包 v" + TXLiveBase.getSDKVersionStr()+"(7.6.506)");
 
         mMainTitle = (TextView) findViewById(R.id.main_title);
         mMainTitle.setOnLongClickListener(new View.OnLongClickListener() {
@@ -251,8 +251,8 @@ public class MainActivity extends Activity {
         videoConnectChildList.add(new ChildBean("多人视频会议", R.drawable.multi_meeting, 0, CreateMeetingActivity.class));
         videoConnectChildList.add(new ChildBean("语音聊天室", R.drawable.room_multi, 0, VoiceRoomListActivity.class));
         videoConnectChildList.add(new ChildBean("视频互动直播", R.drawable.room_multi, 1, LiveRoomListActivity.class));
-        videoConnectChildList.add(new ChildBean("语音通话", R.drawable.room_multi, 0, TRTCAudioCallSelectContactActivity.class));
-        videoConnectChildList.add(new ChildBean("视频通话", R.drawable.room_multi, 0, TRTCVideoCallSelectContactActivity.class));
+        videoConnectChildList.add(new ChildBean("语音通话", R.drawable.room_multi, TRTCCalling.TYPE_AUDIO_CALL, TRTCCallingEntranceActivity.class));
+        videoConnectChildList.add(new ChildBean("视频通话", R.drawable.room_multi, TRTCCalling.TYPE_VIDEO_CALL, TRTCCallingEntranceActivity.class));
         if (videoConnectChildList.size() != 0) {
             GroupBean videoConnectGroupBean = new GroupBean("实时音视频 TRTC", R.drawable.room_multi, videoConnectChildList);
             groupList.add(videoConnectGroupBean);
