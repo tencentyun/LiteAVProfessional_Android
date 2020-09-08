@@ -4,7 +4,7 @@ package com.tencent.liteav.demo.videouploader.model.impl;
  * 视频上传常量定义
  */
 public class TVCConstants {
-    public static final String TVCVERSION = "1.1.1.0";
+    public static final String TVCVERSION = "7.7.9457";
     public static String VOD_SERVER_HOST = "vod2.qcloud.com";
     public static String VOD_SERVER_HOST_BAK = "vod2.dnsv1.com";
 
