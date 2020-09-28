@@ -134,7 +134,11 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (grantResults != null && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            loadVideoList();
+            if (mType == TYPE_MULTI_CHOOSE_PICTURE) {
+                loadPictureList();
+            } else {
+                loadVideoList();
+            }
         }
     }
 

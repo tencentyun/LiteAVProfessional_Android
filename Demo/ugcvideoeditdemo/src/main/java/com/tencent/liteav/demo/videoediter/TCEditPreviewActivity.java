@@ -6,8 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -17,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tencent.qcloud.ugckit.UGCKitConstants;
 import com.tencent.qcloud.ugckit.utils.AlbumSaver;
 import com.tencent.qcloud.ugckit.utils.FileUtils;
@@ -26,6 +27,7 @@ import com.tencent.rtmp.TXVodPlayConfig;
 import com.tencent.rtmp.TXVodPlayer;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 
+import java.io.File;
 import java.util.Locale;
 
 /**
@@ -81,8 +83,10 @@ public class TCEditPreviewActivity extends Activity implements View.OnClickListe
 
         if (!TextUtils.isEmpty(mCoverImagePath)) {
             mImageViewBg.setVisibility(View.VISIBLE);
-            Bitmap bitmap = BitmapFactory.decodeFile(mCoverImagePath);
-            mImageViewBg.setImageBitmap(bitmap);
+            Glide.with(this).load(Uri.fromFile(new File(mCoverImagePath)))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(mImageViewBg);
         }
 
         mTXVodPlayer = new TXVodPlayer(this);

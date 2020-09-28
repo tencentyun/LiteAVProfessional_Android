@@ -1,4 +1,4 @@
-package com.tencent.liteav.demo.videouploader.model.impl;
+package com.tencent.qcloud.ugckit.module.upload.impl;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
