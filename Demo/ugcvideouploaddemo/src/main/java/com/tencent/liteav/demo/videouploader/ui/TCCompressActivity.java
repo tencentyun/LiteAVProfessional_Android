@@ -103,6 +103,16 @@ public class TCCompressActivity extends FragmentActivity {
             return;
         }
         mTXVideoInfo = TXVideoInfoReader.getInstance(this).getVideoFileInfo(mInputSource);
+
+        // 部分机型上会产生00:00时长的视频文件，导致此处VideoInfo为空
+        if (mTXVideoInfo == null) {
+            showDialog(R.string.ugcupload_error_handle_video, R.string.ugcupload_error_invalid_format, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
         initListener();
     }
 
