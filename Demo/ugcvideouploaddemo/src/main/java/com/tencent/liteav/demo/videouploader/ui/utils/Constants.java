@@ -6,6 +6,7 @@ public class Constants {
      * UGC 编辑的的参数
      */
     public static final String VIDEO_EDITER_PATH = "key_video_editer_path"; // 路径的key
+    public static final String VIDEO_SOURCE_PATH = "key_video_source_path"; // 未压缩前视频源路径的key
     public static final String VIDEO_EDITER_URI = "key_video_editer_uri_path";
 
     public static final String DEFAULT_MEDIA_PACK_FOLDER = "txrtmp";      // UGC编辑器输出目录

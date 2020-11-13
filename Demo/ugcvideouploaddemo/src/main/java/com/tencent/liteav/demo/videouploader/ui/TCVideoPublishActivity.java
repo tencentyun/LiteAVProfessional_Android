@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.tencent.liteav.demo.player.activity.SuperPlayerActivity;
+import com.tencent.liteav.demo.player.demo.SuperPlayerActivity;
 import com.tencent.liteav.demo.videouploader.R;
 import com.tencent.liteav.demo.videouploader.ui.utils.Constants;
 import com.tencent.liteav.demo.videouploader.ui.view.VideoWorkProgressFragment;
@@ -92,11 +92,12 @@ public class TCVideoPublishActivity extends FragmentActivity implements View.OnC
 
     private void initData() {
         mVideoPath = getIntent().getStringExtra(Constants.VIDEO_EDITER_PATH);
+        String sourceVideoPath = getIntent().getStringExtra(Constants.VIDEO_SOURCE_PATH);
         File sdcardDir = getExternalFilesDir(null);
         if (sdcardDir != null) {
             mCoverImagePath = sdcardDir.getAbsolutePath() + "/cover.jpg";
         }
-        final Bitmap coverBitmap = TXVideoInfoReader.getInstance(this).getSampleImage(0, mVideoPath);
+        final Bitmap coverBitmap = TXVideoInfoReader.getInstance(this).getSampleImage(0, sourceVideoPath);
         if(coverBitmap != null){
             mImageCover.setImageBitmap(coverBitmap);
             new Thread(new Runnable() {

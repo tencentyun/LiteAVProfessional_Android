@@ -20,7 +20,7 @@ import com.tencent.liteav.demo.common.widget.expandableadapter.BaseExpandableRec
 import com.tencent.liteav.demo.liveplayer.ui.LivePlayerEntranceActivity;
 import com.tencent.liteav.demo.livepusher.camerapush.ui.CameraPushEntranceActivity;
 import com.tencent.liteav.demo.liveroom.ui.LiveRoomActivity;
-import com.tencent.liteav.demo.player.activity.SuperPlayerActivity;
+import com.tencent.liteav.demo.player.demo.SuperPlayerActivity;
 import com.tencent.liteav.demo.videoediter.TCVideoPickerActivity;
 import com.tencent.liteav.demo.videojoiner.ui.TCVideoJoinChooseActivity;
 import com.tencent.liteav.demo.videorecord.TCVideoSettingActivity;
@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mTvVersion = (TextView) findViewById(R.id.main_tv_version);
-        mTvVersion.setText("视频云工具包 v" + TXLiveBase.getSDKVersionStr()+"(7.9.607)");
+        mTvVersion.setText("视频云工具包 v" + TXLiveBase.getSDKVersionStr()+"(8.0.617)");
 
         mMainTitle = (TextView) findViewById(R.id.main_title);
         mMainTitle.setOnLongClickListener(new View.OnLongClickListener() {

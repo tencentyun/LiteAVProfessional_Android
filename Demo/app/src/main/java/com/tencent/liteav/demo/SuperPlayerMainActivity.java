@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 
 import com.tencent.liteav.demo.common.widget.expandableadapter.BaseExpandableRecyclerViewAdapter;
-import com.tencent.liteav.demo.player.activity.SuperPlayerActivity;
+import com.tencent.liteav.demo.player.demo.SuperPlayerActivity;
 import com.tencent.rtmp.TXLiveBase;
 
 import java.io.File;

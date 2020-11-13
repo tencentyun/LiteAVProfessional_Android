@@ -52,6 +52,7 @@ public class TCCompressActivity extends FragmentActivity {
     private int     mVideoResolution;
     private int     mBiteRate;                                          // 码率
     private String  mInputSource;
+    private String  mVideoSourcePath;                                   //未压缩视频源的路径
     private String  mOutputPath;
     private boolean mCompressing;
 
@@ -82,6 +83,7 @@ public class TCCompressActivity extends FragmentActivity {
         } else {
             mInputSource = path;
         }
+        mVideoSourcePath = path; //视频封面的提取兼容9.0以上的机型
         mOutputPath = Utils.generateVideoPath(this);
         int ret = mTXVideoEditer.setVideoPath(mInputSource);
         if (ret != 0) {
@@ -390,6 +392,7 @@ public class TCCompressActivity extends FragmentActivity {
     private void startPublishActivity(String videoPath) {
         Intent intent = new Intent(TCCompressActivity.this, TCVideoPublishActivity.class);
         intent.putExtra(Constants.VIDEO_EDITER_PATH, videoPath);
+        intent.putExtra(Constants.VIDEO_SOURCE_PATH, mVideoSourcePath);
         startActivity(intent);
     }
 
