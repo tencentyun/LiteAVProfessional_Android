@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
+import com.tencent.bugly.beta.Beta;
 import com.tencent.liteav.liveroom.ui.liveroomlist.LiveRoomListActivity;
 import com.tencent.liteav.login.model.ProfileManager;
 import com.tencent.liteav.login.ui.LoginActivity;
@@ -111,6 +112,7 @@ public class TRTCMainActivity extends Activity {
         });
         interceptHyperLink((TextView) findViewById(R.id.tv_privacy));
         initPermission();
+        Beta.checkUpgrade();
     }
 
     @Override
