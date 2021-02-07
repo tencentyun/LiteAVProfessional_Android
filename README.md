@@ -16,7 +16,8 @@
 |  ├─ trtcvideocalldemo     // 场景五：视频通话，展示双人视频通话，有离线通知能力
 |  ├─ liveplayerdemo        // 直播播放，可以扫码播放地址进行播放
 |  ├─ livepusherdemo        // 直播推流，包含推流时，设置美颜，音效，等基础操作
-|  ├─ mlvbliveroomdemo      // 互动直播，包含连麦、聊天、点赞等特性
+|  ├─ livelinkmicdemoold    // 互动直播，包含连麦、聊天、点赞等特性
+|  ├─ livelinkmicdemonew    // 互动直播新方案，超低延时直播等特性
 |  ├─ ugckit                // UGC 组件，包含视频录制，编辑，合成，发布上传等基础功能
 |  ├─ ugcvideorecorddemo    // 视频录制 Demo
 |  ├─ ugcvideojoindemo      // 视频合成 Demo
