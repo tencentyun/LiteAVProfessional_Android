@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/live_link_mic_new_content_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp">
+
+        <TextView
+            android:id="@+id/tv_cdn_play_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginTop="20dp"
+            android:text="你需要a，b两台手机进行测试"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_cdn_play_hint1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="①a手机生成推流地址录制"
+            android:textColor="#FF6B82A8"
+            android:textSize="10sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_cdn_play_hint2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="②b手机输入推流地址或扫码拉流并播放测试"
+            android:textColor="#FF6B82A8"
+            android:textSize="10sp"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/tv_cdn_stream_text"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginTop="20dp"
+            android:text="自动生成播放地址或手动输入"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/tv_cdn_btn_normal_url"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/live_link_mic_new_btn_bg"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="自动生成默认拉流地址"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+
+        <TextView
+            android:id="@+id/tv_cdn_stream_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="我有播放地址"
+            android:textColor="#ff6b82a8"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">'
+
+            <EditText
+                android:id="@+id/et_input_cdn_url"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="8"
+                android:background="@drawable/live_link_mic_new_input_url_bg"
+                android:hint="请扫码输入播放地址"
+                android:imeOptions="actionGo"
+                android:inputType="textUri"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="#ff6b82a8"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/iv_cdn_btn_qr_code_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/live_link_mic_new_ic_qcode" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/cdn_btn_play"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/live_link_mic_new_btn_bg"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="开始播放"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/cdn_btn_close"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/live_link_mic_new_btn_bg"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="取消"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+</ScrollView>

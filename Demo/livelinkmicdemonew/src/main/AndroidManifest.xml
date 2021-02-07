@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.tencent.liteav.demo.livelinkmicnew">
+
+    <application>
+        <activity
+            android:name=".V2MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity android:name=".QRCodeScanActivity"/>
+
+    </application>
+</manifest>

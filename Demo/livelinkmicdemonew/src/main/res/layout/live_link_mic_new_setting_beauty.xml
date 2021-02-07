@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="美颜设置"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/tv_close_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/audio_effect_setting_panel_close"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_ruddy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:text="红润"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <SeekBar
+            android:id="@+id/sb_ruddy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.98"
+            android:indeterminate="false"
+            android:max="9"
+            android:maxHeight="4dp"
+            android:minHeight="4dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="36dp"
+            android:progress="5"
+            android:progressDrawable="@drawable/audio_effect_setting_seekbar_shape"
+            android:thumb="@drawable/audio_effect_setting_shape_seekbar_btn"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_ruddy_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:text="5"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_mopi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:text="美白"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <SeekBar
+            android:id="@+id/sb_mopi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.98"
+            android:indeterminate="false"
+            android:max="9"
+            android:maxHeight="4dp"
+            android:minHeight="4dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="36dp"
+            android:progress="5"
+            android:progressDrawable="@drawable/audio_effect_setting_seekbar_shape"
+            android:thumb="@drawable/audio_effect_setting_shape_seekbar_btn"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_mopi_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:text="5"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_beauty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:text="美颜"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <SeekBar
+            android:id="@+id/sb_beauty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.98"
+            android:indeterminate="false"
+            android:max="9"
+            android:maxHeight="4dp"
+            android:minHeight="4dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="36dp"
+            android:progress="5"
+            android:progressDrawable="@drawable/audio_effect_setting_seekbar_shape"
+            android:thumb="@drawable/audio_effect_setting_shape_seekbar_btn"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_beauty_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:text="5"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -138,7 +138,7 @@ public class SuperPlayerMainActivity extends Activity {
         List<ChildBean> playerChildList = new ArrayList<>();
         playerChildList.add(new ChildBean("超级播放器", R.drawable.play, 3, SuperPlayerActivity.class));
         if (playerChildList.size() != 0) {
-            GroupBean playerGroupBean = new GroupBean("播放器", R.drawable.composite, playerChildList);
+            GroupBean playerGroupBean = new GroupBean("播放器 Player", R.drawable.composite, playerChildList);
             groupList.add(playerGroupBean);
         }
 

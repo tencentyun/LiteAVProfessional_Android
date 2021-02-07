@@ -20,4 +20,5 @@ include ':superplayerdemo'
 
 include ':liveplayerdemo'
 include ':livepusherdemo'
-include ':mlvbliveroomdemo'
+include ':livelinkmicdemoold'
+include ':livelinkmicdemonew'

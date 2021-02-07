@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/live_link_mic_new_content_bg"
+    android:orientation="vertical"
+    android:paddingLeft="18dp"
+    android:paddingRight="18dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">'
+
+        <EditText
+            android:id="@+id/rtc_et_input_streamid"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="8"
+            android:background="@drawable/live_link_mic_new_input_url_bg"
+            android:digits="1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+            android:hint="请输入streamId"
+            android:imeOptions="actionGo"
+            android:inputType="number|textUri"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="#ff6b82a8"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/rtc_btn_qr_code_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/live_link_mic_new_ic_qcode" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_link_mic"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/rtc_tv_link_mic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="开启超低延时播放"
+            android:textColor="@color/line_btn"
+            android:textSize="12sp" />
+
+        <CheckBox
+            android:id="@+id/rtc_cb_link_mic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:button="@drawable/live_link_mic_new_bg_checkbox"
+            android:orientation="horizontal" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/rtc_btn_play"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/live_link_mic_new_btn_bg"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:text="开始播放"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/rtc_btn_close"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/live_link_mic_new_btn_bg"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:text="取消"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+
+</LinearLayout>

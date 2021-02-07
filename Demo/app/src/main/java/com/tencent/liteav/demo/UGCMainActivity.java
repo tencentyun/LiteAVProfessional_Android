@@ -156,7 +156,7 @@ public class UGCMainActivity extends Activity {
         if (shortVideoChildList.size() != 0) {
             // 这个是网页链接，配合build.sh避免在其他版本中出现
             shortVideoChildList.add(new ChildBean("小视频", R.drawable.xiaoshipin, 0, null));
-            GroupBean shortVideoGroupBean = new GroupBean("短视频", R.drawable.video, shortVideoChildList);
+            GroupBean shortVideoGroupBean = new GroupBean("短视频 UGSV", R.drawable.video, shortVideoChildList);
             groupList.add(shortVideoGroupBean);
         }
 
