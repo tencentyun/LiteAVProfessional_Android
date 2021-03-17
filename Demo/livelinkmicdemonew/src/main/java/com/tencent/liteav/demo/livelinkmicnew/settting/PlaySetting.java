@@ -27,9 +27,6 @@ import com.tencent.liteav.demo.livelinkmicnew.settting.customitem.CustomSettingI
 import com.tencent.liteav.demo.livelinkmicnew.settting.customitem.RadioButtonSettingItem;
 import com.tencent.live2.V2TXLiveDef;
 import com.tencent.live2.V2TXLivePlayer;
-import com.tencent.live2.V2TXLiveSnapshotObserver;
-import com.tencent.live2.impl.TXLivePropertyInner;
-import com.tencent.trtc.TRTCCloudDef;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +39,7 @@ import static com.tencent.live2.V2TXLiveDef.V2TXLiveRotation.V2TXLiveRotation90;
 public class PlaySetting extends DialogFragment {
 
     private V2TXLivePlayer mLivePlayer;
+    private ImageView mImageView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -219,27 +217,27 @@ public class PlaySetting extends DialogFragment {
 
     }
 
+    public void setSnapshotImage(Bitmap bitmap) {
+        if (mImageView != null && bitmap != null) {
+            mImageView.setImageBitmap(bitmap);
+        }
+    }
+
     private List<View> createSnapshotButton() {
         List<View>   views  = new ArrayList<>();
         final Button button = new Button(getActivity());
         button.setText("截图");
-        final ImageView imageView = new ImageView(getActivity());
-        imageView.setLayoutParams(new Gallery.LayoutParams(80, 80));
+        mImageView = new ImageView(getActivity());
+        mImageView.setLayoutParams(new Gallery.LayoutParams(80, 80));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mLivePlayer != null) {
-                    mLivePlayer.snapshot(new V2TXLiveSnapshotObserver() {
-                        @Override
-                        public void onSnapshotComplete(Bitmap bmp) {
-                            if (bmp == null) return;
-                            imageView.setImageBitmap(bmp);
-                        }
-                    });
+                    mLivePlayer.snapshot();
                 }
             }
         });
-        views.add(imageView);
+        views.add(mImageView);
         views.add(button);
         return views;
     }

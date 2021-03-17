@@ -24,8 +24,6 @@ import com.tencent.liteav.demo.livelinkmicnew.settting.customitem.RadioButtonSet
 import com.tencent.liteav.demo.livelinkmicnew.settting.customitem.SelectionSettingItem;
 import com.tencent.live2.V2TXLiveDef;
 import com.tencent.live2.V2TXLivePusher;
-import com.tencent.live2.V2TXLiveSnapshotObserver;
-import com.tencent.live2.impl.TXLivePropertyInner;
 import com.tencent.trtc.TRTCCloudDef;
 
 import java.util.ArrayList;
@@ -37,8 +35,6 @@ import static com.tencent.live2.V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLive
 import static com.tencent.live2.V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModePortrait;
 import static com.tencent.trtc.TRTCCloudDef.TRTC_VIDEO_MIRROR_TYPE_AUTO;
 import static com.tencent.trtc.TRTCCloudDef.TRTC_VIDEO_MIRROR_TYPE_ENABLE;
-import static com.tencent.trtc.TRTCCloudDef.TRTC_VIDEO_ROTATION_0;
-import static com.tencent.trtc.TRTCCloudDef.TRTC_VIDEO_ROTATION_90;
 
 /**
  * 视频设置页
@@ -62,6 +58,7 @@ public class PushVideoSettingFragment extends Fragment {
     private int                                 mAppScene = TRTCCloudDef.TRTC_APP_SCENE_LIVE;
     private int                                 mCurRes;
     private V2TXLivePusher                      mLivePusher;
+    private ImageView                           mImageView;
 
     public void setLivePusher(V2TXLivePusher pusher) {
         mLivePusher = pusher;
@@ -189,25 +186,25 @@ public class PushVideoSettingFragment extends Fragment {
         mVideoConfig.saveCache();
     }
 
+    public void setSnapshotImage(Bitmap bitmap) {
+        if (mImageView != null && bitmap != null) {
+            mImageView.setImageBitmap(bitmap);
+        }
+    }
+
     private List<View> createSnapshotButton() {
         List<View>   views  = new ArrayList<>();
         final Button button = new Button(getContext());
         button.setText("截图");
-        final ImageView imageView = new ImageView(getContext());
-        imageView.setLayoutParams(new Gallery.LayoutParams(80, 80));
+        mImageView = new ImageView(getContext());
+        mImageView.setLayoutParams(new Gallery.LayoutParams(80, 80));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mLivePusher.snapshot(new V2TXLiveSnapshotObserver() {
-                    @Override
-                    public void onSnapshotComplete(Bitmap bmp) {
-                        if (bmp == null) return;
-                        imageView.setImageBitmap(bmp);
-                    }
-                });
+                mLivePusher.snapshot();
             }
         });
-        views.add(imageView);
+        views.add(mImageView);
         views.add(button);
         return views;
     }

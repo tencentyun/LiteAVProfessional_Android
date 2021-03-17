@@ -123,7 +123,7 @@ public class PushAudioSettingFragment extends Fragment {
     }
 
     private void updateItem() {
-        mAudioVolumeTypeItem.setSelect(mAudioConfig.getAudioVolumeType() == TRTCCloudDef.TRTCSystemVolumeTypeAuto ? 0 : 1);
+        mAudioVolumeTypeItem.setSelect(mAudioConfig.getAudioVolumeType());
         mAudioEarMonitoringItem.setCheck(mAudioConfig.isEnableEarMonitoring());
         mAudioVolumeEvaluationItem.setCheck(mAudioConfig.isAudioVolumeEvaluation());
     }

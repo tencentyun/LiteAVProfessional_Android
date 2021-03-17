@@ -9,7 +9,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 14
-        versionName "8.4.664"
+        versionName "8.5.673"
 
         multiDexEnabled true
         ndk {
@@ -48,6 +48,7 @@ dependencies {
     compile project(':trtcvoiceroomdemo')
     compile project(':trtccallingdemo')
     compile project(':trtcmeetingdemo')
+    compile project(':trtcchatsalondemo')
     compile project(':login')
     compile project(':ugcvideoeditdemo')
     compile project(':ugcvideojoindemo')

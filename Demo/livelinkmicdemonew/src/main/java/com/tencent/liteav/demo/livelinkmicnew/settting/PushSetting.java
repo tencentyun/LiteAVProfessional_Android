@@ -1,6 +1,7 @@
 package com.tencent.liteav.demo.livelinkmicnew.settting;
 
 import android.app.Dialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -116,6 +117,12 @@ public class PushSetting extends DialogFragment {
 
     public void setLivePusher(V2TXLivePusher pusher) {
         mLivePusher = pusher;
+    }
+
+    public void setSnapshotImage(Bitmap bitmap) {
+        if (mVideoSettingFragment != null) {
+            mVideoSettingFragment.setSnapshotImage(bitmap);
+        }
     }
 
     private void initFragment() {

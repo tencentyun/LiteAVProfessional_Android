@@ -322,7 +322,7 @@ public class SuperPlayerMainActivity extends Activity {
             return null;
         }
 
-        String       path      = sdcardDir.getAbsolutePath() + "/log/tencent/liteav";
+        String       path      = sdcardDir.getAbsolutePath() + "/log/liteav";
         List<String> logs      = new ArrayList<>();
         File         directory = new File(path);
         if (directory != null && directory.exists() && directory.isDirectory()) {

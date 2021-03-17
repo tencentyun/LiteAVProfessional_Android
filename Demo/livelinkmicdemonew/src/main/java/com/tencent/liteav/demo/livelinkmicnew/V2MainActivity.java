@@ -3,6 +3,7 @@ package com.tencent.liteav.demo.livelinkmicnew;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,8 +37,6 @@ import com.tencent.live2.V2TXLivePlayer;
 import com.tencent.live2.V2TXLivePlayerObserver;
 import com.tencent.live2.V2TXLivePusher;
 import com.tencent.live2.V2TXLivePusherObserver;
-import com.tencent.live2.V2TXLiveVideoFrameObserver;
-import com.tencent.live2.impl.TXLivePropertyInner;
 import com.tencent.live2.impl.V2TXLivePlayerImpl;
 import com.tencent.live2.impl.V2TXLivePusherImpl;
 import com.tencent.live2.trtc.TXLiveUtils;
@@ -109,6 +108,7 @@ public class V2MainActivity extends AppCompatActivity {
     private MainProtocolSelectDialog mPushChooseTypeFragmentDialog;
     private QRCodeGenerateFragment mPusherPlayQRCodeFragment;
     private V2VideoSource mVideoSource = V2VideoSource.CAMERA;
+    private PlaySetting mPlaySetting;
 
     // player
     private final List<PlayerViewContainer> mRemoteRenderViewList = new ArrayList<>();
@@ -844,12 +844,6 @@ public class V2MainActivity extends AppCompatActivity {
         playerView.hidePushFeatureView();
         playerView.setSwitchListener(new PlayerViewCallback(container));
 
-        player.setVideoFrameObserver(V2TXLiveDef.V2TXLivePixelFormat.V2TXLivePixelFormatTexture2D, V2TXLiveDef.V2TXLiveBufferType.V2TXLiveBufferTypeTexture, new V2TXLiveVideoFrameObserver() {
-            @Override
-            public void onVideoFrameAvailable(V2TXLiveDef.V2TXLiveVideoFrame videoFrame) {
-                //Log.i(TAG, "[Player] onVideoFrameAvailable, videoFrame width " + videoFrame.width + ", videoFrame height " + videoFrame.height);
-            }
-        });
         player.setRenderView(playerView.getCloudView());
         player.setRenderRotation(V2TXLiveDef.V2TXLiveRotation.V2TXLiveRotation0);
         player.setRenderFillMode(V2TXLiveDef.V2TXLiveFillMode.V2TXLiveFillModeFill);
@@ -875,6 +869,7 @@ public class V2MainActivity extends AppCompatActivity {
 
         playerView.setTag(url);
         playerView.showCloseButton();
+        startPlayerLoading(container, player);
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -922,12 +917,17 @@ public class V2MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onConnectionStateUpdate(V2TXLiveDef.V2TXLiveConnectionState state, String msg, Bundle extraInfo) {
-            if (state == V2TXLiveDef.V2TXLiveConnectionState.V2TXLiveConnectionStateConnecting || state == V2TXLiveDef.V2TXLiveConnectionState.V2TXLiveConnectionStateReconnecting) {
+        public void onPushStatusUpdate(V2TXLiveDef.V2TXLivePushStatus status, String msg, Bundle bundle) {
+            if (status == V2TXLiveDef.V2TXLivePushStatus.V2TXLivePushStatusConnecting || status == V2TXLiveDef.V2TXLivePushStatus.V2TXLivePushStatusReconnecting) {
                 mPushRenderView.showLoading();
             } else {
                 mPushRenderView.dismissLoading();
             }
+        }
+
+        @Override
+        public void onSnapshotComplete(Bitmap bitmap) {
+            mPushSettingFragmentDialog.setSnapshotImage(bitmap);
         }
 
         @Override
@@ -941,59 +941,7 @@ public class V2MainActivity extends AppCompatActivity {
 //                    + " audio bitrate-" + statistics.audioBitrate
 //            );
         }
-
-//        @Override
-//        public void onRemoteStreamUpdate(String userId, V2TXLiveDef.V2TXLiveStreamType type, String url, boolean videoAvailable, boolean audioAvailable) {
-//            Log.i(TAG, "[Pusher] onRemoteStreamUpdate: userId-" + userId + " type-" + type + " url-" + url + " videoAvailable-" + videoAvailable + ", audioAvailable-" + audioAvailable);
-//            if (!videoAvailable && !audioAvailable) {
-//                V2TXLivePlayer player = AVSettingConfig.getInstance().playerMap.get(url);
-//                if (player != null) {
-//                    Log.i(TAG, "onRemoteStreamUpdate false, stop play");
-//                    player.stopPlay();
-//                    AVSettingConfig.getInstance().playerMap.remove(url);
-//                }
-//                PlayerViewContainer playerViewContainer = findRenderView(url);
-//                if (playerViewContainer != null && playerViewContainer.playerView != null) {
-//                    Log.i(TAG, "onRemoteStreamUpdate false, resume playerView");
-//                    resetPlayer(playerViewContainer);
-//                    playerViewContainer.isPlaying = false;
-//                    playerViewContainer.isShowDebugView = false;
-//                } else {
-//                    Log.w(TAG, "onRemoteStreamUpdate false, not found playerView");
-//                }
-//                return;
-//            }
-//            // 低延时流回调，比如连麦，需要拉取对方流观看，但是不用进房
-//            PlayerViewContainer playerViewContainer = allocRenderView(url);
-//            if (playerViewContainer != null && playerViewContainer.playerView == null) {
-//                Log.w(TAG, "allocRenderView failed");
-//            }
-//            startPlay(url, playerViewContainer);
-//        }
     }
-
-    private PlayerViewContainer allocRenderView(final String url) {
-        for (final PlayerViewContainer container : mRemoteRenderViewList) {
-            String viewTag = container.playerView.getTag() == null ? "" : (String) container.playerView.getTag();
-            if (TextUtils.isEmpty(viewTag)) {
-                container.playerView.setTag(url);
-                return container;
-            }
-        }
-        return null;
-    }
-
-    private PlayerViewContainer findRenderView(String url) {
-        for (PlayerViewContainer container : mRemoteRenderViewList) {
-            String viewTag = container.playerView.getTag() == null ? "" : (String) container.playerView.getTag();
-            if (url.equals(viewTag)) {
-                container.playerView.setTag(url);
-                return container;
-            }
-        }
-        return null;
-    }
-
 
     // player
     private class MyPlayerObserver extends V2TXLivePlayerObserver {
@@ -1016,40 +964,66 @@ public class V2MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onRecvFirstAudioFrame(V2TXLivePlayer player) {
-            Log.i(TAG, "[Player] onRecvFirstAudioFrame: player-" + player);
-            mPlayerContainer.isPlaying = true;
-            MainItemRenderView renderView = mPlayerContainer.playerView;
-            for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
-                if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
-                    if (renderView != null) {
-                        renderView.recvFirstAudio(true);
-                    }
-                    return;
-                }
+        public void onSnapshotComplete(V2TXLivePlayer v2TXLivePlayer, Bitmap bitmap) {
+            if (mPlaySetting != null) {
+                mPlaySetting.setSnapshotImage(bitmap);
             }
-            ErrorDialog.showMsgDialog(V2MainActivity.this, "onRecvFirstAudioFrame error: player not found");
         }
 
         @Override
-        public void onRecvFirstVideoFrame(V2TXLivePlayer player) {
-            Log.i(TAG, "[Player] onRecvFirstVideoFrame: player-" + player);
-            mPlayerContainer.isPlaying = true;
-            MainItemRenderView renderView = mPlayerContainer.playerView;
-            for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
-                if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
-                    if (renderView != null) {
-                        renderView.recvFirstVideo(true);
+        public void onVideoPlayStatusUpdate(V2TXLivePlayer player, V2TXLiveDef.V2TXLivePlayStatus status, V2TXLiveDef.V2TXLiveStatusChangeReason reason, Bundle bundle) {
+            Log.i(TAG, "[Player] onVideoPlayStatusUpdate: player-" + player + ", status-" + status + ", reason-" + reason);
+            switch (status) {
+                case V2TXLivePlayStatusPlaying:
+                    mPlayerContainer.isPlaying = true;
+                    stopPlayerLoading(mPlayerContainer, player);
+                    if(reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonLocalStarted) {
+                        MainItemRenderView renderView = mPlayerContainer.playerView;
+                        for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
+                            if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
+                                if (renderView != null) {
+                                    renderView.recvFirstVideo(true);
+                                }
+                                return;
+                            }
+                        }
                     }
-                    return;
-                }
+                    break;
+                case V2TXLivePlayStatusLoading:
+                    mPlayerContainer.isPlaying = false;
+                    startPlayerLoading(mPlayerContainer, player);
+                    break;
+                default:
+                    break;
             }
-            ErrorDialog.showMsgDialog(V2MainActivity.this, "onRecvFirstVideoFrame error: player not found");
         }
 
         @Override
-        public void onVideoResolutionChanged(V2TXLivePlayer player, int width, int height) {
-            Log.i(TAG, "[Player] onVideoResolutionChanged: player-" + player + " width-" + width + " height-" + height);
+        public void onAudioPlayStatusUpdate(V2TXLivePlayer player, V2TXLiveDef.V2TXLivePlayStatus status, V2TXLiveDef.V2TXLiveStatusChangeReason reason, Bundle bundle) {
+            Log.i(TAG, "[Player] onAudioPlayStatusUpdate: player-" + player + ", status-" + status + ", reason-" + reason);
+            switch (status) {
+                case V2TXLivePlayStatusPlaying:
+                    mPlayerContainer.isPlaying = true;
+                    stopPlayerLoading(mPlayerContainer, player);
+                    if (reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonLocalStarted) {
+                        MainItemRenderView renderView = mPlayerContainer.playerView;
+                        for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
+                            if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
+                                if (renderView != null) {
+                                    renderView.recvFirstAudio(true);
+                                }
+                                return;
+                            }
+                        }
+                    }
+                    break;
+                case V2TXLivePlayStatusLoading:
+                    mPlayerContainer.isPlaying = false;
+                    startPlayerLoading(mPlayerContainer, player);
+                    break;
+                default:
+                    break;
+            }
         }
 
         @Override
@@ -1064,41 +1038,6 @@ public class V2MainActivity extends AppCompatActivity {
                     return;
                 }
             }
-        }
-
-        @Override
-        public void onLoading(V2TXLivePlayer player) {
-            Log.i(TAG, "[Player] onLoading: player-" + player);
-            MainItemRenderView view = null;
-            for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
-                if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
-                    view = mPlayerContainer.playerView;
-                    break;
-                }
-            }
-            view.showLoading();
-        }
-
-        @Override
-        public void onPlayBegin(V2TXLivePlayer player) {
-            Log.i(TAG, "[Player] onPlayBegin: player- " + player);
-            MainItemRenderView view = null;
-            for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
-                if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
-                    view = mPlayerContainer.playerView;
-                    break;
-                }
-            }
-            view.dismissLoading();
-        }
-
-        @Override
-        public void onConnectionBroken(V2TXLivePlayer player, int result) {
-            Log.i(TAG, "[Player] onConnectionBroken: player-" + player + ", result-" + result);
-            Toast.makeText(V2MainActivity.this, "连接断开", Toast.LENGTH_SHORT).show();
-            resetPlayer(mPlayerContainer);
-            mPlayerContainer.isPlaying = false;
-            mPlayerContainer.isShowDebugView = false;
         }
 
         @Override
@@ -1118,6 +1057,32 @@ public class V2MainActivity extends AppCompatActivity {
 //            );
         }
 
+    }
+
+    private void startPlayerLoading(PlayerViewContainer playerViewContainer, V2TXLivePlayer player) {
+        MainItemRenderView view = null;
+        for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
+            if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
+                view = playerViewContainer.playerView;
+                break;
+            }
+        }
+        if (view != null) {
+            view.showLoading();
+        }
+    }
+
+    private void stopPlayerLoading(PlayerViewContainer playerViewContainer, V2TXLivePlayer player) {
+        MainItemRenderView view = null;
+        for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
+            if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
+                view = playerViewContainer.playerView;
+                break;
+            }
+        }
+        if (view != null) {
+            view.dismissLoading();
+        }
     }
 
     private class PlayerViewCallback implements MainItemRenderView.ILiveRenderViewSwitchCallback {
@@ -1176,9 +1141,9 @@ public class V2MainActivity extends AppCompatActivity {
 
         @Override
         public void onShowSetting() {
-            PlaySetting fragment = new PlaySetting();
-            fragment.setLivePlayer(mPlayViewContainer.livePlayer);
-            fragment.show(getFragmentManager(), "remote_config_fragment");
+            mPlaySetting = new PlaySetting();
+            mPlaySetting.setLivePlayer(mPlayViewContainer.livePlayer);
+            mPlaySetting.show(getFragmentManager(), "remote_config_fragment");
         }
 
         @Override
@@ -1210,7 +1175,6 @@ public class V2MainActivity extends AppCompatActivity {
                 ((ImageView) view).setImageResource(R.drawable.live_link_mic_new_ic_bottom_stop);
                 mPlayViewContainer.livePlayer.startPlay(mPlayViewContainer.playURL);
                 mPlayViewContainer.isPlaying = true;
-                ;
             } else {
                 ((ImageView) view).setImageResource(R.drawable.live_link_mic_new_ic_bottom_start);
                 handlePlayerFullScreenChange(mPlayViewContainer);
@@ -1238,6 +1202,7 @@ public class V2MainActivity extends AppCompatActivity {
 
         @Override
         public void onClickSnapshot() {
+
         }
 
         @Override

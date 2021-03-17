@@ -41,9 +41,7 @@ public class TRTCVoiceRoomImpl extends TRTCVoiceRoom implements ITXRoomServiceDe
     private        int                   mSdkAppId;
     private        String                mUserId;
     private        String                mUserSig;
-    private        String                mRoomId;
 
-    private TXRoomInfo                           mTXRoomInfo;
     // 主播列表
     private Set<String>                          mAnchorList;
     // 已抛出的观众列表
@@ -226,7 +224,7 @@ public class TRTCVoiceRoomImpl extends TRTCVoiceRoom implements ITXRoomServiceDe
                     return;
                 }
 
-                mRoomId = String.valueOf(roomId);
+                final String strRoomId = String.valueOf(roomId);
 
                 clearList();
 
@@ -251,12 +249,12 @@ public class TRTCVoiceRoomImpl extends TRTCVoiceRoom implements ITXRoomServiceDe
                     }
                 }
                 // 创建房间
-                TXRoomService.getInstance().createRoom(mRoomId, roomName, roomCover, isNeedRequest, txSeatInfoList, new TXCallback() {
+                TXRoomService.getInstance().createRoom(strRoomId, roomName, roomCover, isNeedRequest, txSeatInfoList, new TXCallback() {
                     @Override
                     public void onCallback(final int code, final String msg) {
                         TRTCLogger.i(TAG, "create room in service, code:" + code + " msg:" + msg);
                         if (code == 0) {
-                            enterTRTCRoomInner(mRoomId, mUserId, mUserSig, TRTCCloudDef.TRTCRoleAnchor, callback);
+                            enterTRTCRoomInner(strRoomId, mUserId, mUserSig, TRTCCloudDef.TRTCRoleAnchor, callback);
                             return;
                         } else {
                             runOnDelegateThread(new Runnable() {
@@ -337,9 +335,9 @@ public class TRTCVoiceRoomImpl extends TRTCVoiceRoom implements ITXRoomServiceDe
             public void run() {
                 // 恢复设定
                 clearList();
-                mRoomId = String.valueOf(roomId);
+                String strRoomId = String.valueOf(roomId);
                 TRTCLogger.i(TAG, "start enter room, room id:" + roomId);
-                enterTRTCRoomInner(mRoomId, mUserId, mUserSig, TRTCCloudDef.TRTCRoleAudience, new TRTCVoiceRoomCallback.ActionCallback() {
+                enterTRTCRoomInner(strRoomId, mUserId, mUserSig, TRTCCloudDef.TRTCRoleAudience, new TRTCVoiceRoomCallback.ActionCallback() {
                     @Override
                     public void onCallback(final int code, final String msg) {
                         TRTCLogger.i(TAG, "trtc enter room finish, room id:" + roomId + " code:" + code + " msg:" + msg);
@@ -360,7 +358,7 @@ public class TRTCVoiceRoomImpl extends TRTCVoiceRoom implements ITXRoomServiceDe
                         });
                     }
                 });
-                TXRoomService.getInstance().enterRoom(mRoomId, new TXCallback() {
+                TXRoomService.getInstance().enterRoom(strRoomId, new TXCallback() {
                     @Override
                     public void onCallback(final int code, final String msg) {
                         TRTCLogger.i(TAG, "enter room service finish, room id:" + roomId + " code:" + code + " msg:" + msg);
@@ -438,7 +436,6 @@ public class TRTCVoiceRoomImpl extends TRTCVoiceRoom implements ITXRoomServiceDe
             }
         });
         clearList();
-        mRoomId = "";
     }
 
     private boolean isOnSeat(String userId) {
@@ -1089,7 +1086,13 @@ public class TRTCVoiceRoomImpl extends TRTCVoiceRoom implements ITXRoomServiceDe
             public void run() {
                 TRTCVoiceRoomDef.RoomInfo roomInfo = new TRTCVoiceRoomDef.RoomInfo();
                 roomInfo.roomName = tXRoomInfo.roomName;
-                roomInfo.roomId = Integer.valueOf(mRoomId);
+                int translateRoomId = 0;
+                try {
+                    translateRoomId = Integer.parseInt(tXRoomInfo.roomId);
+                } catch (NumberFormatException e) {
+                    TRTCLogger.e(TAG, e.getMessage());
+                }
+                roomInfo.roomId = translateRoomId;
                 roomInfo.ownerId = tXRoomInfo.ownerId;
                 roomInfo.ownerName = tXRoomInfo.ownerName;
                 roomInfo.coverUrl = tXRoomInfo.cover;
