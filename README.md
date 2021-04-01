@@ -41,8 +41,8 @@
 ## 相关文档链接
 
 - [SDK 的版本更新历史](https://github.com/tencentyun/LiteAVProfessional_Android/releases)
-- [实时音视频（TRTC） API文档](http://doc.qcloudtrtc.com/md_introduction_trtc_Android_%E6%A6%82%E8%A7%88.html)
+- [实时音视频（TRTC） API文档](https://cloud.tencent.com/document/product/647/32267)
 - [播放器（Player） API文档](https://github.com/tencentyun/SuperPlayer_Android/wiki)
 - [移动直播（MLVB） API文档](https://cloud.tencent.com/document/product/454/34766)
-- [短视频（UGSV） API文档](http://doc.qcloudtrtc.com/group__TXUGCRecord__android.html)
+- [短视频（UGSV） API文档](https://liteav.sdk.qcloud.com/doc/api/zh-cn/group__TXUGCRecord__android.html)
 - [Demo体验](https://cloud.tencent.com/document/product/454/6555#.E7.B2.BE.E7.AE.80.E7.89.88-demo)
