@@ -69,7 +69,7 @@ public class TRTCMainActivity extends Activity {
         }
         setContentView(R.layout.activity_trtc_main);
         mTvVersion = (TextView) findViewById(R.id.main_tv_version);
-        mTvVersion.setText("腾讯云 TRTC v" + TXLiveBase.getSDKVersionStr());
+        mTvVersion.setText(getString(R.string.app_tv_trtc_version, TXLiveBase.getSDKVersionStr()));
         mMainTitle = (TextView) findViewById(R.id.main_title);
         mMainTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -83,7 +83,7 @@ public class TRTCMainActivity extends Activity {
                             intent.setType("application/octet-stream");
                             //intent.setPackage("com.tencent.mobileqq");
                             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(logFile));
-                            startActivity(Intent.createChooser(intent, "分享日志"));
+                            startActivity(Intent.createChooser(intent, getString(R.string.app_title_share_log)));
                         }
                     }
                 });
@@ -126,15 +126,15 @@ public class TRTCMainActivity extends Activity {
     public void onBackPressed() {
         //退出登录
         AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.common_alert_dialog)
-                .setMessage("确定要退出APP吗？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setMessage(getString(R.string.app_dialog_exit_app))
+                .setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         CallService.stop(TRTCMainActivity.this);
                         finish();
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -152,8 +152,8 @@ public class TRTCMainActivity extends Activity {
     private void showLogoutDialog() {
         if (mAlertDialog == null) {
             mAlertDialog = new AlertDialog.Builder(this, R.style.common_alert_dialog)
-                    .setMessage("确定要退出登录吗？")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    .setMessage(getString(R.string.app_dialog_log_out))
+                    .setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // 执行退出登录操作
@@ -171,7 +171,7 @@ public class TRTCMainActivity extends Activity {
                             });
                         }
                     })
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -192,11 +192,11 @@ public class TRTCMainActivity extends Activity {
 
     private List<TRTCItemEntity> createTRTCItems() {
         List<TRTCItemEntity> list = new ArrayList<>();
-        list.add(new TRTCItemEntity(getString(R.string.item_video_conferencing), "语音自动降噪、视频画质超高清，适用于在线会议、远程培训、小班课等场景。", R.drawable.multi_meeting, 0, CreateMeetingActivity.class));
-        list.add(new TRTCItemEntity(getString(R.string.item_chat_room), "内含变声、音效、混响、背景音乐等声音玩法，适用于闲聊房、K歌房、开黑房等语聊场景。", R.drawable.voice_chatroom, 0, VoiceRoomListActivity.class));
-        list.add(new TRTCItemEntity(getString(R.string.item_video_interactive_live_streaming), "低延时、十万人高并发的大型互动直播解决方案，观众时延低至800ms，上下麦切换免等待。", R.drawable.live_stream, 0, LiveRoomListActivity.class));
-        list.add(new TRTCItemEntity(getString(R.string.item_voice_call), "48kHz高音质，60%丢包可正常语音通话，领先行业的3A处理，杜绝回声和啸叫。", R.drawable.voice_call, TRTCCalling.TYPE_AUDIO_CALL, TRTCCallingEntranceActivity.class));
-        list.add(new TRTCItemEntity(getString(R.string.item_video_call), "支持720P/1080P高清画质，50%丢包率可正常视频通话，自带美颜、挂件、抠图等AI特效。", R.drawable.video_call, TRTCCalling.TYPE_VIDEO_CALL, TRTCCallingEntranceActivity.class));
+        list.add(new TRTCItemEntity(getString(R.string.item_video_conferencing), getString(R.string.app_tv_video_conferencing_tips), R.drawable.multi_meeting, 0, CreateMeetingActivity.class));
+        list.add(new TRTCItemEntity(getString(R.string.item_chat_room), getString(R.string.app_tv_chat_room_tips), R.drawable.voice_chatroom, 0, VoiceRoomListActivity.class));
+        list.add(new TRTCItemEntity(getString(R.string.item_video_interactive_live_streaming), getString(R.string.app_tv_video_interactive_live_streaming_tips), R.drawable.live_stream, 0, LiveRoomListActivity.class));
+        list.add(new TRTCItemEntity(getString(R.string.item_voice_call), getString(R.string.app_tv_voice_call_tips), R.drawable.voice_call, TRTCCalling.TYPE_AUDIO_CALL, TRTCCallingEntranceActivity.class));
+        list.add(new TRTCItemEntity(getString(R.string.item_video_call), getString(R.string.app_tv_video_call_tips), R.drawable.video_call, TRTCCalling.TYPE_VIDEO_CALL, TRTCCallingEntranceActivity.class));
         list.add(new TRTCItemEntity(getString(R.string.item_chat_salon), "", R.drawable.chat_salon, 0, ChatSalonListActivity.class));
         return list;
     }

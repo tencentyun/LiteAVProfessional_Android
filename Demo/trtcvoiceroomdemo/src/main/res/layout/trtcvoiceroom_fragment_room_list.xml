@@ -24,7 +24,7 @@
         android:layout_centerInParent="true"
         android:drawablePadding="20dp"
         android:gravity="center"
-        android:text="暂无内容哦~"
+        android:text="@string/trtcvoiceroom_tv_no_content"
         android:textColor="#777"
         android:textSize="16sp" />
 

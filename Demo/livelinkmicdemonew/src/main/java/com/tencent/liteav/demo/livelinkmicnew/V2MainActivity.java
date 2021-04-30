@@ -33,13 +33,13 @@ import com.tencent.liteav.login.model.ProfileManager;
 import com.tencent.liteav.login.model.UserModel;
 import com.tencent.live2.V2TXLiveCode;
 import com.tencent.live2.V2TXLiveDef;
+import com.tencent.live2.V2TXLiveDef.V2TXLiveMode;
 import com.tencent.live2.V2TXLivePlayer;
 import com.tencent.live2.V2TXLivePlayerObserver;
 import com.tencent.live2.V2TXLivePusher;
 import com.tencent.live2.V2TXLivePusherObserver;
 import com.tencent.live2.impl.V2TXLivePlayerImpl;
 import com.tencent.live2.impl.V2TXLivePusherImpl;
-import com.tencent.live2.trtc.TXLiveUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +55,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static com.tencent.live2.V2TXLiveDef.V2TXLiveMode.*;
+import static com.tencent.live2.V2TXLiveDef.V2TXLiveMode.TXLiveMode_RTMP;
 import static com.tencent.live2.V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModePortrait;
 
 public class V2MainActivity extends AppCompatActivity {
@@ -157,7 +159,7 @@ public class V2MainActivity extends AppCompatActivity {
                 int position = data.getIntExtra("position", 0);
                 Log.i(TAG, "[Player] scanURL " + mScanPlayURL + ", position " + position);
                 if (AVSettingConfig.getInstance().playerViewScanMap.get(mScanPlayURL) != null) {
-                    Toast.makeText(V2MainActivity.this, "该播放地址正在播放，请换一个播放地址", Toast.LENGTH_LONG).show();
+                    Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_please_replace_other_url_to_play), Toast.LENGTH_LONG).show();
                     Log.w(TAG, "[Player] scanURL url is same");
                     return;
                 }
@@ -212,7 +214,7 @@ public class V2MainActivity extends AppCompatActivity {
         for (PlayerViewContainer container : mRemoteRenderViewList) {
             container.playerView.setVisibility(View.VISIBLE);
         }
-        ((TextView) findViewById(R.id.livepusher_title_textview)).setText("V2推拉流");
+        ((TextView) findViewById(R.id.livepusher_title_textview)).setText(getString(R.string.livelinkmicnew_tv_title_v2));
         findViewById(R.id.livepusher_ibtn_qrcode).setVisibility(View.GONE);
         mPushRenderView.hideExtraInfoView();
         mIsPushFullScreen = false;
@@ -258,7 +260,7 @@ public class V2MainActivity extends AppCompatActivity {
             findViewById(R.id.ll_layout2).setVisibility(View.VISIBLE);
             findViewById(R.id.live_render_user_5).setVisibility(View.VISIBLE);
         }
-        ((TextView) findViewById(R.id.livepusher_title_textview)).setText("V2推拉流");
+        ((TextView) findViewById(R.id.livepusher_title_textview)).setText(getString(R.string.livelinkmicnew_tv_title_v2));
         findViewById(R.id.livepusher_ibtn_qrcode).setVisibility(View.GONE);
         mCurrentPlayViewContainer.playerView.hideExtraInfoView();
 
@@ -326,7 +328,7 @@ public class V2MainActivity extends AppCompatActivity {
 
         for (PlayerViewContainer container : mRemoteRenderViewList) {
             container.playerView.setTag("");
-            container.playerView.setRenderTextTips("Player");
+            container.playerView.setRenderTextTips(getString(R.string.livelinkmicnew_tv_title_player));
             container.playerView.hideDebugView();
             container.playerView.hideControlLayout();
         }
@@ -401,7 +403,7 @@ public class V2MainActivity extends AppCompatActivity {
                             String streamId = mPushTRTCStreamId.getText().toString().trim();
                             mPusherRoomId = streamId;
                             if (TextUtils.isEmpty(streamId)) {
-                                Toast.makeText(V2MainActivity.this, "请输入一个streamId。", Toast.LENGTH_LONG).show();
+                                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_please_input_a_stream_id), Toast.LENGTH_LONG).show();
                                 mPushTRTCStreamId = null;
                                 return;
                             }
@@ -418,7 +420,7 @@ public class V2MainActivity extends AppCompatActivity {
                         // ROOM push
                         if (mPushROOMRoomId != null && mPushROOMUserId != null) {
                             if (TextUtils.isEmpty(mPushROOMRoomId.getText().toString()) || TextUtils.isEmpty(mPushROOMUserId.getText().toString())) {
-                                Toast.makeText(V2MainActivity.this, "roomId, userId不能为空。", Toast.LENGTH_LONG).show();
+                                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_room_id_or_user_id_not_null), Toast.LENGTH_LONG).show();
                                 mPushROOMRoomId = null;
                                 mPushROOMUserId = null;
                                 return;
@@ -500,7 +502,7 @@ public class V2MainActivity extends AppCompatActivity {
         });
         mPushRenderView.hideDebugView();
         mPushRenderView.hideExtraInfoView();
-        mPushRenderView.setRenderTextTips("Pusher");
+        mPushRenderView.setRenderTextTips(getString(R.string.livelinkmicnew_tv_title_pusher));
         mPushRenderView.setSwitchListener(new PushViewCallback());
     }
 
@@ -576,14 +578,14 @@ public class V2MainActivity extends AppCompatActivity {
                 if (mPlayTRTCStreamId != null) {
                     String streamId = mPlayTRTCStreamId.getText().toString().trim();
                     if (TextUtils.isEmpty(streamId)) {
-                        Toast.makeText(V2MainActivity.this, "请输入一个streamId。", Toast.LENGTH_LONG).show();
+                        Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_please_input_a_stream_id), Toast.LENGTH_LONG).show();
                         mPlayTRTCStreamId = null;
                         return;
                     }
 
                     String simpleURL = "trtc://cloud.tencent.com/play/" + streamId;
                     if (AVSettingConfig.getInstance().playerViewScanMap.get(simpleURL) != null) {
-                        Toast.makeText(V2MainActivity.this, "重复的streamId，请换一个streamId。", Toast.LENGTH_LONG).show();
+                        Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_please_replace_other_stream_id), Toast.LENGTH_LONG).show();
                         mPlayTRTCStreamId = null;
                         return;
                     }
@@ -599,7 +601,7 @@ public class V2MainActivity extends AppCompatActivity {
                     String roomId = mPlayROOMRoomId.getText().toString().trim();
                     String remoteUserId = mPlayROOMUserId.getText().toString().trim();
                     if (TextUtils.isEmpty(roomId) || TextUtils.isEmpty(remoteUserId)) {
-                        Toast.makeText(V2MainActivity.this, "roomId, userId不能为空。", Toast.LENGTH_LONG).show();
+                        Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_room_id_or_user_id_not_null), Toast.LENGTH_LONG).show();
                         mPlayROOMRoomId = null;
                         mPlayROOMUserId = null;
                         return;
@@ -607,7 +609,7 @@ public class V2MainActivity extends AppCompatActivity {
 
                     String simpleURL = "room://cloud.tencent.com/rtc?strroomid=" + roomId + "&remoteuserid=" + remoteUserId;
                     if (AVSettingConfig.getInstance().playerViewScanMap.get(simpleURL) != null) {
-                        Toast.makeText(V2MainActivity.this, "roomId, userId重复。", Toast.LENGTH_LONG).show();
+                        Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_room_id_or_user_id_duplicate), Toast.LENGTH_LONG).show();
                         mPlayROOMRoomId = null;
                         mPlayROOMUserId = null;
                         return;
@@ -666,7 +668,7 @@ public class V2MainActivity extends AppCompatActivity {
                 mPusherPlayQRCodeFragment.setQRCodeURL(mQRCodePusherURL);
                 mPusherPlayQRCodeFragment.toggle(getFragmentManager(), PUSHER_PLAY_QR_CODE_FRAGMENT);
             } else {
-                Toast.makeText(this, "推流尚未启动！请启动推流！", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.livelinkmicnew_toast_please_start_up_push), Toast.LENGTH_LONG).show();
             }
         } else if (id == R.id.live_render_user_2) {
             startPlayChooseProtocolType(0);
@@ -699,15 +701,34 @@ public class V2MainActivity extends AppCompatActivity {
     }
 
     private void startPush() {
+        if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ||
+                PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)) {
+            Log.w(TAG, "[Pusher] startPush failed, permission not open!");
+            Toast.makeText(this, getString(R.string.livelinkmicnew_toast_push_permisson_failure), Toast.LENGTH_LONG).show();
+            resetPusher(null, mPushRenderView);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkPermission();
+                }
+            }, 1500);
+            return;
+        }
         String pushURL = AVSettingConfig.getInstance().roomPushURL;
         if (TextUtils.isEmpty(pushURL)) {
-            Toast.makeText(this, "推流失败！", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.livelinkmicnew_toast_push_failure), Toast.LENGTH_LONG).show();
             resetPusher(null, mPushRenderView);
             Log.w(TAG, "[Pusher] startPush failed, push url is empty! ");
             return;
         }
         mIsPusherStart = false;
-        mLivePusher = new V2TXLivePusherImpl(this, TXLiveUtils.parseLiveMode(pushURL));
+        V2TXLiveMode mode = null;
+        if (pushURL.startsWith("trtc://")) {
+            mode = TXLiveMode_RTC;
+        } else {
+            mode = TXLiveMode_RTMP;
+        }
+        mLivePusher = new V2TXLivePusherImpl(this, mode);
 
         mLivePusher.setObserver(new MyPusherObserver());
         AVSettingConfig.getInstance().pusherInstance = mLivePusher;
@@ -743,9 +764,9 @@ public class V2MainActivity extends AppCompatActivity {
         int result = mLivePusher.startPush(AVSettingConfig.getInstance().roomPushURL);
         if (result != 0) {
             if (result == V2TXLiveCode.V2TXLIVE_ERROR_REFUSED) {
-                Toast.makeText(V2MainActivity.this, "推流失败：抱歉，RTC暂不支持同一台设备使用相同streamid同时推拉流", Toast.LENGTH_LONG).show();
+                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_pusher_stream_id_duplicate), Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(V2MainActivity.this, "推流失败！", Toast.LENGTH_LONG).show();
+                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_push_failure), Toast.LENGTH_LONG).show();
             }
             Log.w(TAG, "[Pusher] startPush failed, result " + result);
             resetPusher(pusher, mPushRenderView);
@@ -759,7 +780,7 @@ public class V2MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (!mIsPusherStart) {
-                    Toast.makeText(V2MainActivity.this, "推流失败！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_push_failure), Toast.LENGTH_SHORT).show();
                     Log.w(TAG, "[Pusher] pusher failed, timeout to receive local first video");
                     resetPusher(pusher, mPushRenderView);
                 }
@@ -777,8 +798,13 @@ public class V2MainActivity extends AppCompatActivity {
             mLivePusher.stopCamera();
             mLivePusher.stopScreenCapture();
 
+            // 重置成初始值
+            mLivePusher.getDeviceManager().setSystemVolumeType(TXDeviceManager.TXSystemVolumeType.TXSystemVolumeTypeAuto);
+            mLivePusher.getAudioEffectManager().enableVoiceEarMonitor(false);
+            mLivePusher.getAudioEffectManager().setVoiceCaptureVolume(100);
+            mLivePusher.enableVolumeEvaluation(0);
+
             mLivePusher.stopPush();
-            mLivePusher = null;
         }
         mHasInitPusher = false;
         mIsPusherStart = false;
@@ -787,12 +813,13 @@ public class V2MainActivity extends AppCompatActivity {
         mIsShowPusherDebugView = false;
         mIsFrontCamera = true;
         AVSettingConfig.getInstance().roomPushURL = null;
+        AVSettingConfig.getInstance().clearSetting();
     }
 
     private void startPlay(String url, final PlayerViewContainer container) {
         final MainItemRenderView playerView = container.playerView;
         if (TextUtils.isEmpty(url) || playerView == null) {
-            Toast.makeText(V2MainActivity.this, "URL为空！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_url_is_null), Toast.LENGTH_SHORT).show();
             resetPlayer(container);
             container.isPlaying = false;
             container.isShowDebugView = false;
@@ -800,7 +827,7 @@ public class V2MainActivity extends AppCompatActivity {
         }
         boolean isURLInvalid = url.startsWith("room://") || url.startsWith("trtc://") || url.startsWith("http://") || url.startsWith("rtmp://") || url.startsWith("https://");
         if (!isURLInvalid) {
-            Toast.makeText(V2MainActivity.this, "无效的URL！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_invalid_url), Toast.LENGTH_SHORT).show();
             resetPlayer(container);
             container.isPlaying = false;
             container.isShowDebugView = false;
@@ -853,9 +880,9 @@ public class V2MainActivity extends AppCompatActivity {
         final int result = player.startPlay(url);
         if (result != 0) {
             if (result == V2TXLiveCode.V2TXLIVE_ERROR_REFUSED) {
-                Toast.makeText(V2MainActivity.this, "拉流失败：抱歉，RTC暂不支持同一台设备使用相同streamid同时推拉流", Toast.LENGTH_LONG).show();
+                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_player_stream_id_duplicate), Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(V2MainActivity.this, "拉流失败！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_player_failure), Toast.LENGTH_SHORT).show();
             }
             Log.e(TAG, "[Player] startPlay failed, result " + result);
             resetPlayer(container);
@@ -874,7 +901,7 @@ public class V2MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (!container.isPlaying) {
-                    Toast.makeText(V2MainActivity.this, "拉流失败！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_player_failure), Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "[Player] play error, timeout to receive first video");
                     resetPlayer(container);
                     container.isPlaying = false;
@@ -892,6 +919,7 @@ public class V2MainActivity extends AppCompatActivity {
 
         @Override
         public void onError(int code, String msg, Bundle extraInfo) {
+            Toast.makeText(V2MainActivity.this, msg, Toast.LENGTH_SHORT).show();
             Log.e(TAG, "[Pusher] onError: " + msg + ", extraInfo " + extraInfo);
             mIsPusherStart = false;
             ErrorDialog.showMsgDialog(V2MainActivity.this, "onError errorCode: " + code);
@@ -960,6 +988,7 @@ public class V2MainActivity extends AppCompatActivity {
         @Override
         public void onError(V2TXLivePlayer player, int code, String msg, Bundle extraInfo) {
             Log.e(TAG, "[Player] onError: player-" + player + " code-" + code + " msg-" + msg + " info-" + extraInfo);
+            Toast.makeText(V2MainActivity.this, msg, Toast.LENGTH_SHORT).show();
             ErrorDialog.showMsgDialog(V2MainActivity.this, "onError errorCode: " + code);
         }
 
@@ -1186,11 +1215,9 @@ public class V2MainActivity extends AppCompatActivity {
 
         @Override
         public void onClose(View view) {
-            if (mPlayViewContainer.isPlaying) {
-                resetPlayer(mPlayViewContainer);
-                mPlayViewContainer.isPlaying = false;
-                mPlayViewContainer.isShowDebugView = false;
-            }
+            resetPlayer(mPlayViewContainer);
+            mPlayViewContainer.isPlaying = false;
+            mPlayViewContainer.isShowDebugView = false;
         }
     }
 
@@ -1212,7 +1239,7 @@ public class V2MainActivity extends AppCompatActivity {
         @Override
         public void onCameraChange(View view) {
             if (mLivePusher == null) {
-                Toast.makeText(V2MainActivity.this, "推流尚未开始！", Toast.LENGTH_LONG).show();
+                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_push_not_start), Toast.LENGTH_LONG).show();
                 return;
             }
             mIsFrontCamera = !mIsFrontCamera;
@@ -1223,7 +1250,7 @@ public class V2MainActivity extends AppCompatActivity {
         @Override
         public void onMuteVideo(View view) {
             if (mLivePusher == null) {
-                Toast.makeText(V2MainActivity.this, "推流尚未开始！", Toast.LENGTH_LONG).show();
+                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_push_not_start), Toast.LENGTH_LONG).show();
                 return;
             }
             if (!mIsMuteVideo) {
@@ -1244,7 +1271,7 @@ public class V2MainActivity extends AppCompatActivity {
         @Override
         public void onMuteAudio(View view) {
             if (mLivePusher == null) {
-                Toast.makeText(V2MainActivity.this, "推流尚未开始！", Toast.LENGTH_LONG).show();
+                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_push_not_start), Toast.LENGTH_LONG).show();
                 return;
             }
             if (!mIsMuteAudio) {
@@ -1266,7 +1293,7 @@ public class V2MainActivity extends AppCompatActivity {
         @Override
         public void onShowSetting() {
             if (mLivePusher == null) {
-                Toast.makeText(V2MainActivity.this, "推流尚未开始！", Toast.LENGTH_LONG).show();
+                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_push_not_start), Toast.LENGTH_LONG).show();
                 return;
             }
             if (mPushSettingFragmentDialog != null) {
@@ -1280,7 +1307,7 @@ public class V2MainActivity extends AppCompatActivity {
         @Override
         public void onShowDebugView(View view) {
             if (mLivePusher == null) {
-                Toast.makeText(V2MainActivity.this, "推流尚未开始！", Toast.LENGTH_LONG).show();
+                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_push_not_start), Toast.LENGTH_LONG).show();
                 return;
             }
             if (!mIsShowPusherDebugView) {
@@ -1297,7 +1324,7 @@ public class V2MainActivity extends AppCompatActivity {
         @Override
         public void onShowBeautyPanel(View view) {
             if (mLivePusher == null) {
-                Toast.makeText(V2MainActivity.this, "推流尚未开始！", Toast.LENGTH_LONG).show();
+                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_push_not_start), Toast.LENGTH_LONG).show();
                 return;
             }
             mPushRenderView.showOrHideBeautyPanel(mLivePusher.getBeautyManager());
@@ -1306,7 +1333,7 @@ public class V2MainActivity extends AppCompatActivity {
         @Override
         public void onShowBGMPanel(View view) {
             if (mLivePusher == null) {
-                Toast.makeText(V2MainActivity.this, "推流尚未开始！", Toast.LENGTH_LONG).show();
+                Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_push_not_start), Toast.LENGTH_LONG).show();
                 return;
             }
             mPushRenderView.showOrHideAudioPanel();
@@ -1335,7 +1362,7 @@ public class V2MainActivity extends AppCompatActivity {
     private void handlePusherFullScreenChange() {
         Log.d(TAG, "[Pusher] onFullScreenChange mIsPushFullScreen " + mIsPushFullScreen);
         if (!mHasInitPusher) {
-            Toast.makeText(V2MainActivity.this, "推流尚未启动!请启动推流！", Toast.LENGTH_LONG).show();
+            Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_please_start_up_push), Toast.LENGTH_LONG).show();
             return;
         }
         if (!mIsPushFullScreen) {
@@ -1350,7 +1377,8 @@ public class V2MainActivity extends AppCompatActivity {
             if (TextUtils.isEmpty(mPusherUserId)) {
                 mPusherUserId = "";
             }
-            String text = mIsRoomProtocol ? "V2推流(" + mPusherRoomId + "_" + mPusherUserId + ")" : "V2推流(" + mPusherRoomId + ")";
+            String text = mIsRoomProtocol ? getString(R.string.livelinkmicnew_tv_title_v2)+ "(" + mPusherRoomId + "_" + mPusherUserId + ")"
+                    : getString(R.string.livelinkmicnew_tv_title_v2) + "(" + mPusherRoomId + ")";
             ((TextView) findViewById(R.id.livepusher_title_textview)).setText(text);
             mPushRenderView.showExtraInfoView();
             findViewById(R.id.livepusher_ibtn_qrcode).setVisibility(View.VISIBLE);
@@ -1366,7 +1394,7 @@ public class V2MainActivity extends AppCompatActivity {
             for (PlayerViewContainer container : mRemoteRenderViewList) {
                 container.playerView.setVisibility(View.VISIBLE);
             }
-            ((TextView) findViewById(R.id.livepusher_title_textview)).setText("V2推拉流");
+            ((TextView) findViewById(R.id.livepusher_title_textview)).setText(getString(R.string.livelinkmicnew_tv_title_v2));
             findViewById(R.id.livepusher_ibtn_qrcode).setVisibility(View.GONE);
             mPushRenderView.hideExtraInfoView();
             mPushRenderView.hideBeautyPanel();
@@ -1386,7 +1414,7 @@ public class V2MainActivity extends AppCompatActivity {
 
     private void handlePlayerFullScreenChange(PlayerViewContainer playerViewContainer) {
         if (!playerViewContainer.isPlaying) {
-            Toast.makeText(V2MainActivity.this, "拉流尚未启动!请启动拉流！", Toast.LENGTH_LONG).show();
+            Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_error_please_start_up_play), Toast.LENGTH_LONG).show();
             return;
         }
         int position = 0;
@@ -1418,7 +1446,7 @@ public class V2MainActivity extends AppCompatActivity {
                 findViewById(R.id.ll_layout2).setVisibility(View.GONE);
                 findViewById(R.id.live_render_user_5).setVisibility(View.GONE);
             }
-            String title = "V2拉流";
+            String title = getString(R.string.livelinkmicnew_tv_title_v2);
             if (!TextUtils.isEmpty(playerViewContainer.textTitle)) {
                 title += "(" + playerViewContainer.textTitle + ")";
             }
@@ -1460,7 +1488,7 @@ public class V2MainActivity extends AppCompatActivity {
                 findViewById(R.id.ll_layout2).setVisibility(View.VISIBLE);
                 findViewById(R.id.live_render_user_5).setVisibility(View.VISIBLE);
             }
-            ((TextView) findViewById(R.id.livepusher_title_textview)).setText("V2推拉流");
+            ((TextView) findViewById(R.id.livepusher_title_textview)).setText(getString(R.string.livelinkmicnew_tv_title_v2));
             playerViewContainer.playerView.hideExtraInfoView();
             playerViewContainer.playerView.showFullScreenView();
             if (mCurrentPlayViewContainer.isPlaying) {
@@ -1564,11 +1592,16 @@ public class V2MainActivity extends AppCompatActivity {
         pusherView.setVolumeProgress(0);
         pusherView.hideCloseButton();
         if (pusherView.getCloudView() != null) {
+            pusherView.getCloudView().clearLog();
             pusherView.getCloudView().clearLastFrame(true);
         }
         if (pusherView != null) {
             pusherView.destroyAudioEffect();
+            if (mLivePusher != null) {
+                pusherView.destroyBeautyEffect(mLivePusher.getBeautyManager());
+            }
         }
+        mLivePusher = null;
     }
 
     private void resetRenderView(MainItemRenderView view) {

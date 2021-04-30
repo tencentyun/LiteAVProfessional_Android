@@ -18,7 +18,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="测试测试" />
+        tools:text="@string/trtcvoiceroom_tv_tools_test" />
 
     <View
         android:id="@+id/view_divide"

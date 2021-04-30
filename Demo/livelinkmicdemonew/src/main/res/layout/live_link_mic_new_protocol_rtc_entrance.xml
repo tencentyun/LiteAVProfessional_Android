@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal">'
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/rtc_et_input_streamid"
@@ -21,7 +21,7 @@
             android:layout_weight="8"
             android:background="@drawable/live_link_mic_new_input_url_bg"
             android:digits="1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
-            android:hint="请输入streamId"
+            android:hint="@string/livelinkmicnew_tv_please_input_stream_id"
             android:imeOptions="actionGo"
             android:inputType="number|textUri"
             android:paddingLeft="10dp"
@@ -55,7 +55,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:text="开启超低延时播放"
+            android:text="@string/livelinkmicnew_tv_enable_realtime_play"
             android:textColor="@color/line_btn"
             android:textSize="12sp" />
 
@@ -78,7 +78,7 @@
         android:background="@drawable/live_link_mic_new_btn_bg"
         android:gravity="center"
         android:onClick="onClick"
-        android:text="开始播放"
+        android:text="@string/livelinkmicnew_tv_start_play"
         android:textColor="@color/white"
         android:textSize="12sp" />
 
@@ -90,7 +90,7 @@
         android:background="@drawable/live_link_mic_new_btn_bg"
         android:gravity="center"
         android:onClick="onClick"
-        android:text="取消"
+        android:text="@string/livelinkmicnew_btn_cancel"
         android:textColor="@color/white"
         android:textSize="12sp" />
 

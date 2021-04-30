@@ -24,6 +24,7 @@ dependencies {
     compile rootProject.ext.liteavSdk
     compile project(':debug')
     compile project(':login')
+    compile project(':audioeffectsettingkit')
     compile 'com.blankj:utilcode:1.25.9'
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'

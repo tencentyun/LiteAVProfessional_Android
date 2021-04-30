@@ -13,7 +13,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="5dp"
         android:gravity="center_horizontal"
-        android:text="邀请上麦"
+        android:text="@string/trtcvoiceroom_tv_invite_chat"
         android:textColor="@color/colorWhite"
         android:textSize="16sp" />
 
@@ -24,7 +24,7 @@
         android:layout_alignBottom="@+id/tv_pusher_tag"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
-        android:text="取消"
+        android:text="@string/trtcvoiceroom_dialog_cancel"
         android:textColor="@color/colorWhite"
         android:textSize="16sp" />
 

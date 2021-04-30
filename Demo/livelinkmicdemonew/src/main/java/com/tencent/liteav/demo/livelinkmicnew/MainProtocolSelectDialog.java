@@ -239,11 +239,11 @@ public class MainProtocolSelectDialog extends DialogFragment {
             });
 
             if (!mIsPlay) {
-                mStreamText.setText("自动生成推流地址或手动输入");
-                mDefaultUrlButton.setText("自动生成推流地址");
-                mTextStreamTips.setText("我有推流地址");
-                mPlayButton.setText("开始推流");
-                mEditUrl.setHint("请扫码输入推流地址");
+                mStreamText.setText(getString(R.string.livelinkmicnew_tv_generate_or_input_push_url));
+                mDefaultUrlButton.setText(getString(R.string.livelinkmicnew_tv_generate_push_url));
+                mTextStreamTips.setText(getString(R.string.livelinkmicnew_tv_i_have_a_push_url));
+                mPlayButton.setText(getString(R.string.livelinkmicnew_tv_start_push));
+                mEditUrl.setHint(getString(R.string.livelinkmicnew_tv_please_scan_to_input_push_url));
                 view.findViewById(R.id.tv_cdn_play_hint).setVisibility(View.VISIBLE);
                 view.findViewById(R.id.tv_cdn_play_hint1).setVisibility(View.VISIBLE);
                 view.findViewById(R.id.tv_cdn_play_hint2).setVisibility(View.VISIBLE);
@@ -337,10 +337,10 @@ public class MainProtocolSelectDialog extends DialogFragment {
             if (!mIsPlay) {
                 view.findViewById(R.id.ll_link_mic).setVisibility(View.GONE);
                 mCheckTextView = (TextView) view.findViewById(R.id.room_tv_link_mic);
-                mCheckTextView.setText("开启录屏推流");
-                mStartButton.setText("开始推流");
-                mStreamText.setText("自动生成推流地址或手动输入");
-                mDefaultUrlButton.setText("自动生成房间号和用户ID");
+                mCheckTextView.setText(getString(R.string.livelinkmicnew_tv_enable_push_screen_recording));
+                mStartButton.setText(getString(R.string.livelinkmicnew_tv_start_push));
+                mStreamText.setText(getString(R.string.livelinkmicnew_tv_generate_or_input_push_url));
+                mDefaultUrlButton.setText(getString(R.string.livelinkmicnew_tv_generate_room_id_and_user_id));
                 mQrCodeButton.setVisibility(View.GONE);
             }
         }
@@ -410,8 +410,8 @@ public class MainProtocolSelectDialog extends DialogFragment {
             if (!mIsPlay) {
                 view.findViewById(R.id.ll_link_mic).setVisibility(View.GONE);
                 mCheckTextView = (TextView) view.findViewById(R.id.rtc_tv_link_mic);
-                mCheckTextView.setText("开启录屏推流");
-                mStartButton.setText("开始推流");
+                mCheckTextView.setText(getString(R.string.livelinkmicnew_tv_enable_push_screen_recording));
+                mStartButton.setText(getString(R.string.livelinkmicnew_tv_start_push));
                 mQrCodeButton.setVisibility(View.GONE);
             }
         }

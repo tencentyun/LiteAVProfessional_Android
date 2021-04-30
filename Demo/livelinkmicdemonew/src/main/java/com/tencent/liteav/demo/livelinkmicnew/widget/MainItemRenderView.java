@@ -17,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.tencent.liteav.audio.TXAudioEffectManager;
+import com.tencent.liteav.audiosettingkit.AudioEffectDialog;
+import com.tencent.liteav.audiosettingkit.AudioEffectPanel;
 import com.tencent.liteav.beauty.TXBeautyManager;
 import com.tencent.liteav.demo.livelinkmicnew.R;
 import com.tencent.rtmp.ui.TXCloudVideoView;
@@ -35,9 +37,8 @@ public class MainItemRenderView extends FrameLayout {
     private ImageView           mIconAdd;
     private TextView            mRenderTextTips;
     private LinearLayout        mControlLayout;
-    private AudioEffectPanel    mAudioEffectPanel;
-    private BeautyPanel mBeautyPanel;
-    private TXAudioEffectManager mAudioEffectManager;
+    private AudioEffectDialog   mAudioEffectDialog;
+    private BeautyPanel         mBeautyPanel;
 
     public MainItemRenderView(@NonNull Context context) {
         super(context);
@@ -79,7 +80,6 @@ public class MainItemRenderView extends FrameLayout {
                 mIvQRCode.setVisibility(GONE);
             }
         });
-        mAudioEffectPanel = (AudioEffectPanel) findViewById(R.id.livepusher_audio_panel);
         mBeautyPanel = (BeautyPanel) findViewById(R.id.livepusher_beauty_panel);
         findViewById(R.id.render_btn_switch_view).setOnClickListener(new OnClickListener() {
             @Override
@@ -283,21 +283,18 @@ public class MainItemRenderView extends FrameLayout {
     }
 
     public void showOrHideAudioPanel() {
-        if (mAudioEffectPanel.isShown()) {
-            mAudioEffectPanel.setVisibility(View.GONE);
-            mAudioEffectPanel.hideAudioPanel();
-            showControlLayout();
+        if (mAudioEffectDialog == null) {
+            mAudioEffectDialog = new AudioEffectDialog(getContext());
+        }
+        if (mAudioEffectDialog.isShowing()) {
+            mAudioEffectDialog.cancel();
         } else {
-            mAudioEffectPanel.setVisibility(View.VISIBLE);
-            mAudioEffectPanel.showAudioPanel();
-            hideControlLayout();
+            mAudioEffectDialog.show();
         }
     }
 
     public void hideAudioEffectPanel() {
-        mAudioEffectPanel.setVisibility(View.GONE);
-        mAudioEffectPanel.hideAudioPanel();
-        showControlLayout();
+        mAudioEffectDialog.cancel();
     }
 
     public void hideBeautyPanel() {
@@ -306,23 +303,33 @@ public class MainItemRenderView extends FrameLayout {
     }
 
     public void setAudioEffectManager(TXAudioEffectManager audioEffectManager) {
-        mAudioEffectManager = audioEffectManager;
-        mAudioEffectPanel.setAudioEffectManager(mAudioEffectManager);
-        mAudioEffectPanel.setBackgroundColor(0xff13233F);
-        mAudioEffectPanel.setOnAudioEffectPanelHideListener(new AudioEffectPanel.OnAudioEffectPanelHideListener() {
+        if (mAudioEffectDialog == null) {
+            mAudioEffectDialog = new AudioEffectDialog(getContext());
+        }
+        mAudioEffectDialog.setAudioEffectManager(audioEffectManager);
+        mAudioEffectDialog.setBackgroundColor(0xff13233F);
+        mAudioEffectDialog.setOnAudioEffectPanelHideListener(new AudioEffectPanel.OnAudioEffectPanelHideListener() {
             @Override
             public void onClosePanel() {
-                mAudioEffectPanel.setVisibility(View.GONE);
-                showControlLayout();
+                mAudioEffectDialog.dismiss();
             }
         });
     }
 
     public void destroyAudioEffect() {
-        if (mAudioEffectPanel != null) {
-            mAudioEffectPanel.reset();
-            mAudioEffectPanel.unInit();
+        if (mAudioEffectDialog != null) {
+            mAudioEffectDialog.reset();
+            mAudioEffectDialog.unInit();
+            mAudioEffectDialog = null;
         }
+    }
+
+    public void destroyBeautyEffect(TXBeautyManager beautyManager) {
+        beautyManager.setBeautyLevel(0);
+        beautyManager.setWhitenessLevel(0);
+        beautyManager.setRuddyLevel(0);
+        beautyManager.setWhitenessLevel(0);
+        mBeautyPanel.resetBeautyView();
     }
 
     public void showOrHideBeautyPanel(TXBeautyManager beautyManager) {

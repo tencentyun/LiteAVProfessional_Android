@@ -29,11 +29,23 @@ public class BeautyPanel extends FrameLayout {
     }
 
     public void setBeautyManager(TXBeautyManager beautyManager) {
-        mBeautyManager = beautyManager;
-        mBeautyManager.setBeautyStyle(1); //自然
-        mBeautyManager.setBeautyLevel(5);
-        mBeautyManager.setRuddyLevel(5);
-        mBeautyManager.setWhitenessLevel(5);
+        if (mBeautyManager == null) {
+            mBeautyManager = beautyManager;
+            mBeautyManager.setBeautyStyle(1); //自然
+            mBeautyManager.setBeautyLevel(5);
+            mBeautyManager.setRuddyLevel(5);
+            mBeautyManager.setWhitenessLevel(5);
+        }
+    }
+
+    public void resetBeautyView() {
+        mBeautyText.setText(String.valueOf(5));
+        mRuddyText.setText(String.valueOf(5));
+        mMopiText.setText(String.valueOf(5));
+        mBeautySeekBar.setProgress(5);
+        mRuddySeekBar.setProgress(5);
+        mMopiSeekBar.setProgress(5);
+        mBeautyManager = null;
     }
 
     private void initView() {

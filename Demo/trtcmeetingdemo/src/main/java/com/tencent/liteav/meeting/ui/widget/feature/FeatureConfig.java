@@ -7,7 +7,7 @@ import com.tencent.trtc.TRTCCloudDef;
  */
 public class FeatureConfig {
     public static final String AUDIO_EVALUATION_CHANGED = "AUDIO_EVALUATION_CHANGED";
-    final static int DEFAULT_BITRATE = 800;
+    final static int DEFAULT_BITRATE = 700;
     final static int DEFAULT_FPS     = 15;
 
     //    private final static String  PER_DATA            = "per_feature_data";
@@ -15,7 +15,7 @@ public class FeatureConfig {
     //    private final static String  PER_SAVE_FLAG       = "per_save_flag";
 
     // 分辨率
-    private           int     mVideoResolution       = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_960_540;
+    private           int     mVideoResolution       = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_640_360;
     // 帧率
     private           int     mVideoFps              = DEFAULT_FPS;
     // 码率

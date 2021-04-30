@@ -107,7 +107,7 @@ public class VoiceRoomListFragment extends Fragment implements SwipeRefreshLayou
      * 点击的就是之前自己创建的房间，重新创建
      */
     private void startEnterExistRoom(RoomEntity info) {
-        ToastUtils.showShort("该房间是您创建，重新进入中...");
+        ToastUtils.showShort(getString(R.string.trtcvoiceroom_toast_reentering));
         String roomName    = info.roomName;
         String userId      = ProfileManager.getInstance().getUserModel().userId;
         String userName    = ProfileManager.getInstance().getUserModel().userName;
@@ -172,7 +172,7 @@ public class VoiceRoomListFragment extends Fragment implements SwipeRefreshLayou
                                 }
                                 mRoomListViewAdapter.notifyDataSetChanged();
                             } else {
-                                ToastUtils.showLong("组件获取列表失败:" + msg);
+                                ToastUtils.showLong(getString(R.string.trtcvoiceroom_toast_obtain_list_failed, msg));
                             }
                             mSwipeRefreshLayout.setRefreshing(false);
                             refreshView();
@@ -187,7 +187,7 @@ public class VoiceRoomListFragment extends Fragment implements SwipeRefreshLayou
 
             @Override
             public void onFailed(int code, String msg) {
-                ToastUtils.showShort("请求网络失败 " + msg);
+                ToastUtils.showShort(getString(R.string.trtcvoiceroom_toast_request_network_failure, msg));
                 mSwipeRefreshLayout.setRefreshing(false);
                 refreshView();
             }

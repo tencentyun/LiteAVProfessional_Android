@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="audio_effect_setting_bgm_title">Background music</string>
+    <string name="audio_effect_setting_panel_close">Close</string>
+    <string name="audio_effect_setting_panel_select_song">Select song</string>
+
+    <string name="audio_effect_setting_surround_sound_test_1">Surround sound test 1</string>
+    <string name="audio_effect_setting_surround_sound_test_2">Surround sound test 2</string>
+    <string name="audio_effect_setting_surround_sound_test_3">Surround sound test 3</string>
+    <string name="audio_effect_setting_unknown">Unknown</string>
+
+    <string name="audio_effect_setting_panel_music_volume">Music volume level</string>
+    <string name="audio_effect_setting_panel_mic_volume">Voice volume level</string>
+    <string name="audio_effect_setting_panel_music_pitch">Music tone</string>
+    <string name="audio_effect_setting_panel_changer">Voice changing</string>
+    <string name="audio_effect_setting_panel_reverb">Reverb</string>
+
+    <string name="audio_effect_setting_changetype_original">Original</string>
+    <string name="audio_effect_setting_changetype_child">Naughty boy</string>
+    <string name="audio_effect_setting_changetype_luoli">Little girl</string>
+    <string name="audio_effect_setting_changetype_dashu">Middle-aged man</string>
+    <string name="audio_effect_setting_changetype_metal">Heavy metal</string>
+    <string name="audio_effect_setting_changetype_sick">Being cold</string>
+    <string name="audio_effect_setting_changetype_foreign">Non-native speaker</string>
+    <string name="audio_effect_setting_changetype_kunsou">Furious animal</string>
+    <string name="audio_effect_setting_changetype_feizai">Fat otaku</string>
+    <string name="audio_effect_setting_changetype_dianliu">Strong electric current</string>
+    <string name="audio_effect_setting_changetype_machine">Robot</string>
+    <string name="audio_effect_setting_changetype_kongling">Ethereal voice</string>
+
+    <string name="audio_effect_setting_reverbtype_origin">No effect</string>
+    <string name="audio_effect_setting_reverbtype_ktv">Karaoke room</string>
+    <string name="audio_effect_setting_reverbtype_room">Small room</string>
+    <string name="audio_effect_setting_reverbtype_meeting">Big hall</string>
+    <string name="audio_effect_setting_reverbtype_lowdeep">Deep</string>
+    <string name="audio_effect_setting_reverbtype_hongliang">Resonant</string>
+    <string name="audio_effect_setting_reverbtype_heavymetal">Metallic</string>
+    <string name="audio_effect_setting_reverbtype_cixing">Husky</string>
+
+    <string name="livelinkmicnew_msg_success">Success</string>
+    <string name="livelinkmicnew_msg_error_refused">Call failed (rejected)</string>
+    <string name="livelinkmicnew_msg_error_invalid_parameter">Call failed (parameter exception)</string>
+    <string name="livelinkmicnew_msg_error_not_supported">The called API is not implemented</string>
+    <string name="livelinkmicnew_msg_error_failed">Call failed</string>
+
+    <string name="livelinkmicnew_tv_setting">Setting</string>
+    <string name="livelinkmicnew_tv_play_volume">Playback Volume: </string>
+    <string name="livelinkmicnew_tv_screen_filling_direction">Fill Mode</string>
+    <string name="livelinkmicnew_tv_screen_auto">Auto</string>
+    <string name="livelinkmicnew_tv_screen_fill">Fill</string>
+    <string name="livelinkmicnew_tv_direction_of_rotation">Rotation</string>
+    <string name="livelinkmicnew_tv_rotation0">0</string>
+    <string name="livelinkmicnew_tv_rotation90">90</string>
+    <string name="livelinkmicnew_tv_rotation180">180</string>
+    <string name="livelinkmicnew_tv_rotation270">270</string>
+    <string name="livelinkmicnew_tv_volume_tips">Volume Reminder</string>
+    <string name="livelinkmicnew_tv_enable_volume_tips">On</string>
+    <string name="livelinkmicnew_tv_disable_volume_tips">Off</string>
+    <string name="livelinkmicnew_tv_screen_snapshot">Screenshot</string>
+    <string name="livelinkmicnew_tv_snapshot">Take</string>
+
+    <string name="livelinkmicnew_tv_volume_type">Volume Type</string>
+    <string name="livelinkmicnew_tv_volume_type_auto">Auto</string>
+    <string name="livelinkmicnew_tv_volume_type_media">Media</string>
+    <string name="livelinkmicnew_tv_volume_type_voip">Call</string>
+    <string name="livelinkmicnew_tv_voice_capture_volume">Collection Volume</string>
+    <string name="livelinkmicnew_tv_enable_voice_ear_monitor">Enable In-ear Monitor</string>
+
+    <string name="livelinkmicnew_title_video">Video</string>
+    <string name="livelinkmicnew_title_audio">Audio</string>
+
+    <string name="livelinkmicnew_tv_resolution">Resolution</string>
+    <string name="livelinkmicnew_tv_local_preview_mirror">Local Preview Mirror</string>
+    <string name="livelinkmicnew_tv_mirror_type_auto">Auto</string>
+    <string name="livelinkmicnew_tv_mirror_type_enable">On</string>
+    <string name="livelinkmicnew_tv_mirror_type_disable">Off</string>
+    <string name="livelinkmicnew_tv_enable_remote_mirror">Remote Mirror</string>
+    <string name="livelinkmicnew_tv_enable_video_watermark">Watermarking</string>
+
+    <string name="livelinkmicnew_primary_clip">Copied to clipboard</string>
+
+    <string name="livelinkmicnew_tv_generate_or_input_push_url">Auto-generate or enter a push address</string>
+    <string name="livelinkmicnew_tv_generate_push_url">Auto-generate a push address</string>
+    <string name="livelinkmicnew_tv_i_have_a_push_url">I have a push address</string>
+    <string name="livelinkmicnew_tv_start_push">Start Push</string>
+    <string name="livelinkmicnew_tv_please_scan_to_input_push_url">Scan QR code or enter an address</string>
+    <string name="livelinkmicnew_tv_enable_push_screen_recording">Start pushing screen recording streams</string>
+    <string name="livelinkmicnew_tv_generate_room_id_and_user_id">Auto-generate room and user ID</string>
+
+    <string name="livelinkmicnew_tv_title_v2">V2 Push and Pull</string>
+    <string name="livelinkmicnew_tv_title_player">Player</string>
+    <string name="livelinkmicnew_tv_title_pusher">Pusher</string>
+    <string name="livelinkmicnew_toast_please_replace_other_url_to_play">The 该播放地址正在播放，请换一个播放地址</string>
+    <string name="livelinkmicnew_toast_please_input_a_stream_id">Enter a stream ID.</string>
+    <string name="livelinkmicnew_toast_room_id_or_user_id_not_null">Room/User ID cannot be empty.</string>
+    <string name="livelinkmicnew_toast_please_replace_other_stream_id">Duplicate stream ID.</string>
+    <string name="livelinkmicnew_toast_room_id_or_user_id_duplicate">Duplicate room/user ID</string>
+    <string name="livelinkmicnew_toast_please_start_up_push">Push not started. Please push streams first.</string>
+    <string name="livelinkmicnew_toast_push_failure">Push failed</string>
+    <string name="livelinkmicnew_toast_error_pusher_stream_id_duplicate">Push failed: you cannot use the same stream ID for push and pull on the same device.</string>
+    <string name="livelinkmicnew_toast_error_url_is_null">Empty URL</string>
+    <string name="livelinkmicnew_toast_error_invalid_url">Invalid URL</string>
+    <string name="livelinkmicnew_toast_error_player_stream_id_duplicate">Pull failed: you cannot use the same stream ID for push and pull on the same device.</string>
+    <string name="livelinkmicnew_toast_player_failure">Pull failed</string>
+    <string name="livelinkmicnew_toast_error_connection_broken">Disconnected</string>
+    <string name="livelinkmicnew_toast_error_push_not_start">Push not started</string>
+    <string name="livelinkmicnew_toast_error_please_start_up_play">Pull not started. Please pull streams first.</string>
+    <string name="livelinkmicnew_toast_push_permisson_failure">Push failed！Please turn on the microphone or camera permission first.</string>
+
+    <string name="livelinkmicnew_audio_effect_setting_sound_effect_settings">Sound Effect</string>
+    <string name="livelinkmicnew_btn_ok">OK</string>
+    <string name="livelinkmicnew_btn_cancel">Cancel</string>
+    <string name="livelinkmicnew_btn_close">Close</string>
+
+    <string name="livelinkmicnew_tv_generate_play_url_success">Playback address generated</string>
+    <string name="livelinkmicnew_tv_use_another_phone_to_play">Use the other phone to scan the QR code or copy the address for playback testing</string>
+    <string name="livelinkmicnew_tv_copy_the_play_url">Copy Address</string>
+
+    <string name="livelinkmicnew_tv_connecting">Connecting</string>
+    <string name="livelinkmicnew_tv_first_video_frame">First video frame</string>
+    <string name="livelinkmicnew_tv_first_audio_frame">First audio frame</string>
+    <string name="livelinkmicnew_tv_switch_view">Switch View</string>
+    <string name="livelinkmicnew_tv_reboot">Restart</string>
+    <string name="livelinkmicnew_tv_turn_on_audio">Enable audio</string>
+
+    <string name="livelinkmicnew_play_hint">Test with two phones</string>
+    <string name="livelinkmicnew_play_hint_1">1. On phone A, generate a push address and start streaming.</string>
+    <string name="livelinkmicnew_play_hint_2">2. On phone B, enter the address or scan the QR code to pull streams for playback.</string>
+    <string name="livelinkmicnew_tv_generate_or_input_play_url">Auto-generate or enter a playback address</string>
+    <string name="livelinkmicnew_tv_generate_default_play_url">Auto-generate</string>
+    <string name="livelinkmicnew_tv_i_have_a_play_url">I have a playback address</string>
+    <string name="livelinkmicnew_tv_please_scan_to_input_play_url">Scan QR code or enter an address</string>
+    <string name="livelinkmicnew_tv_start_play">Start Playback</string>
+    <string name="livelinkmicnew_tv_play_default_url">Play default url</string>
+    <string name="livelinkmicnew_tv_please_input_room_id">Enter a room ID</string>
+    <string name="livelinkmicnew_tv_please_input_user_id">Enter a user ID</string>
+    <string name="livelinkmicnew_tv_please_input_stream_id">Enter a stream ID</string>
+    <string name="livelinkmicnew_tv_enable_realtime_play">Enable realtime play</string>
+
+    <string name="livelinkmicnew_tv_beauty_panel_beauty_setting">Beauty Filter</string>
+    <string name="livelinkmicnew_tv_beauty_panel_ruddy">Rosy Skin</string>
+    <string name="livelinkmicnew_tv_beauty_panel_white">Skin Brightening</string>
+    <string name="livelinkmicnew_tv_beauty_panel_beauty">Retouch</string>
+
+</resources>

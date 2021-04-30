@@ -93,7 +93,7 @@ public class PlaySetting extends DialogFragment {
 
         TextView titleText = new TextView(getActivity());
         titleText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        titleText.setText("设置");
+        titleText.setText(getString(R.string.livelinkmicnew_tv_setting));
         titleText.setTextSize(14);
         titleText.setGravity(Gravity.CENTER);
         titleText.setTextColor(Color.WHITE);
@@ -101,8 +101,9 @@ public class PlaySetting extends DialogFragment {
 
         TextView tv = new TextView(getActivity());
         tv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        tv.setText("播放音量：");
+        tv.setText(getString(R.string.livelinkmicnew_tv_play_volume));
         tv.setTextColor(Color.WHITE);
+        titleText.setTextSize(12);
         llContainer.addView(tv);
         SeekBar seekBar = new SeekBar(getActivity());
         LinearLayout.LayoutParams seekBarParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -131,7 +132,10 @@ public class PlaySetting extends DialogFragment {
         });
         llContainer.addView(seekBar);
 
-        RadioButtonSettingItem fillMode = new RadioButtonSettingItem(getActivity(), new BaseSettingItem.ItemText("画面填充方向","自适应", "铺满"), new RadioButtonSettingItem.SelectedListener() {
+        RadioButtonSettingItem fillMode = new RadioButtonSettingItem(getActivity(), new BaseSettingItem.ItemText(
+                getString(R.string.livelinkmicnew_tv_screen_filling_direction),
+                getString(R.string.livelinkmicnew_tv_screen_auto),
+                getString(R.string.livelinkmicnew_tv_screen_fill)), new RadioButtonSettingItem.SelectedListener() {
             @Override
             public void onSelected(int index) {
                 switch (index) {
@@ -159,7 +163,12 @@ public class PlaySetting extends DialogFragment {
         llContainer.addView(fillMode.getView());
 
 
-        RadioButtonSettingItem rotation = new RadioButtonSettingItem(getActivity(), new BaseSettingItem.ItemText("旋转方向","0", "90", "180", "270"), new RadioButtonSettingItem.SelectedListener() {
+        RadioButtonSettingItem rotation = new RadioButtonSettingItem(getActivity(), new BaseSettingItem.ItemText(
+                getString(R.string.livelinkmicnew_tv_direction_of_rotation),
+                getString(R.string.livelinkmicnew_tv_rotation0),
+                getString(R.string.livelinkmicnew_tv_rotation90),
+                getString(R.string.livelinkmicnew_tv_rotation180),
+                getString(R.string.livelinkmicnew_tv_rotation270)), new RadioButtonSettingItem.SelectedListener() {
             @Override
             public void onSelected(int index) {
                 switch (index) {
@@ -198,7 +207,10 @@ public class PlaySetting extends DialogFragment {
         }
         llContainer.addView(rotation.getView());
 
-        RadioButtonSettingItem audioVolumeCallback = new RadioButtonSettingItem(getActivity(), new BaseSettingItem.ItemText("音量提示","开启", "关闭"), new RadioButtonSettingItem.SelectedListener() {
+        RadioButtonSettingItem audioVolumeCallback = new RadioButtonSettingItem(getActivity(), new BaseSettingItem.ItemText(
+                getString(R.string.livelinkmicnew_tv_volume_tips),
+                getString(R.string.livelinkmicnew_tv_enable_volume_tips),
+                getString(R.string.livelinkmicnew_tv_disable_volume_tips)), new RadioButtonSettingItem.SelectedListener() {
             @Override
             public void onSelected(int index) {
                 AVSettingConfig.getInstance().enableVolumeCallback = index == 0;
@@ -211,7 +223,8 @@ public class PlaySetting extends DialogFragment {
         audioVolumeCallback.setSelect(AVSettingConfig.getInstance().enableVolumeCallback ? 0 : 1);
         llContainer.addView(audioVolumeCallback.getView());
 
-        CustomSettingItem snapshotItem = new CustomSettingItem(getActivity(), new BaseSettingItem.ItemText("视频截图", ""), createSnapshotButton());
+        CustomSettingItem snapshotItem = new CustomSettingItem(getActivity(), new BaseSettingItem.ItemText(
+                getString(R.string.livelinkmicnew_tv_screen_snapshot), ""), createSnapshotButton());
         snapshotItem.setAlign(CustomSettingItem.ALIGN_RIGHT);
         llContainer.addView(snapshotItem.getView());
 
@@ -226,7 +239,7 @@ public class PlaySetting extends DialogFragment {
     private List<View> createSnapshotButton() {
         List<View>   views  = new ArrayList<>();
         final Button button = new Button(getActivity());
-        button.setText("截图");
+        button.setText(getString(R.string.livelinkmicnew_tv_snapshot));
         mImageView = new ImageView(getActivity());
         mImageView.setLayoutParams(new Gallery.LayoutParams(80, 80));
         button.setOnClickListener(new View.OnClickListener() {

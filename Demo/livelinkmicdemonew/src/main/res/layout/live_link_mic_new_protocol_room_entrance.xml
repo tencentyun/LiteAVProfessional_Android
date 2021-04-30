@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_marginTop="10dp"
-        android:text="自动生成播放地址或手动输入"
+        android:text="@string/livelinkmicnew_tv_generate_or_input_play_url"
         android:textColor="@color/white"
         android:textSize="12sp"
         android:visibility="gone"/>
@@ -25,7 +25,7 @@
         android:background="@drawable/live_link_mic_new_btn_bg"
         android:gravity="center"
         android:onClick="onClick"
-        android:text="播放默认拉流地址"
+        android:text="@string/livelinkmicnew_tv_play_default_url"
         android:textColor="@color/white"
         android:textSize="12sp"
         android:visibility="gone"/>
@@ -47,7 +47,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/live_link_mic_new_input_url_bg"
-        android:hint="请输入房间号"
+        android:hint="@string/livelinkmicnew_tv_please_input_room_id"
         android:imeOptions="actionGo"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -64,7 +64,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/live_link_mic_new_input_url_bg"
-        android:hint="请输入用户Id"
+        android:hint="@string/livelinkmicnew_tv_please_input_user_id"
         android:imeOptions="actionGo"
         android:inputType="number|textUri"
         android:digits="1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
@@ -94,7 +94,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:visibility="gone">'
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/room_tv_link_mic"
@@ -105,7 +105,7 @@
             android:layout_marginLeft="10dp"
             android:textColor="@color/line_btn"
             android:textSize="12sp"
-            android:text="开启超低延时播放" />
+            android:text="@string/livelinkmicnew_tv_enable_realtime_play" />
 
         <CheckBox
             android:id="@+id/room_cb_link_mic"
@@ -126,7 +126,7 @@
         android:background="@drawable/live_link_mic_new_btn_bg"
         android:gravity="center"
         android:onClick="onClick"
-        android:text="开始播放"
+        android:text="@string/livelinkmicnew_tv_start_play"
         android:textColor="@color/white"
         android:textSize="12sp" />
 
@@ -138,7 +138,7 @@
         android:background="@drawable/live_link_mic_new_btn_bg"
         android:gravity="center"
         android:onClick="onClick"
-        android:text="取消"
+        android:text="@string/livelinkmicnew_btn_cancel"
         android:textColor="@color/white"
         android:textSize="12sp" />
 

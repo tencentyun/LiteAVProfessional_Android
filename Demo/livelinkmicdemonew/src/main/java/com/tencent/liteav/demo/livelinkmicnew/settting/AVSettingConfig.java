@@ -64,6 +64,17 @@ public class AVSettingConfig {
         return mAudioConfig;
     }
 
+    public void clearSetting() {
+        if (mAudioConfig != null) {
+            mAudioConfig.clearCache();
+            mAudioConfig = null;
+        }
+        if (mVideoConfig != null) {
+            mVideoConfig.clearCache();
+            mVideoConfig = null;
+        }
+    }
+
     private static class SingletonHolder {
         /**
          * 由JVM来保证线程安全
@@ -235,6 +246,10 @@ public class AVSettingConfig {
             }
         }
 
+        public void clearCache() {
+            SPUtils.getInstance(PER_DATA).clear();
+        }
+
         public boolean isRecording() {
             return mRecording;
         }
@@ -253,7 +268,7 @@ public class AVSettingConfig {
         private final static String PER_DATA_PARAM = "per_video_param";
         private final static String PER_SAVE_FLAG = "per_save_flag";
         // 分辨率
-        private V2TXLiveDef.V2TXLiveVideoResolution mVideoResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution640x360;
+        private V2TXLiveDef.V2TXLiveVideoResolution mVideoResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution960x540;
         // 帧率
         private int mVideoFps = DEFAULT_FPS;
         // 码率
@@ -267,7 +282,7 @@ public class AVSettingConfig {
         // 画面填充方向是否为充满， true为充满
         private boolean mVideoFillMode = false;
         // 画面预览镜像类型
-        private int mMirrorType = TRTC_VIDEO_MIRROR_TYPE_AUTO;
+        private V2TXLiveDef.V2TXLiveMirrorType mMirrorType = V2TXLiveDef.V2TXLiveMirrorType.V2TXLiveMirrorTypeAuto;
         // 是否打开视频采集
         private boolean mEnableVideo = true;
         // 是否推送视频
@@ -309,7 +324,7 @@ public class AVSettingConfig {
          * transient 表示这个参数不会序列化
          */
         private transient boolean mSaveFlag = true;
-        private int mCurrentResolutionPosition = 4; // 640*360
+        private int mCurrentResolutionPosition = 6; // 960*540
         private int mCurrentFPSPosition = 1; // 15fps
 
         public VideoConfig() {
@@ -479,11 +494,11 @@ public class AVSettingConfig {
             mVideoFillMode = videoFillMode;
         }
 
-        public int getMirrorType() {
+        public V2TXLiveDef.V2TXLiveMirrorType getMirrorType() {
             return mMirrorType;
         }
 
-        public void setMirrorType(int mirrorType) {
+        public void setMirrorType(V2TXLiveDef.V2TXLiveMirrorType mirrorType) {
             mMirrorType = mirrorType;
         }
 
@@ -603,6 +618,10 @@ public class AVSettingConfig {
             } catch (Exception e) {
 
             }
+        }
+
+        public void clearCache() {
+            SPUtils.getInstance(PER_DATA).clear();
         }
     }
 }

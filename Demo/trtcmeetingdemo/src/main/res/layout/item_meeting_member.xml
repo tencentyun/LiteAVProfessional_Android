@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorWhite"
             android:textSize="14sp"
-            tools:text="王大锤" />
+            tools:text="@string/meeting_tv_tools_user_name" />
 
         <ImageView
             android:id="@+id/img_signal"

@@ -19,5 +19,5 @@
         android:id="@+id/live_btn_click"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="确定" />
+        android:text="@string/livelinkmicnew_btn_ok" />
 </LinearLayout>

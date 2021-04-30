@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mTvVersion = (TextView) findViewById(R.id.main_tv_version);
-        mTvVersion.setText("视频云工具包 v" + TXLiveBase.getSDKVersionStr()+"(8.5.677)");
+        mTvVersion.setText(getString(R.string.app_tv_video_cloud_tools_version, TXLiveBase.getSDKVersionStr()+"(8.6.688)"));
 
         mMainTitle = (TextView) findViewById(R.id.main_title);
         mMainTitle.setOnLongClickListener(new View.OnLongClickListener() {
@@ -81,7 +81,7 @@ public class MainActivity extends Activity {
                             intent.setType("application/octet-stream");
                             //intent.setPackage("com.tencent.mobileqq");
                             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(logFile));
-                            startActivity(Intent.createChooser(intent, "分享日志"));
+                            startActivity(Intent.createChooser(intent, getString(R.string.app_title_share_log)));
                         }
                     }
                 });
@@ -121,12 +121,12 @@ public class MainActivity extends Activity {
             public void onChildClicked(GroupBean groupItem, ChildBean childItem) {
                 if (childItem.mIconId == R.drawable.xiaoshipin) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://dldir1.qq.com/hudongzhibo/liteav/XiaoShiPin.apk"));
+                    intent.setData(Uri.parse("http://dldir1.qq.com/hudongzhibo/liteav/XiaoShiPin.apk"));
                     startActivity(intent);
                     return;
                 } else if (childItem.mIconId == R.drawable.xiaozhibo) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://dldir1.qq.com/hudongzhibo/liteav/xiaozhibo.apk"));
+                    intent.setData(Uri.parse("http://dldir1.qq.com/hudongzhibo/liteav/xiaozhibo.apk"));
                     startActivity(intent);
                     return;
                 }
@@ -142,8 +142,8 @@ public class MainActivity extends Activity {
     private void showLogoutDialog() {
         if (mAlertDialog == null) {
             mAlertDialog = new AlertDialog.Builder(this, R.style.common_alert_dialog)
-                    .setMessage("确定要退出登录吗？")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    .setMessage(getString(R.string.app_dialog_log_out))
+                    .setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // 执行退出登录操作
@@ -161,7 +161,7 @@ public class MainActivity extends Activity {
                             });
                         }
                     })
-                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -184,15 +184,15 @@ public class MainActivity extends Activity {
     public void onBackPressed() {
         //退出登录
         AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.common_alert_dialog)
-                .setMessage("确定要退出APP吗？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setMessage(getString(R.string.app_dialog_exit_app))
+                .setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         CallService.stop(MainActivity.this);
                         finish();
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -214,49 +214,49 @@ public class MainActivity extends Activity {
 
         // 直播
         List<ChildBean> pusherChildList = new ArrayList<>();
-        pusherChildList.add(new ChildBean("推流演示（摄像头推流）", R.drawable.push, 0, CameraPushEntranceActivity.class));
-        pusherChildList.add(new ChildBean("拉流演示", R.drawable.live, 0, LivePlayerEntranceActivity.class));
-        pusherChildList.add(new ChildBean("连麦演示（新方案）", R.drawable.room_live, 0, V2MainActivity.class));
-        pusherChildList.add(new ChildBean("连麦演示（旧方案）", R.drawable.room_live, 0, LiveRoomActivity.class));
+        pusherChildList.add(new ChildBean(getString(R.string.app_item_live_pusher), R.drawable.push, 0, CameraPushEntranceActivity.class));
+        pusherChildList.add(new ChildBean(getString(R.string.app_item_live_player), R.drawable.live, 0, LivePlayerEntranceActivity.class));
+        pusherChildList.add(new ChildBean(getString(R.string.app_item_link_mic_new), R.drawable.room_live, 0, V2MainActivity.class));
+        pusherChildList.add(new ChildBean(getString(R.string.app_item_link_mic_old), R.drawable.room_live, 0, LiveRoomActivity.class));
         if (pusherChildList.size() != 0) {
             // 这个是网页链接，配合build.sh避免在如ugc_smart版中出现
-            pusherChildList.add(new ChildBean("小直播", R.drawable.xiaozhibo, 0, null));
-            GroupBean pusherGroupBean = new GroupBean("移动直播 MLVB", R.drawable.room_live, pusherChildList);
+            pusherChildList.add(new ChildBean(getString(R.string.app_item_xiao_zhi_bo), R.drawable.xiaozhibo, 0, null));
+            GroupBean pusherGroupBean = new GroupBean(getString(R.string.app_item_mlvb), R.drawable.room_live, pusherChildList);
             groupList.add(pusherGroupBean);
         }
 
         // 初始化播放器
         List<ChildBean> playerChildList = new ArrayList<>();
-        playerChildList.add(new ChildBean("超级播放器", R.drawable.play, 3, SuperPlayerActivity.class));
+        playerChildList.add(new ChildBean(getString(R.string.app_item_super_player), R.drawable.play, 3, SuperPlayerActivity.class));
         if (playerChildList.size() != 0) {
-            GroupBean playerGroupBean = new GroupBean("播放器 Player", R.drawable.composite, playerChildList);
+            GroupBean playerGroupBean = new GroupBean(getString(R.string.app_item_player), R.drawable.composite, playerChildList);
             groupList.add(playerGroupBean);
         }
 
         // 短视频
         List<ChildBean> shortVideoChildList = new ArrayList<>();
-        shortVideoChildList.add(new ChildBean("视频录制", R.drawable.video, 0, TCVideoSettingActivity.class));
-        shortVideoChildList.add(new ChildBean("特效编辑", R.drawable.cut, 0, TCVideoPickerActivity.class));
-        shortVideoChildList.add(new ChildBean("视频拼接", R.drawable.composite, TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE, TCVideoJoinChooseActivity.class));
-        shortVideoChildList.add(new ChildBean("图片转场", R.drawable.short_video_picture, TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE_PICTURE, TCVideoJoinChooseActivity.class));
-        shortVideoChildList.add(new ChildBean("视频上传", R.drawable.update, TCVideoJoinChooseActivity.TYPE_PUBLISH_CHOOSE, TCVideoJoinChooseActivity.class));
+        shortVideoChildList.add(new ChildBean(getString(R.string.app_item_video_recording), R.drawable.video, 0, TCVideoSettingActivity.class));
+        shortVideoChildList.add(new ChildBean(getString(R.string.app_item_effects_editor), R.drawable.cut, 0, TCVideoPickerActivity.class));
+        shortVideoChildList.add(new ChildBean(getString(R.string.app_item_video_stitching), R.drawable.composite, TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE, TCVideoJoinChooseActivity.class));
+        shortVideoChildList.add(new ChildBean(getString(R.string.app_item_picture_transition), R.drawable.short_video_picture, TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE_PICTURE, TCVideoJoinChooseActivity.class));
+        shortVideoChildList.add(new ChildBean(getString(R.string.app_item_video_upload), R.drawable.update, TCVideoJoinChooseActivity.TYPE_PUBLISH_CHOOSE, TCVideoJoinChooseActivity.class));
 
         if (shortVideoChildList.size() != 0) {
             // 这个是网页链接，配合build.sh避免在其他版本中出现
-            shortVideoChildList.add(new ChildBean("小视频", R.drawable.xiaoshipin, 0, null));
-            GroupBean shortVideoGroupBean = new GroupBean("短视频 UGSV", R.drawable.video, shortVideoChildList);
+            shortVideoChildList.add(new ChildBean(getString(R.string.app_item_xiao_shi_pin), R.drawable.xiaoshipin, 0, null));
+            GroupBean shortVideoGroupBean = new GroupBean(getString(R.string.app_item_ugsv), R.drawable.video, shortVideoChildList);
             groupList.add(shortVideoGroupBean);
         }
 
         // 视频通话
         List<ChildBean> videoConnectChildList = new ArrayList<>();
-        videoConnectChildList.add(new ChildBean("多人视频会议", R.drawable.multi_meeting, 0, CreateMeetingActivity.class));
-        videoConnectChildList.add(new ChildBean("语音聊天室", R.drawable.room_multi, 0, VoiceRoomListActivity.class));
-        videoConnectChildList.add(new ChildBean("视频互动直播", R.drawable.room_multi, 1, LiveRoomListActivity.class));
-        videoConnectChildList.add(new ChildBean("语音通话", R.drawable.room_multi, TRTCCalling.TYPE_AUDIO_CALL, TRTCCallingEntranceActivity.class));
-        videoConnectChildList.add(new ChildBean("视频通话", R.drawable.room_multi, TRTCCalling.TYPE_VIDEO_CALL, TRTCCallingEntranceActivity.class));
+        videoConnectChildList.add(new ChildBean(getString(R.string.item_video_conferencing), R.drawable.multi_meeting, 0, CreateMeetingActivity.class));
+        videoConnectChildList.add(new ChildBean(getString(R.string.item_chat_room), R.drawable.room_multi, 0, VoiceRoomListActivity.class));
+        videoConnectChildList.add(new ChildBean(getString(R.string.item_video_interactive_live_streaming), R.drawable.room_multi, 1, LiveRoomListActivity.class));
+        videoConnectChildList.add(new ChildBean(getString(R.string.item_voice_call), R.drawable.room_multi, TRTCCalling.TYPE_AUDIO_CALL, TRTCCallingEntranceActivity.class));
+        videoConnectChildList.add(new ChildBean(getString(R.string.item_video_call), R.drawable.room_multi, TRTCCalling.TYPE_VIDEO_CALL, TRTCCallingEntranceActivity.class));
         if (videoConnectChildList.size() != 0) {
-            GroupBean videoConnectGroupBean = new GroupBean("实时音视频 TRTC", R.drawable.room_multi, videoConnectChildList);
+            GroupBean videoConnectGroupBean = new GroupBean(getString(R.string.app_item_trtc), R.drawable.room_multi, videoConnectChildList);
             groupList.add(videoConnectGroupBean);
         }
 

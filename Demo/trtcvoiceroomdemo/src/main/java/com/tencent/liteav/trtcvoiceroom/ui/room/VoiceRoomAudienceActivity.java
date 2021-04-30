@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.tencent.liteav.trtcvoiceroom.R;
 import com.tencent.liteav.trtcvoiceroom.model.TRTCVoiceRoomCallback;
 import com.tencent.liteav.trtcvoiceroom.model.TRTCVoiceRoomDef;
 import com.tencent.liteav.trtcvoiceroom.ui.base.VoiceRoomSeatEntity;
@@ -45,7 +46,7 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
 
     private void initAudience() {
         mInvitationSeatMap = new HashMap<>();
-        mVoiceRoomSeatAdapter.setEmptyText("点击上麦");
+        mVoiceRoomSeatAdapter.setEmptyText(getString(R.string.trtcvoiceroom_msg_click_to_chat));
         mVoiceRoomSeatAdapter.notifyDataSetChanged();
         // 开始进房哦
         enterRoom();
@@ -79,7 +80,7 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
         mTRTCVoiceRoom.exitRoom(new TRTCVoiceRoomCallback.ActionCallback() {
             @Override
             public void onCallback(int code, String msg) {
-                ToastUtils.showShort("退房成功");
+                ToastUtils.showShort(R.string.trtcvoiceroom_toast_exit_the_room_successfully);
             }
         });
     }
@@ -98,10 +99,10 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
             public void onCallback(int code, String msg) {
                 if (code == 0) {
                     //进房成功
-                    ToastUtils.showShort("进房成功");
+                    ToastUtils.showShort(R.string.trtcvoiceroom_toast_enter_the_room_successfully);
                     mTRTCVoiceRoom.setAudioQuality(mAudioQuality);
                 } else {
-                    ToastUtils.showShort("进房失败[" + code + "]:" + msg);
+                    ToastUtils.showShort(getString(R.string.trtcvoiceroom_toast_enter_the_room_failure, code, msg));
                     finish();
                 }
             }
@@ -122,7 +123,7 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
     @Override
     public void onItemClick(final int itemPos) {
         if (!mIsSeatInitSuccess) {
-            ToastUtils.showLong("麦位列表还没有初始化好哦！");
+            ToastUtils.showLong(R.string.trtcvoiceroom_toast_list_has_not_been_initialized);
             return;
         }
         // 判断座位有没有人
@@ -139,7 +140,7 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
                         }
                         dialog.dismiss();
                     }
-                }, "下麦");
+                }, getString(R.string.trtcvoiceroom_msg_offline));
                 dialog.show();
             } else {
                 // 点击其他人可以toast展示一下
@@ -156,17 +157,17 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
                         // 发送请求之前再次判断一下这个座位有没有人
                         VoiceRoomSeatEntity seatEntity = mVoiceRoomSeatEntityList.get(itemPos);
                         if (seatEntity.isUsed) {
-                            ToastUtils.showShort("该麦位已经被人占了");
+                            ToastUtils.showShort(R.string.trtcvoiceroom_toast_position_is_already_occupied);
                             return;
                         }
                         startTakeSeat(itemPos);
                     }
                     dialog.dismiss();
                 }
-            }, "申请上麦");
+            }, getString(R.string.trtcvoiceroom_tv_apply_for_chat));
             dialog.show();
         } else {
-            ToastUtils.showShort("麦位已锁定，无法申请上麦");
+            ToastUtils.showShort(R.string.trtcvoiceroom_toast_position_is_locked_cannot_apply_for_chat);
         }
     }
 
@@ -175,9 +176,9 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
             @Override
             public void onCallback(int code, String msg) {
                 if (code == 0) {
-                    ToastUtils.showShort("下麦成功");
+                    ToastUtils.showShort(R.string.trtcvoiceroom_toast_offline_successfully);
                 } else {
-                    ToastUtils.showShort("下麦失败:" + msg);
+                    ToastUtils.showShort(getString(R.string.trtcvoiceroom_toast_offline_failure, msg));
                 }
             }
         });
@@ -185,22 +186,22 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
 
     private void startTakeSeat(int itemPos) {
         if (mCurrentRole == TRTCCloudDef.TRTCRoleAnchor) {
-            ToastUtils.showShort("您已经是麦上主播了~");
+            ToastUtils.showShort(R.string.trtcvoiceroom_toast_you_are_already_an_anchor);
             return;
         }
         if (mNeedRequest) {
             //需要申请上麦
             if (mOwnerId == null) {
-                ToastUtils.showShort("房间还没准备好~");
+                ToastUtils.showShort(R.string.trtcvoiceroom_toast_the_room_is_not_ready);
                 return;
             }
             String inviteId = mTRTCVoiceRoom.sendInvitation(TCConstants.CMD_REQUEST_TAKE_SEAT, mOwnerId, String.valueOf(changeSeatIndexToModelIndex(itemPos)), new TRTCVoiceRoomCallback.ActionCallback() {
                 @Override
                 public void onCallback(int code, String msg) {
                     if (code == 0) {
-                        ToastUtils.showShort("申请已发出，请等待主播处理");
+                        ToastUtils.showShort(R.string.trtcvoiceroom_toast_application_has_been_sent_please_wait_for_processing);
                     } else {
-                        ToastUtils.showShort("申请发送失败:" + msg);
+                        ToastUtils.showShort(getString(R.string.trtcvoiceroom_toast_failed_to_send_application, msg));
                     }
                 }
             });
@@ -225,7 +226,7 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
         }
         mConfirmDialogFragment = new ConfirmDialogFragment();
         int seatIndex = Integer.parseInt(content);
-        mConfirmDialogFragment.setMessage("主播邀请你上" + seatIndex + "号麦");
+        mConfirmDialogFragment.setMessage(getString(R.string.trtcvoiceroom_msg_invite_you_to_chat, seatIndex));
         mConfirmDialogFragment.setNegativeClickListener(new ConfirmDialogFragment.NegativeClickListener() {
             @Override
             public void onClick() {
@@ -233,7 +234,7 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
                     @Override
                     public void onCallback(int code, String msg) {
                         Log.d(TAG, "rejectInvitation callback:" + code);
-                        ToastUtils.showShort("你拒绝上麦申请");
+                        ToastUtils.showShort(R.string.trtcvoiceroom_msg_you_refuse_to_chat);
                     }
                 });
                 mConfirmDialogFragment.dismiss();
@@ -247,7 +248,7 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
                     @Override
                     public void onCallback(int code, String msg) {
                         if (code != 0) {
-                            ToastUtils.showShort("接受请求失败:" + code);
+                            ToastUtils.showShort(getString(R.string.trtcvoiceroom_toast_accept_request_failure, code));
                         }
                         Log.d(TAG, "acceptInvitation callback:" + code);
                     }
@@ -322,7 +323,7 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
     @Override
     public void onRoomDestroy(String roomId) {
         super.onRoomDestroy(roomId);
-        ToastUtils.showLong("房主已解散房间");
+        ToastUtils.showLong(R.string.trtcvoiceroom_msg_close_room);
         mTRTCVoiceRoom.exitRoom(null);
         finish();
     }

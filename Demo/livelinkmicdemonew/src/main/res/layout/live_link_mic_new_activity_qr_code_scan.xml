@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:paddingTop="14dp"
-        android:text="ROOM扫码拉流"
+        android:text="@string/livelinkmicnew_tv_title_v2"
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
 

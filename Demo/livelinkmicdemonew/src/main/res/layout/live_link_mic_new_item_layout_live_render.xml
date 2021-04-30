@@ -102,7 +102,7 @@
         android:background="@color/black"
         android:gravity="center"
         android:padding="10dp"
-        android:text="正在连接中"
+        android:text="@string/livelinkmicnew_tv_connecting"
         android:textColor="@color/white"
         android:visibility="gone" />
 
@@ -113,7 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:enabled="false"
-        android:text="视频首帧"
+        android:text="@string/livelinkmicnew_tv_first_video_frame"
         android:textColor="@color/white"
         android:textSize="12sp" />
 
@@ -124,7 +124,7 @@
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/render_cb_video"
         android:enabled="false"
-        android:text="音频首帧"
+        android:text="@string/livelinkmicnew_tv_first_audio_frame"
         android:textColor="@color/white"
         android:textSize="12sp" />
 
@@ -134,7 +134,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:text="切换 View"
+        android:text="@string/livelinkmicnew_tv_switch_view"
         android:textSize="10sp" />
 
     <Button
@@ -143,7 +143,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/render_btn_switch_view"
         android:layout_alignParentRight="true"
-        android:text="截图"
+        android:text="@string/livelinkmicnew_tv_snapshot"
         android:textSize="10sp" />
 
     <Button
@@ -152,7 +152,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/render_btn_snapshot"
         android:layout_alignParentRight="true"
-        android:text="重启"
+        android:text="@string/livelinkmicnew_tv_reboot"
         android:textSize="10sp" />
 
     <ImageView
@@ -325,13 +325,6 @@
 
     </LinearLayout>
 
-    <com.tencent.liteav.demo.livelinkmicnew.widget.AudioEffectPanel
-        android:id="@+id/livepusher_audio_panel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone" />
-
     <com.tencent.liteav.demo.livelinkmicnew.widget.BeautyPanel
         android:id="@+id/livepusher_beauty_panel"
         android:layout_width="match_parent"
@@ -346,7 +339,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
         android:layout_alignParentRight="true"
-        android:text="关闭"
+        android:text="@string/livelinkmicnew_btn_close"
         android:src="@drawable/live_link_mic_new_ic_close"
         android:visibility="gone"/>
 

@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:singleLine="true"
-            android:text="成员列表"
+            android:text="@string/meeting_tv_member_list"
             android:textColor="@color/colorWhite"
             android:textSize="18sp" />
     </android.support.v7.widget.Toolbar>
@@ -42,14 +42,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:background="@drawable/meeting_button_exit"
         android:padding="10dp"
-        android:text="全体静音"
+        android:text="@string/meeting_toast_mute_all_audio"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_mute_audio_all_off"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btn_mute_audio_all_off"/>
 
     <TextView
         android:id="@+id/btn_mute_audio_all_off"
@@ -58,23 +60,23 @@
         android:layout_marginBottom="15dp"
         android:background="@drawable/meeting_button_border"
         android:padding="10dp"
-        android:text="解除全体静音"
+        android:text="@string/meeting_toast_not_mute_all_audio"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintTop_toTopOf="@+id/btn_mute_audio_all"
-        app:layout_constraintEnd_toStartOf="@+id/btn_mute_audio_all"
-        app:layout_constraintStart_toEndOf="@+id/btn_mute_video_all" />
+        app:layout_constraintLeft_toRightOf="@+id/btn_mute_audio_all"
+        app:layout_constraintRight_toLeftOf="@+id/btn_mute_video_all"/>
 
     <TextView
         android:id="@+id/btn_mute_video_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
         android:background="@drawable/meeting_button_exit"
         android:padding="10dp"
-        android:text="全体禁画"
+        android:text="@string/meeting_toast_mute_all_video"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_mute_audio_all_off"
-        app:layout_constraintTop_toTopOf="@+id/btn_mute_audio_all_off" />
+        app:layout_constraintTop_toTopOf="@+id/btn_mute_audio_all"
+        app:layout_constraintRight_toRightOf="parent"/>
 </merge>

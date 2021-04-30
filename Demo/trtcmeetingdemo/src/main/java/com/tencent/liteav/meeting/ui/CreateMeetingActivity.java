@@ -138,7 +138,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
         mSettingContainerLl = (LinearLayout) findViewById(R.id.ll_setting_container);
 
         mSettingItemList = new ArrayList<>();
-        BaseSettingItem.ItemText itemText = new BaseSettingItem.ItemText("开启摄像头", "");
+        BaseSettingItem.ItemText itemText = new BaseSettingItem.ItemText(getString(R.string.meeting_title_turn_on_camera), "");
         SwitchSettingItem mOpenCameraItem = new SwitchSettingItem(this, itemText,
                 new SwitchSettingItem.Listener() {
                     @Override
@@ -148,7 +148,7 @@ public class CreateMeetingActivity extends AppCompatActivity {
                 }).setCheck(true);
         mSettingItemList.add(mOpenCameraItem);
 
-        itemText = new BaseSettingItem.ItemText("开启麦克风", "");
+        itemText = new BaseSettingItem.ItemText(getString(R.string.meeting_title_turn_on_microphone), "");
         SwitchSettingItem mOpenAudioItem = new SwitchSettingItem(this, itemText,
                 new SwitchSettingItem.Listener() {
                     @Override

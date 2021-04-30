@@ -53,7 +53,7 @@ public class UGCMainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mTvVersion = (TextView) findViewById(R.id.main_tv_version);
-        mTvVersion.setText("腾讯云 UGC v" + TXLiveBase.getSDKVersionStr());
+        mTvVersion.setText(getString(R.string.app_tv_ugc_version, TXLiveBase.getSDKVersionStr()));
         mMainTitle = (TextView) findViewById(R.id.main_title);
         mMainTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -67,7 +67,7 @@ public class UGCMainActivity extends Activity {
                             intent.setType("application/octet-stream");
                             //intent.setPackage("com.tencent.mobileqq");
                             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(logFile));
-                            startActivity(Intent.createChooser(intent, "分享日志"));
+                            startActivity(Intent.createChooser(intent, getString(R.string.app_title_share_log)));
                         }
                     }
                 });
@@ -99,12 +99,12 @@ public class UGCMainActivity extends Activity {
             public void onChildClicked(GroupBean groupItem, ChildBean childItem) {
                 if (childItem.mIconId == R.drawable.xiaoshipin) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://dldir1.qq.com/hudongzhibo/liteav/XiaoShiPin.apk"));
+                    intent.setData(Uri.parse("http://dldir1.qq.com/hudongzhibo/liteav/XiaoShiPin.apk"));
                     startActivity(intent);
                     return;
                 } else if (childItem.mIconId == R.drawable.xiaozhibo) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://dldir1.qq.com/hudongzhibo/liteav/xiaozhibo.apk"));
+                    intent.setData(Uri.parse("http://dldir1.qq.com/hudongzhibo/liteav/xiaozhibo.apk"));
                     startActivity(intent);
                     return;
                 }
@@ -125,14 +125,14 @@ public class UGCMainActivity extends Activity {
     public void onBackPressed() {
         //退出登录
         AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.common_alert_dialog)
-                .setMessage("确定要退出APP吗？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setMessage(getString(R.string.app_dialog_exit_app))
+                .setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -147,16 +147,16 @@ public class UGCMainActivity extends Activity {
 
         // 短视频
         List<ChildBean> shortVideoChildList = new ArrayList<>();
-        shortVideoChildList.add(new ChildBean("视频录制", R.drawable.video, 0, TCVideoSettingActivity.class));
-        shortVideoChildList.add(new ChildBean("特效编辑", R.drawable.cut, 0, TCVideoPickerActivity.class));
-        shortVideoChildList.add(new ChildBean("视频拼接", R.drawable.composite, TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE, TCVideoJoinChooseActivity.class));
-        shortVideoChildList.add(new ChildBean("图片转场", R.drawable.short_video_picture, TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE_PICTURE, TCVideoJoinChooseActivity.class));
-        shortVideoChildList.add(new ChildBean("视频上传", R.drawable.update, TCVideoJoinChooseActivity.TYPE_PUBLISH_CHOOSE, TCVideoJoinChooseActivity.class));
+        shortVideoChildList.add(new ChildBean(getString(R.string.app_item_video_recording), R.drawable.video, 0, TCVideoSettingActivity.class));
+        shortVideoChildList.add(new ChildBean(getString(R.string.app_item_effects_editor), R.drawable.cut, 0, TCVideoPickerActivity.class));
+        shortVideoChildList.add(new ChildBean(getString(R.string.app_item_video_stitching), R.drawable.composite, TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE, TCVideoJoinChooseActivity.class));
+        shortVideoChildList.add(new ChildBean(getString(R.string.app_item_picture_transition), R.drawable.short_video_picture, TCVideoJoinChooseActivity.TYPE_MULTI_CHOOSE_PICTURE, TCVideoJoinChooseActivity.class));
+        shortVideoChildList.add(new ChildBean(getString(R.string.app_item_video_upload), R.drawable.update, TCVideoJoinChooseActivity.TYPE_PUBLISH_CHOOSE, TCVideoJoinChooseActivity.class));
 
         if (shortVideoChildList.size() != 0) {
             // 这个是网页链接，配合build.sh避免在其他版本中出现
-            shortVideoChildList.add(new ChildBean("小视频", R.drawable.xiaoshipin, 0, null));
-            GroupBean shortVideoGroupBean = new GroupBean("短视频 UGSV", R.drawable.video, shortVideoChildList);
+            shortVideoChildList.add(new ChildBean(getString(R.string.app_item_xiao_shi_pin), R.drawable.xiaoshipin, 0, null));
+            GroupBean shortVideoGroupBean = new GroupBean(getString(R.string.app_item_ugsv), R.drawable.video, shortVideoChildList);
             groupList.add(shortVideoGroupBean);
         }
 

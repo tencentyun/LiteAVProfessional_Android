@@ -116,7 +116,7 @@ public class QRCodeGenerateFragment extends DialogFragment {
             public void onClick(View v) {
                 mClipData = ClipData.newPlainText("text", mQRCodeURL);
                 mClipboardManager.setPrimaryClip(mClipData);
-                Toast.makeText(getActivity(), "已添加至剪切板", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.livelinkmicnew_primary_clip), Toast.LENGTH_SHORT).show();
             }
         });
 

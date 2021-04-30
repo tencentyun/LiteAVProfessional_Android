@@ -94,7 +94,7 @@ public class PushVideoSettingFragment extends Fragment {
 
         // 分辨率相关
         BaseSettingItem.ItemText itemText =
-                new BaseSettingItem.ItemText("分辨率", getResources().getStringArray(R.array.live_link_mic_new_solution));
+                new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_resolution), getResources().getStringArray(R.array.live_link_mic_new_solution));
         mResolutionItem = new SelectionSettingItem(getContext(), itemText,
                 new SelectionSettingItem.Listener() {
                     @Override
@@ -114,7 +114,10 @@ public class PushVideoSettingFragment extends Fragment {
         mSettingItemList.add(mResolutionItem);
 
         itemText =
-                new BaseSettingItem.ItemText("本地预览镜像", "auto", "开启", "关闭");
+                new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_local_preview_mirror),
+                        getString(R.string.livelinkmicnew_tv_mirror_type_auto),
+                        getString(R.string.livelinkmicnew_tv_mirror_type_enable),
+                        getString(R.string.livelinkmicnew_tv_mirror_type_disable));
         mMirrorTypeItem = new RadioButtonSettingItem(getContext(), itemText,
                 new RadioButtonSettingItem.SelectedListener() {
                     @Override
@@ -128,6 +131,7 @@ public class PushVideoSettingFragment extends Fragment {
                         } else {
                             type = V2TXLiveMirrorTypeDisable;
                         }
+                        mVideoConfig.setMirrorType(type);
                         if (mLivePusher != null) {
                             mLivePusher.setRenderMirror(type);
                         }
@@ -136,7 +140,7 @@ public class PushVideoSettingFragment extends Fragment {
         mSettingItemList.add(mMirrorTypeItem);
 
         itemText =
-                new BaseSettingItem.ItemText("开启远程镜像", "");
+                new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_enable_remote_mirror), "");
         mRemoteMirrorItem = new CheckBoxSettingItem(getContext(), itemText,
                 new CheckBoxSettingItem.ClickListener() {
                     @Override
@@ -150,7 +154,7 @@ public class PushVideoSettingFragment extends Fragment {
         mSettingItemList.add(mRemoteMirrorItem);
 
         itemText =
-                new BaseSettingItem.ItemText("开启视频水印", "");
+                new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_enable_video_watermark), "");
         mWatermark = new CheckBoxSettingItem(getContext(), itemText,
                 new CheckBoxSettingItem.ClickListener() {
                     @Override
@@ -165,7 +169,7 @@ public class PushVideoSettingFragment extends Fragment {
         mSettingItemList.add(mWatermark);
 
         itemText =
-                new BaseSettingItem.ItemText("视频截图", "");
+                new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_screen_snapshot), "");
         CustomSettingItem snapshotItem = new CustomSettingItem(getContext(), itemText, createSnapshotButton());
         snapshotItem.setAlign(CustomSettingItem.ALIGN_RIGHT);
         mSettingItemList.add(snapshotItem);
@@ -195,7 +199,7 @@ public class PushVideoSettingFragment extends Fragment {
     private List<View> createSnapshotButton() {
         List<View>   views  = new ArrayList<>();
         final Button button = new Button(getContext());
-        button.setText("截图");
+        button.setText(getString(R.string.livelinkmicnew_tv_snapshot));
         mImageView = new ImageView(getContext());
         mImageView.setLayoutParams(new Gallery.LayoutParams(80, 80));
         button.setOnClickListener(new View.OnClickListener() {
@@ -210,11 +214,11 @@ public class PushVideoSettingFragment extends Fragment {
     }
 
     private void updateItem() {
-        int index = 0;
-        int type  = mVideoConfig.getMirrorType();
-        if (TRTC_VIDEO_MIRROR_TYPE_AUTO == type) {
+        int index;
+        V2TXLiveDef.V2TXLiveMirrorType type = mVideoConfig.getMirrorType();
+        if (V2TXLiveDef.V2TXLiveMirrorType.V2TXLiveMirrorTypeAuto == type) {
             index = 0;
-        } else if (TRTC_VIDEO_MIRROR_TYPE_ENABLE == type) {
+        } else if (V2TXLiveMirrorTypeEnable == type) {
             index = 1;
         } else {
             index = 2;

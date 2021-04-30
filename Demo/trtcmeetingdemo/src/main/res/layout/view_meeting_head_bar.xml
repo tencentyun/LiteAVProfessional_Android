@@ -47,7 +47,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/meeting_button_exit"
-        android:text="退出会议"
+        android:text="@string/meeting_tv_exit_meeting"
         android:textColor="@color/colorWhite"
         android:textSize="14sp" />
 </merge>

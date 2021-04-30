@@ -59,14 +59,14 @@ public class VoiceRoomListActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 new AlertDialog.Builder(VoiceRoomListActivity.this, R.style.TRTCVoiceRoomDialogTheme)
-                        .setTitle("Global Log")
-                        .setMessage("清除Log")
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        .setTitle(getString(R.string.trtcvoiceroom_dialog_title_log))
+                        .setMessage(getString(R.string.trtcvoiceroom_dialog_clear_log))
+                        .setNegativeButton(getString(R.string.trtcvoiceroom_dialog_cancel), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
-                        }).setPositiveButton("清除", new DialogInterface.OnClickListener() {
+                        }).setPositiveButton(R.string.trtcvoiceroom_dialog_ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         globalLogTextview.setText("");
@@ -112,7 +112,7 @@ public class VoiceRoomListActivity extends AppCompatActivity {
     }
 
     private void initializeLiveRoom() {
-        setTitle("语音聊天室");
+        setTitle(getString(R.string.trtcvoiceroom_title_chat_room));
         RoomManager.getInstance().initSdkAppId(GenerateTestUserSig.SDKAPPID);
         showFragment();
     }

@@ -33,7 +33,7 @@ public class PushSetting extends DialogFragment {
     private List<String>   mTitleList;
     private PagerAdapter mPagerAdapter;
 
-    private final String[]           TITLE_LIST = {"视频", "音频"};
+    private String[]           TITLE_LIST;
     private PushAudioSettingFragment mAudioSettingFragment;
     private PushVideoSettingFragment mVideoSettingFragment;
     private V2TXLivePusher           mLivePusher;
@@ -42,6 +42,10 @@ public class PushSetting extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_TITLE, R.style.V2BaseFragmentDialogTheme);
+        TITLE_LIST = new String[] {
+                getString(R.string.livelinkmicnew_title_video),
+                getString(R.string.livelinkmicnew_title_audio)
+        };
         initFragment();
     }
 

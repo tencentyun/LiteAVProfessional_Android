@@ -176,9 +176,9 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
     private void preExitMeeting() {
         String notifyMsg = "";
         if (isCreating) {
-            notifyMsg = "您是会议创建者，退出后会议将结束!";
+            notifyMsg = getString(R.string.meeting_msg_exit_meeting);
         } else {
-            notifyMsg = "确认退出会议?";
+            notifyMsg = getString(R.string.meeting_msg_confirm_exit_meeting);
         }
         showExitInfoDialog(notifyMsg, false);
     }
@@ -198,7 +198,7 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
                 if (code == 0) {
                     // 创建房间成功
                     isCreating = true;
-                    ToastUtils.showLong("会议创建成功");
+                    ToastUtils.showLong(getString(R.string.meeting_toast_create_meeting_successfully));
                     mMeetingHeadBarView.setTitle(String.valueOf(mRoomId));
                     changeResolution();
                     return;
@@ -227,7 +227,7 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
         FeatureConfig.getInstance().setAudioVolumeEvaluation(true);
         mTRTCMeeting.setDelegate(this);
         mTRTCMeeting.setSelfProfile(mUserName, mUserAvatar, null);
-        mMeetingHeadBarView.setTitle("会议进入中...");
+        mMeetingHeadBarView.setTitle(getString(R.string.meeting_title_entering));
         createMeeting();
         // 根据外面传入的设置，选择是否打开相应的功能
         mTRTCMeeting.setAudioQuality(mAudioQuality);
@@ -239,7 +239,6 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
         if (mOpenCamera) {
             mTRTCMeeting.startCameraPreview(isFrontCamera, mViewVideo.getLocalPreviewView());
         }
-        initBeauty();
         mTRTCMeeting.setSpeaker(isUseSpeaker);
         mMeetingHeadBarView.setHeadsetImg(isUseSpeaker);
         mTRTCMeeting.enableAudioEvaluation(FeatureConfig.getInstance().isAudioVolumeEvaluation());
@@ -490,10 +489,10 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
     @Override
     public void onError(int code, String message) {
         if (code == -1308) {
-            ToastUtils.showLong("启动录屏失败");
+            ToastUtils.showLong(getString(R.string.meeting_toast_start_screen_recording_failed));
             stopScreenCapture();
         } else {
-            ToastUtils.showLong("出现错误[" + code + "]:" + message);
+            ToastUtils.showLong(getString(R.string.meeting_toast_error, code, message));
             finish();
         }
     }
@@ -501,7 +500,7 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
     @Override
     public void onRoomDestroy(String roomId) {
         if (String.valueOf(mRoomId).equals(roomId)) {
-            ToastUtils.showShort("创建者已结束会议");
+            ToastUtils.showShort(getString(R.string.meeting_toast_end_meeting));
             finish();
         }
     }
@@ -702,6 +701,9 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
     public void onScreenCaptureStopped(int reason) {
         isScreenCapture = false;
         changeResolution();
+        if (mOpenCamera) {
+            mTRTCMeeting.startCameraPreview(isFrontCamera, mViewVideo.getLocalPreviewView());
+        }
     }
 
     @Override
@@ -746,7 +748,7 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
         } else if (id == R.id.img_screen_share) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!PermissionUtils.isGrantedDrawOverlays()) {
-                    ToastUtils.showLong("需要打开悬浮窗权限");
+                    ToastUtils.showLong(getString(R.string.meeting_toast_need_floating_window_permission));
                     PermissionUtils.requestDrawOverlays(new PermissionUtils.SimpleCallback() {
                         @Override
                         public void onGranted() {
@@ -755,7 +757,7 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
 
                         @Override
                         public void onDenied() {
-                            ToastUtils.showLong("需要打开悬浮窗权限");
+                            ToastUtils.showLong(getString(R.string.meeting_toast_need_floating_window_permission));
                         }
                     });
                 } else {
@@ -811,9 +813,6 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
         mScreenCaptureGroup.setVisibility(View.GONE);
         mBottomToolBarGroup.setVisibility(View.VISIBLE);
         mTRTCMeeting.stopScreenCapture();
-        if (mOpenCamera) {
-            mTRTCMeeting.startCameraPreview(isFrontCamera, mViewVideo.getLocalPreviewView());
-        }
     }
 
     private void showFloatingWindow() {
@@ -888,7 +887,7 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
 
                 @Override
                 public void onMuteAllAudioClick() {
-                    ToastUtils.showShort("全体静音");
+                    ToastUtils.showShort(getString(R.string.meeting_toast_mute_all_audio));
                     mIsUserEnterMuteAudio = true;
                     for (int i = 1; i < mMemberEntityList.size(); i++) {
                         MemberEntity entity = mMemberEntityList.get(i);
@@ -900,7 +899,7 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
 
                 @Override
                 public void onMuteAllAudioOffClick() {
-                    ToastUtils.showShort("解除全体静音");
+                    ToastUtils.showShort(getString(R.string.meeting_toast_not_mute_all_audio));
                     mIsUserEnterMuteAudio = false;
                     for (int i = 1; i < mMemberEntityList.size(); i++) {
                         MemberEntity entity = mMemberEntityList.get(i);
@@ -912,7 +911,7 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
 
                 @Override
                 public void onMuteAllVideoClick() {
-                    ToastUtils.showShort("全体静画");
+                    ToastUtils.showShort(getString(R.string.meeting_toast_mute_all_video));
                     for (int i = 1; i < mMemberEntityList.size(); i++) {
                         MemberEntity entity = mMemberEntityList.get(i);
                         entity.setMuteVideo(true);
@@ -984,7 +983,7 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
         builder.setCancelable(true);
         builder.setTitle(msg);
         if (!isError) {
-            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(getString(R.string.meeting_dialog_ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -992,7 +991,7 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
                     finish();
                 }
             });
-            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(getString(R.string.meeting_dialog_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -1000,7 +999,7 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
             });
         } else {
             //当情况为错误的时候，直接停止推流
-            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(getString(R.string.meeting_dialog_ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

@@ -79,7 +79,7 @@ public class SelectMemberView extends BottomSheetDialog {
     }
 
     public void refreshView() {
-        mPusherTagTv.setText("正在加载中...");
+        mPusherTagTv.setText(mContext.getString(R.string.trtcvoiceroom_tv_loading));
     }
 
     public void notifyDataSetChanged() {
@@ -176,11 +176,11 @@ public class SelectMemberView extends BottomSheetDialog {
                 }
                 if (model.type == MemberEntity.TYPE_IDEL) {
                     mButtonInvite.setVisibility(View.VISIBLE);
-                    mButtonInvite.setText("邀请");
+                    mButtonInvite.setText(context.getResources().getString(R.string.trtcvoiceroom_tv_invite));
                     mButtonInvite.setBackgroundColor(context.getResources().getColor(R.color.trtcvoiceroom_color_text_blue));
                 } else if (model.type == MemberEntity.TYPE_WAIT_AGREE) {
                     mButtonInvite.setVisibility(View.VISIBLE);
-                    mButtonInvite.setText("同意");
+                    mButtonInvite.setText(context.getString(R.string.trtcvoiceroom_agree));
                     mButtonInvite.setBackgroundColor(context.getResources().getColor(R.color.trtcvoiceroom_color_text_red));
                 } else {
                     mButtonInvite.setVisibility(View.INVISIBLE);

@@ -87,7 +87,7 @@ public class VoiceRoomSeatAdapter extends
                 //close的界面
                 mImgHead.setImageResource(R.drawable.trtcvoiceroom_ic_lock);
                 mImgHead.setCircleBackgroundColor(context.getResources().getColor(R.color.trtcvoiceroom_circle));
-                mTvName.setText("座位已锁定");
+                mTvName.setText(context.getString(R.string.trtcvoiceroom_tv_seat_locked));
                 mFrameLayoutHeadImg.setForeground(null);
                 return;
             }
@@ -98,14 +98,14 @@ public class VoiceRoomSeatAdapter extends
                 mTvName.setTextColor(context.getResources().getColor(R.color.trtcvoiceroom_text_color_disable));
             } else {
                 if (!TextUtils.isEmpty(model.userAvatar)) {
-                    Picasso.get().load(model.userAvatar).into(mImgHead);
+                    Picasso.get().load(model.userAvatar).placeholder(R.drawable.trtcvoiceroom_ic_head).error(R.drawable.trtcvoiceroom_ic_head).into(mImgHead);
                 } else {
                     mImgHead.setImageResource(R.drawable.trtcvoiceroom_ic_head);
                 }
                 if (!TextUtils.isEmpty(model.userName)) {
                     mTvName.setText(model.userName);
                 } else {
-                    mTvName.setText("主播名还在查找");
+                    mTvName.setText(context.getString(R.string.trtcvoiceroom_tv_the_anchor_name_is_still_looking_up));
                 }
             }
             if (model.isMute) {

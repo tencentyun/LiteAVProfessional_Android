@@ -49,7 +49,7 @@ import static com.tencent.liteav.trtcvoiceroom.model.TRTCVoiceRoomDef.SeatInfo.S
 public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoomSeatAdapter.OnItemClickListener, TRTCVoiceRoomDelegate, InputTextMsgDialog.OnTextSendListener, MsgListAdapter.OnItemClickListener {
     protected static final String TAG = VoiceRoomBaseActivity.class.getName();
 
-    protected static final int    MAX_SEAT_SIZE           = 7;
+    protected static final int    MAX_SEAT_SIZE           = 9;
     protected static final String VOICEROOM_ROOM_ID       = "room_id";
     protected static final String VOICEROOM_ROOM_NAME     = "room_name";
     protected static final String VOICEROOM_USER_NAME     = "user_name";
@@ -129,10 +129,11 @@ public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoo
                     mBtnMic.setSelected(currentMode);
                     if (currentMode) {
                         mTRTCVoiceRoom.startMicrophone();
-                        ToastUtils.showLong("您已开启麦克风");
+                        ToastUtils.showLong(R.string.trtcvoiceroom_toast_you_have_turned_on_the_microphone);
                     } else {
                         mTRTCVoiceRoom.stopMicrophone();
-                        ToastUtils.showLong("您已关闭麦克风");
+                        mAnchorAudioPanel.stopPlay();
+                        ToastUtils.showLong(R.string.trtcvoiceroom_toast_you_have_turned_off_the_microphone);
                     }
                 }
             }
@@ -144,9 +145,9 @@ public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoo
                 mBtnAudio.setSelected(currentMode);
                 mTRTCVoiceRoom.muteAllRemoteAudio(!currentMode);
                 if (currentMode) {
-                    ToastUtils.showLong("您已取消静音");
+                    ToastUtils.showLong(R.string.trtcvoiceroom_toast_you_have_unmuted);
                 } else {
-                    ToastUtils.showLong("您已静音");
+                    ToastUtils.showLong(R.string.trtcvoiceroom_toast_you_are_muted);
                 }
             }
         });
@@ -180,7 +181,7 @@ public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoo
     protected boolean checkButtonPermission() {
         boolean hasPermission = (mCurrentRole == TRTCCloudDef.TRTCRoleAnchor);
         if (!hasPermission) {
-            ToastUtils.showLong("主播才能操作哦");
+            ToastUtils.showLong(R.string.trtcvoiceroom_toast_anchor_can_only_operate_it);
         }
         return hasPermission;
     }
@@ -278,7 +279,7 @@ public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoo
         }
         byte[] byte_num = msg.getBytes(StandardCharsets.UTF_8);
         if (byte_num.length > 160) {
-            Toast.makeText(this, "请输入内容", Toast.LENGTH_SHORT).show();
+            ToastUtils.showShort(R.string.trtcvoiceroom_toast_please_enter_content);
             return;
         }
 
@@ -294,9 +295,9 @@ public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoo
             @Override
             public void onCallback(int code, String msg) {
                 if (code == 0) {
-                    ToastUtils.showShort("发送成功");
+                    ToastUtils.showShort(R.string.trtcvoiceroom_toast_sent_successfully);
                 } else {
-                    ToastUtils.showShort("发送消息失败[" + code + "]" + msg);
+                    ToastUtils.showShort(getString(R.string.trtcvoiceroom_toast_sent_message_failure, code, msg));
                 }
             }
         });
@@ -374,7 +375,7 @@ public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoo
                     //主播上线啦
                     mMainSeatUserId = newSeatInfo.userId;
                     userids.add(newSeatInfo.userId);
-                    mTvName.setText("房主信息获取中");
+                    mTvName.setText(getString(R.string.trtcvoiceroom_tv_information_acquisition));
                 }
                 continue;
             }
@@ -427,7 +428,7 @@ public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoo
                         if (newSeatInfo.status == STATUS_USED) {
                             //主播上线啦
                             if (!TextUtils.isEmpty(userInfo.userAvatar)) {
-                                Picasso.get().load(userInfo.userAvatar).into(mImgHead);
+                                Picasso.get().load(userInfo.userAvatar).placeholder(R.drawable.trtcvoiceroom_ic_head).error(R.drawable.trtcvoiceroom_ic_head).into(mImgHead);
                             } else {
                                 mImgHead.setImageResource(R.drawable.trtcvoiceroom_ic_head);
                             }
@@ -437,7 +438,7 @@ public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoo
                                 mTvName.setText(userInfo.userName);
                             }
                         } else {
-                            mTvName.setText("主播未上线");
+                            mTvName.setText(getString(R.string.trtcvoiceroom_tv_the_anchor_is_not_online));
                         }
                     } else {
                         // 接下来是座位区域的列表
@@ -457,7 +458,7 @@ public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoo
     public void onAnchorEnterSeat(int index, TRTCVoiceRoomDef.UserInfo user) {
         if (index != 0) {
             // 房主上麦就别提醒了
-            showNotifyMsg(user.userName + "上" + index + "号麦");
+            showNotifyMsg(getString(R.string.trtcvoiceroom_tv_online, user.userName, index));
         }
     }
 
@@ -465,32 +466,33 @@ public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoo
     public void onAnchorLeaveSeat(int index, TRTCVoiceRoomDef.UserInfo user) {
         if (index != 0) {
             // 房主上麦就别提醒了
-            showNotifyMsg(user.userName + "下" + index + "号麦");
+            showNotifyMsg(getString(R.string.trtcvoiceroom_tv_offline, user.userName, index));
         }
     }
 
     @Override
     public void onSeatMute(int index, boolean isMute) {
         if (isMute) {
-            showNotifyMsg(index + "号位被禁言");
+            showNotifyMsg(getString(R.string.trtcvoiceroom_tv_the_position_has_muted, index));
         } else {
-            showNotifyMsg(index + "号位解除禁言");
+            showNotifyMsg(getString(R.string.trtcvoiceroom_tv_the_position_has_unmuted, index));
         }
     }
 
     @Override
     public void onSeatClose(int index, boolean isClose) {
-        showNotifyMsg(isClose ? "房主封禁" + index + "号位" : "房主解禁" + index + "号位");
+        showNotifyMsg(isClose ? getString(R.string.trtcvoiceroom_tv_the_owner_ban_this_position, index) :
+                getString(R.string.trtcvoiceroom_tv_the_owner_not_ban_this_position, index));
     }
 
     @Override
     public void onAudienceEnter(TRTCVoiceRoomDef.UserInfo userInfo) {
-        showNotifyMsg(userInfo.userName + "进房");
+        showNotifyMsg(getString(R.string.trtcvoiceroom_tv_enter_room, userInfo.userName));
     }
 
     @Override
     public void onAudienceExit(TRTCVoiceRoomDef.UserInfo userInfo) {
-        showNotifyMsg(userInfo.userName + "退房");
+        showNotifyMsg(getString(R.string.trtcvoiceroom_tv_exit_room, userInfo.userName));
     }
 
     @Override

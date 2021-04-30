@@ -23,7 +23,7 @@
         android:singleLine="true"
         android:textColor="@color/white"
         android:textSize="14sp"
-        tools:text="张晓闯"/>
+        tools:text="@string/trtcvoiceroom_tv_tools_anchor_name_tips"/>
 
     <TextView
         android:id="@+id/tv_room_name"

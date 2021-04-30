@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:singleLine="true"
-            android:text="设置"
+            android:text="@string/meeting_tv_settings"
             android:textColor="@color/meetingTextColorSecond"
             android:textSize="16sp" />
 
@@ -34,7 +34,7 @@
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
             android:singleLine="true"
-            android:text="关闭"
+            android:text="@string/meeting_title_disable"
             android:visibility="gone"
             android:textColor="@color/meetingTextColorSecond"
             android:textSize="16sp" />

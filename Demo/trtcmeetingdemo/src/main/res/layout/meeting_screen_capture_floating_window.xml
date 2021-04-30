@@ -12,5 +12,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="1"
-        android:text="屏幕录制中"/>
+        android:text="@string/meeting_tv_screen_recording"/>
 </com.tencent.liteav.meeting.ui.widget.base.BaseFloatingView>

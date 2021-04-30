@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
-        android:text="播放地址生成成功"
+        android:text="@string/livelinkmicnew_tv_generate_play_url_success"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />
 
@@ -25,8 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="23dp"
-            android:singleLine="true"
-            android:text="用另外一台手机扫码或复制地址进行播放测试"
+            android:text="@string/livelinkmicnew_tv_use_another_phone_to_play"
             android:textColor="#FF6B82A8"
             android:textSize="12sp" />
 
@@ -57,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
-            android:text="复制直播地址"
+            android:text="@string/livelinkmicnew_tv_copy_the_play_url"
             android:textColor="#FF6B82A8"
             android:textSize="14sp" />
     </LinearLayout>
@@ -73,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="#FF13233F"
-        android:text="关闭"
+        android:text="@string/livelinkmicnew_btn_close"
         android:textColor="#FF0062E3"
         android:textSize="16sp" />
 

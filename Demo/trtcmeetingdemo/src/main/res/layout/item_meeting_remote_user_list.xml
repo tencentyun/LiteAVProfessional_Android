@@ -19,7 +19,7 @@
         android:textSize="16sp"
         android:layout_marginLeft="10dp"
         android:layout_weight="1"
-        android:text="王大锤"
+        android:text="@string/meeting_tv_tools_user_name"
         android:textColor="@color/meetingTextColorSecond"/>
 
     <android.support.v7.widget.AppCompatImageButton

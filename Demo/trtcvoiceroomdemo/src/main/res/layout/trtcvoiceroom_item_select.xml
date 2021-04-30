@@ -27,14 +27,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/iv_avatar"
         app:layout_constraintTop_toTopOf="@+id/cl_pk_select"
-        tools:text="主播" />
+        tools:text="@string/trtcvoiceroom_tv_tools_user_name_tips" />
 
     <Button
         android:id="@+id/btn_invite_anchor"
         android:layout_width="68dp"
         android:layout_height="30dp"
         android:background="@color/trtcvoiceroom_color_text_blue"
-        android:text="邀请"
+        android:text="@string/trtcvoiceroom_tv_invite"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_middle"
         app:layout_constraintBottom_toBottomOf="@+id/cl_pk_select"

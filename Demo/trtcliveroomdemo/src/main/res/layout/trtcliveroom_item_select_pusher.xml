@@ -45,7 +45,7 @@
         android:layout_width="68dp"
         android:layout_height="30dp"
         android:background="@color/trtcliveroom_color_text_blue"
-        android:text="邀请"
+        android:text="@string/trtcliveroom_btn_invite"
         android:textColor="@color/white"
         android:textSize="@dimen/trtcliveroom_text_size_middle"
         app:layout_constraintBottom_toBottomOf="@+id/cl_pk_select"

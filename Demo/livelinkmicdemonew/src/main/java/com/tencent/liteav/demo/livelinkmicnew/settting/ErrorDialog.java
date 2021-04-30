@@ -80,19 +80,19 @@ public class ErrorDialog extends DialogFragment {
         String msg = "";
         switch (code) {
             case V2TXLiveCode.V2TXLIVE_OK:
-                msg = "成功";
+                msg = activity.getString(R.string.livelinkmicnew_msg_success);
                 break;
             case V2TXLiveCode.V2TXLIVE_ERROR_REFUSED:
-                msg = "调用失败(调用被拒绝)";
+                msg = activity.getString(R.string.livelinkmicnew_msg_error_refused);
                 break;
             case V2TXLiveCode.V2TXLIVE_ERROR_INVALID_PARAMETER:
-                msg = "调用失败(参数异常)";
+                msg = activity.getString(R.string.livelinkmicnew_msg_error_invalid_parameter);
                 break;
             case V2TXLiveCode.V2TXLIVE_ERROR_NOT_SUPPORTED:
-                msg = "调用未实现接口";
+                msg = activity.getString(R.string.livelinkmicnew_msg_error_not_supported);
                 break;
             case V2TXLiveCode.V2TXLIVE_ERROR_FAILED:
-                msg = "调用失败";
+                msg = activity.getString(R.string.livelinkmicnew_msg_error_failed);
                 break;
         }
         bundle.putString("msg", msg);

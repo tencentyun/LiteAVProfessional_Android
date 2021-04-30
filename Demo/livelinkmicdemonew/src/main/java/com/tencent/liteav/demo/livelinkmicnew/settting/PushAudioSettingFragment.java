@@ -16,8 +16,6 @@ import com.tencent.liteav.demo.livelinkmicnew.settting.customitem.RadioButtonSet
 import com.tencent.liteav.demo.livelinkmicnew.settting.customitem.SeekBarSettingItem;
 import com.tencent.liteav.device.TXDeviceManager;
 import com.tencent.live2.V2TXLivePusher;
-import com.tencent.live2.impl.TXLivePropertyInner;
-import com.tencent.trtc.TRTCCloudDef;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +43,10 @@ public class PushAudioSettingFragment extends Fragment {
         mSettingItemList = new ArrayList<>();
         mAudioConfig = AVSettingConfig.getInstance().getAudioConfig();
         BaseSettingItem.ItemText itemText =
-                new BaseSettingItem.ItemText("音量类型", "自动", "媒体", "通话");
+                new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_volume_type),
+                        getString(R.string.livelinkmicnew_tv_volume_type_auto),
+                        getString(R.string.livelinkmicnew_tv_volume_type_media),
+                        getString(R.string.livelinkmicnew_tv_volume_type_voip));
         mAudioVolumeTypeItem = new RadioButtonSettingItem(getContext(), itemText,
                 new RadioButtonSettingItem.SelectedListener() {
                     @Override
@@ -67,7 +68,7 @@ public class PushAudioSettingFragment extends Fragment {
                 });
         mSettingItemList.add(mAudioVolumeTypeItem);
 
-        itemText = new BaseSettingItem.ItemText("采集音量", "");
+        itemText = new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_voice_capture_volume), "");
         mSettingItemList.add(new SeekBarSettingItem(getContext(), itemText, new SeekBarSettingItem.Listener() {
             @Override
             public void onSeekBarChange(int progress, boolean fromUser) {
@@ -79,7 +80,7 @@ public class PushAudioSettingFragment extends Fragment {
         }).setProgress(mAudioConfig.getRecordVolume()));
 
         //耳返设置入口
-        itemText = new BaseSettingItem.ItemText("开启耳返", "");
+        itemText = new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_enable_voice_ear_monitor), "");
         mAudioEarMonitoringItem = new CheckBoxSettingItem(getContext(), itemText,
                 new CheckBoxSettingItem.ClickListener() {
                     @Override
@@ -93,7 +94,7 @@ public class PushAudioSettingFragment extends Fragment {
         mSettingItemList.add(mAudioEarMonitoringItem);
 
         itemText =
-                new BaseSettingItem.ItemText("音量提示", "");
+                new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_volume_tips), "");
         mAudioVolumeEvaluationItem = new CheckBoxSettingItem(getContext(), itemText,
                 new CheckBoxSettingItem.ClickListener() {
                     @Override
