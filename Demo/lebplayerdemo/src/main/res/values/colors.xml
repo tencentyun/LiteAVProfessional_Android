@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lebplayer_white">#FFFFFF</color>
+    <color name="lebplayer_black">#000000</color>
+    <color name="lebplayer_line_btn">#BBBBBB</color>
+    <color name="lebplayer_colorRadioText">#999999</color>
+</resources>

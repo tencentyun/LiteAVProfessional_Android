@@ -20,6 +20,7 @@ include ':superplayerkit'
 include ':superplayerdemo'
 
 include ':liveplayerdemo'
+include ':lebplayerdemo'
 include ':livepusherdemo'
 include ':livelinkmicdemoold'
 include ':livelinkmicdemonew'

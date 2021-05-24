@@ -315,7 +315,7 @@ public class TCDanmuMgr {
             try {
                 headBitmap = Picasso.get().load(headUrl).centerCrop().resize(mBitmapWidth, mBitmapHeight)
                         .get();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

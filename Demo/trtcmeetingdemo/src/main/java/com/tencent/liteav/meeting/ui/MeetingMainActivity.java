@@ -491,6 +491,9 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
         if (code == -1308) {
             ToastUtils.showLong(getString(R.string.meeting_toast_start_screen_recording_failed));
             stopScreenCapture();
+            if (mOpenCamera) {
+                mTRTCMeeting.startCameraPreview(isFrontCamera, mViewVideo.getLocalPreviewView());
+            }
         } else {
             ToastUtils.showLong(getString(R.string.meeting_toast_error, code, message));
             finish();

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lebplayer_title">快直播播放器</string>
+    <string name="lebplayer_intput_url">请输入播放地址</string>
+    <string name="lebplayer_intput_leb_url">请输入以 webrtc:// 开头的播放地址</string>
+    <string name="lebplayer_have_url">我有播放地址</string>
+    <string name="lebplayer_start_paly">开始播放</string>
+
+    <string name="lebplayer_msg_success">成功</string>
+    <string name="lebplayer_msg_error_refused">调用失败(调用被拒绝)</string>
+    <string name="lebplayer_msg_error_invalid_parameter">调用失败(参数异常)</string>
+    <string name="lebplayer_msg_error_not_supported">调用未实现接口</string>
+    <string name="lebplayer_msg_error_failed">调用失败</string>
+
+    <string name="lebplayer_tv_setting">设置</string>
+    <string name="lebplayer_tv_play_volume">播放音量：</string>
+    <string name="lebplayer_tv_screen_filling_direction">画面填充方向</string>
+    <string name="lebplayer_tv_screen_auto">自适应</string>
+    <string name="lebplayer_tv_screen_fill">铺满</string>
+    <string name="lebplayer_tv_direction_of_rotation">旋转方向</string>
+    <string name="lebplayer_tv_rotation0">0</string>
+    <string name="lebplayer_tv_rotation90">90</string>
+    <string name="lebplayer_tv_rotation180">180</string>
+    <string name="lebplayer_tv_rotation270">270</string>
+    <string name="lebplayer_tv_volume_tips">音量提示</string>
+    <string name="lebplayer_tv_enable_volume_tips">开启</string>
+    <string name="lebplayer_tv_disable_volume_tips">关闭</string>
+    <string name="lebplayer_tv_screen_snapshot">视频截图</string>
+    <string name="lebplayer_tv_snapshot">截图</string>
+
+    <string name="lebplayer_toast_error_url_is_null">URL为空！</string>
+    <string name="lebplayer_toast_error_player_stream_id_duplicate">拉流失败：抱歉，RTC暂不支持同一台设备使用相同streamid同时推拉流</string>
+    <string name="lebplayer_toast_player_failure">拉流失败！</string>
+
+    <string name="lebplayer_btn_ok">确定</string>
+
+    <string name="lebplayer_tv_connecting">正在连接中</string>
+    <string name="lebplayer_tv_turn_on_audio">开启音频</string>
+
+</resources>

@@ -867,6 +867,7 @@ public class V2MainActivity extends AppCompatActivity {
 
         playerView.hideAddIcon();
         playerView.showControlLayout();
+        playerView.showFullScreenView();
         playerView.hideExtraInfoView();
         playerView.hidePushFeatureView();
         playerView.setSwitchListener(new PlayerViewCallback(container));
@@ -1022,6 +1023,11 @@ public class V2MainActivity extends AppCompatActivity {
                     mPlayerContainer.isPlaying = false;
                     startPlayerLoading(mPlayerContainer, player);
                     break;
+                case V2TXLivePlayStatusStopped:
+                    resetPlayer(mPlayerContainer);
+                    mPlayerContainer.isPlaying = false;
+                    mPlayerContainer.isShowDebugView = false;
+                    break;
                 default:
                     break;
             }
@@ -1049,6 +1055,11 @@ public class V2MainActivity extends AppCompatActivity {
                 case V2TXLivePlayStatusLoading:
                     mPlayerContainer.isPlaying = false;
                     startPlayerLoading(mPlayerContainer, player);
+                    break;
+                case V2TXLivePlayStatusStopped:
+                    resetPlayer(mPlayerContainer);
+                    mPlayerContainer.isPlaying = false;
+                    mPlayerContainer.isShowDebugView = false;
                     break;
                 default:
                     break;
