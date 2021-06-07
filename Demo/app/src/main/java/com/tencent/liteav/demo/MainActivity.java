@@ -21,6 +21,7 @@ import com.tencent.liteav.demo.lebplayer.ui.LebPlayerLauncherActivity;
 import com.tencent.liteav.demo.livelinkmicnew.V2MainActivity;
 import com.tencent.liteav.demo.liveplayer.ui.LivePlayerEntranceActivity;
 import com.tencent.liteav.demo.livepusher.camerapush.ui.CameraPushEntranceActivity;
+import com.tencent.liteav.demo.livepusher.screenpush.ScreenPushEntranceActivity;
 import com.tencent.liteav.demo.liveroom.ui.LiveRoomActivity;
 import com.tencent.liteav.demo.player.demo.SuperPlayerActivity;
 import com.tencent.liteav.demo.videoediter.TCVideoPickerActivity;
@@ -67,7 +68,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mTvVersion = (TextView) findViewById(R.id.main_tv_version);
-        mTvVersion.setText(getString(R.string.app_tv_video_cloud_tools_version, TXLiveBase.getSDKVersionStr()+"(8.7.804)"));
+        mTvVersion.setText(getString(R.string.app_tv_video_cloud_tools_version, TXLiveBase.getSDKVersionStr()+"(8.7.805)"));
 
         mMainTitle = (TextView) findViewById(R.id.main_title);
         mMainTitle.setOnLongClickListener(new View.OnLongClickListener() {
@@ -216,6 +217,7 @@ public class MainActivity extends Activity {
         // 直播
         List<ChildBean> pusherChildList = new ArrayList<>();
         pusherChildList.add(new ChildBean(getString(R.string.app_item_live_pusher), R.drawable.push, 0, CameraPushEntranceActivity.class));
+        pusherChildList.add(new ChildBean(getString(R.string.app_item_live_pusher_screen), R.drawable.push, 0, ScreenPushEntranceActivity.class));
         pusherChildList.add(new ChildBean(getString(R.string.app_item_live_player), R.drawable.live, 0, LivePlayerEntranceActivity.class));
         pusherChildList.add(new ChildBean(getString(R.string.app_item_leb_player), R.drawable.live, 0, LebPlayerLauncherActivity.class));
         pusherChildList.add(new ChildBean(getString(R.string.app_item_link_mic_new), R.drawable.room_live, 0, V2MainActivity.class));

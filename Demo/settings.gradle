@@ -24,6 +24,7 @@ include ':lebplayerdemo'
 include ':livepusherdemo'
 include ':livelinkmicdemoold'
 include ':livelinkmicdemonew'
+include ':livepusherscreendemo'
 
 if (!liteavSourcePath.isEmpty()) {
     apply from: new File(settingsDir, '../source_link_gradle/liteav_source_settings.gradle').getAbsolutePath()

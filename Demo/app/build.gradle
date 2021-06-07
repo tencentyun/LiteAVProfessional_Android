@@ -9,7 +9,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 17
-        versionName "8.7.804"
+        versionName "8.7.805"
 
         multiDexEnabled true
         ndk {
@@ -60,6 +60,7 @@ dependencies {
     compile project(':livepusherdemo')
     compile project(':livelinkmicdemoold')
     compile project(':livelinkmicdemonew')
+    compile project(':livepusherscreendemo')
 
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.android.support:recyclerview-v7:25.+'

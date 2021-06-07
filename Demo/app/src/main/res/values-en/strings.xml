@@ -31,6 +31,7 @@
     <string name="app_dialog_exit_app">Are you sure you want to exit?</string>
 
     <string name="app_item_live_pusher">Push (Camera)</string>
+    <string name="app_item_live_pusher_screen">Push (Screen)</string>
     <string name="app_item_live_player">Pull</string>
     <string name="app_item_link_mic_new">Co-anchoring (New)</string>
     <string name="app_item_link_mic_old">Co-anchoring (Old)</string>
