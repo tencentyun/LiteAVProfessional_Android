@@ -14,8 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.blankj.utilcode.constant.PermissionConstants;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.tencent.liteav.demo.trtc.R;
 import com.tencent.liteav.login.model.ProfileManager;
@@ -80,7 +78,6 @@ public class CreateMeetingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_meeting);
         initView();
         initData();
-        initPermission();
     }
 
     private void initData() {
@@ -183,12 +180,5 @@ public class CreateMeetingActivity extends AppCompatActivity {
         //设置图片在文字的哪个方向
         rb.setCompoundDrawables(drawable, null, null, null);
         rb.setCompoundDrawablePadding(20);
-    }
-
-    private void initPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PermissionUtils.permission(PermissionConstants.STORAGE, PermissionConstants.MICROPHONE, PermissionConstants.CAMERA)
-                    .request();
-        }
     }
 }

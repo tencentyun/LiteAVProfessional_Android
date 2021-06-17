@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.liteav.demo.beauty.BeautyParams;
@@ -142,8 +143,20 @@ public class MeetingMainActivity extends AppCompatActivity implements TRTCMeetin
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         initData();
         initView();
-        startCreateOrEnterMeeting();
         ProfileManager.getInstance().checkNeedShowSecurityTips(MeetingMainActivity.this);
+        PermissionUtils.permission(PermissionConstants.CAMERA, PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                startCreateOrEnterMeeting();
+                ProfileManager.getInstance().checkNeedShowSecurityTips(MeetingMainActivity.this);
+            }
+
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.trtcmeeting_tips_start_camera_audio);
+                finish();
+            }
+        }).request();
     }
 
     @Override

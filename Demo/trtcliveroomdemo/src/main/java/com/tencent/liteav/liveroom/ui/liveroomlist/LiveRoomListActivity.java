@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.blankj.utilcode.constant.PermissionConstants;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.liteav.debug.GenerateTestUserSig;
@@ -44,7 +42,6 @@ public class LiveRoomListActivity extends AppCompatActivity {
         initStatusBar();
         initLiveRoomListFragment();
 
-        requestPermission();
     }
 
     private void initNavigationBack() {
@@ -128,10 +125,4 @@ public class LiveRoomListActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void requestPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PermissionUtils.permission(PermissionConstants.STORAGE, PermissionConstants.MICROPHONE, PermissionConstants.CAMERA)
-                    .request();
-        }
-    }
 }

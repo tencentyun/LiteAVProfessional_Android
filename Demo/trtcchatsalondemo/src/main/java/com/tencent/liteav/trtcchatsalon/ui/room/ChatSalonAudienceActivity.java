@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.liteav.trtcchatsalon.R;
 import com.tencent.liteav.trtcchatsalon.model.TRTCChatSalonCallback;
@@ -14,6 +16,7 @@ import com.tencent.liteav.trtcchatsalon.model.TRTCChatSalonDef;
 import com.tencent.liteav.trtcchatsalon.ui.list.TCConstants;
 import com.tencent.liteav.trtcchatsalon.ui.widget.ConfirmDialogFragment;
 import com.tencent.trtc.TRTCCloudDef;
+import java.util.List;
 
 /**
  * 观众界面
@@ -44,7 +47,16 @@ public class ChatSalonAudienceActivity extends ChatSalonBaseActivity {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(mSelfUserId)) {
+                    PermissionUtils.permission(PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+                        @Override
+                        public void onGranted(List<String> permissionsGranted) {
                     startTakeSeat(mSelfUserId);
+                        }
+                        @Override
+                        public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                            ToastUtils.showShort(R.string.trtcchatsalon_tips_open_audio);
+                        }
+                    }).request();
                 }
             }
         });

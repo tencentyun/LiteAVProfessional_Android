@@ -19,6 +19,8 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.liteav.audiosettingkit.AudioEffectPanel;
 import com.tencent.liteav.demo.beauty.model.ItemInfo;
@@ -239,7 +241,16 @@ public class TCCameraAnchorActivity extends TCBaseAnchorActivity implements View
     protected void startPreview() {
         // 打开本地预览，传入预览的 View
         mTXCloudVideoView.setVisibility(View.VISIBLE);
+        PermissionUtils.permission(PermissionConstants.CAMERA).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
         mLiveRoom.startCameraPreview(true, mTXCloudVideoView, null);
+            }
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.trtcliveroom_tips_start_camera_audio);
+            }
+        }).request();
     }
 
     /**
@@ -268,6 +279,23 @@ public class TCCameraAnchorActivity extends TCBaseAnchorActivity implements View
         }
         mLiveRoom.setAudioQuality(audioQuality);
         // 创建房间成功，开始推流
+        PermissionUtils.permission(PermissionConstants.CAMERA, PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                if (permissionsGranted.size() == 2) {
+                    startPush();
+                }
+            }
+
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.trtcliveroom_tips_start_camera_audio);
+            }
+        }).request();
+
+    }
+
+    private void startPush() {
         mLiveRoom.startPublish(mSelfUserId + "_stream", new TRTCLiveRoomCallback.ActionCallback() {
             @Override
             public void onCallback(int code, String msg) {

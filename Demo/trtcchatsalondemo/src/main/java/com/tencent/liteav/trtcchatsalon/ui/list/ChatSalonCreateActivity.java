@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.blankj.utilcode.constant.PermissionConstants;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.tencent.liteav.login.model.ProfileManager;
 import com.tencent.liteav.trtcchatsalon.R;
 import com.tencent.liteav.trtcchatsalon.ui.room.ChatSalonAnchorActivity;
@@ -56,7 +54,6 @@ public class ChatSalonCreateActivity extends AppCompatActivity {
         setContentView(R.layout.trtcchatsalon_activity_create_voice_room);
         initView();
         initData();
-        initPermission();
     }
 
     private void initData() {
@@ -102,10 +99,4 @@ public class ChatSalonCreateActivity extends AppCompatActivity {
         mEnterTv = (TextView) findViewById(R.id.tv_enter);
     }
 
-    private void initPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PermissionUtils.permission(PermissionConstants.STORAGE, PermissionConstants.MICROPHONE, PermissionConstants.CAMERA)
-                    .request();
-        }
-    }
 }

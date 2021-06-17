@@ -37,4 +37,6 @@
     <string name="lebplayer_tv_connecting">正在连接中</string>
     <string name="lebplayer_tv_turn_on_audio">开启音频</string>
 
+    <string name="lebplayer_camera">请先打开摄像头权限</string>
+
 </resources>

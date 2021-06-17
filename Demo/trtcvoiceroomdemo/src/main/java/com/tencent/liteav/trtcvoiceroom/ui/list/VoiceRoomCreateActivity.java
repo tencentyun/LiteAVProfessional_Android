@@ -65,7 +65,6 @@ public class VoiceRoomCreateActivity extends AppCompatActivity {
         setContentView(R.layout.trtcvoiceroom_activity_create_voice_room);
         initView();
         initData();
-        initPermission();
     }
 
     private void initData() {
@@ -117,13 +116,6 @@ public class VoiceRoomCreateActivity extends AppCompatActivity {
                 mNeedOwnerAgree = isChecked;
             }
         });
-    }
-
-    private void initPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PermissionUtils.permission(PermissionConstants.STORAGE, PermissionConstants.MICROPHONE, PermissionConstants.CAMERA)
-                    .request();
-        }
     }
 
     private void setStyle(RadioButton rb) {

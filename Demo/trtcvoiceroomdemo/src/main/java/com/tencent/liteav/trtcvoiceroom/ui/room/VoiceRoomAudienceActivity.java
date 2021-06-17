@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.liteav.trtcvoiceroom.R;
 import com.tencent.liteav.trtcvoiceroom.model.TRTCVoiceRoomCallback;
@@ -160,7 +162,17 @@ public class VoiceRoomAudienceActivity extends VoiceRoomBaseActivity {
                             ToastUtils.showShort(R.string.trtcvoiceroom_toast_position_is_already_occupied);
                             return;
                         }
-                        startTakeSeat(itemPos);
+                        PermissionUtils.permission(PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+                            @Override
+                            public void onGranted(List<String> permissionsGranted) {
+                                startTakeSeat(itemPos);
+                            }
+
+                            @Override
+                            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                                ToastUtils.showShort(R.string.trtcvoiceroom_tips_open_audio);
+                            }
+                        }).request();
                     }
                     dialog.dismiss();
                 }

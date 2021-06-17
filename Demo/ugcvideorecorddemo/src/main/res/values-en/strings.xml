@@ -1,0 +1,3 @@
+<resources>
+    <string name="ugcrecord_app_camera_storage_mic">Please turn on the camera, microphone and storage permissions first</string>
+</resources>

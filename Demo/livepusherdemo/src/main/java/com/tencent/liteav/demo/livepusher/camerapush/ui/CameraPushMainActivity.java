@@ -35,6 +35,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.liteav.audiosettingkit.AudioEffectPanel;
 import com.tencent.liteav.demo.beauty.view.BeautyPanel;
 import com.tencent.liteav.demo.livepusher.R;
@@ -54,6 +57,7 @@ import com.tencent.rtmp.ui.TXCloudVideoView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import static com.tencent.live2.V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModeLandscape;
@@ -140,8 +144,21 @@ public class CameraPushMainActivity extends FragmentActivity implements
         initMainView();            // 初始化一些核心的 View
 
         // 进入页面，自动开始推流，并且弹出推流对应的拉流地址
-        startPush();
-        mPusherPlayQRCodeFragment.toggle(getFragmentManager(), PUSHER_PLAY_QR_CODE_FRAGMENT);
+        PermissionUtils.permission(PermissionConstants.CAMERA, PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                // 初始化完成之后自动播放
+                startPush();
+                mPusherPlayQRCodeFragment.toggle(getFragmentManager(), PUSHER_PLAY_QR_CODE_FRAGMENT);
+            }
+
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.livepusher_app_camera_mic);
+                finish();
+            }
+        }).request();
+
     }
 
     @Override
@@ -708,8 +725,8 @@ public class CameraPushMainActivity extends FragmentActivity implements
     }
 
     private void setTouchFocus(boolean enable) {
-        mIsFocusEnable = enable;
-        mLivePusher.getDeviceManager().enableCameraAutoFocus(enable);
+        mIsFocusEnable = !enable;
+        mLivePusher.getDeviceManager().enableCameraAutoFocus(mIsFocusEnable);
         if (mLivePusher.isPushing() == 1) {
             stopPush();
             startPush();

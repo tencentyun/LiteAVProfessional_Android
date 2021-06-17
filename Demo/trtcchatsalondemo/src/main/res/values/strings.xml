@@ -1,5 +1,5 @@
 <resources>
-    <string name="tctrtcchatsalon_app_name">语音沙龙</string>
+    <string name="trtcchatsalon_app_name">语音沙龙</string>
     <string name="trtcchatsalon_numer_format" >%d人在看</string>
     <string name="trtcchatsalon_agree">同意</string>
     <string name="trtcchatsalon_warning_not_empty">"输入不能为空!"</string>
@@ -51,5 +51,6 @@
     <string name="trtcchatsalon_create_or_join_group_limit">"单个用户可创建和加入的群组数量超过了限制，请购买相关套餐,价格地址：https://cloud.tencent.com/document/product/269/11673"</string>
     <string name="trtcchatsalon_group_member_limit">"群成员数量超过限制，请参考，请购买相关套餐，价格地址：https://cloud.tencent.com/document/product/269/11673"</string>
     <string name="trtcchatsalon_invitation_limit">请求正在处理，请稍后再试</string>
+    <string name="trtcchatsalon_tips_open_audio">请先打开麦克风权限</string>
 </resources>
 

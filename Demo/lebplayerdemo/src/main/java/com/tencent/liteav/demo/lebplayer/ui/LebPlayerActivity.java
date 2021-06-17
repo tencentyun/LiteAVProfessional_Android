@@ -64,8 +64,6 @@ public class LebPlayerActivity extends AppCompatActivity {
         setContentView(R.layout.lebplayer_activity);
         AVSettingConfig.getInstance().fillMode = V2TXLiveFillMode.V2TXLiveFillModeFit;
 
-        checkPermission();
-
         findViewById(R.id.lebplayer_ibtn_left).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,31 +77,6 @@ public class LebPlayerActivity extends AppCompatActivity {
         resetPlayerView();
 
         startPlay();
-    }
-
-    private boolean checkPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            List<String> permissions = new ArrayList<>();
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)) {
-                permissions.add(Manifest.permission.CAMERA);
-            }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)) {
-                permissions.add(Manifest.permission.RECORD_AUDIO);
-            }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-            }
-            if (permissions.size() != 0) {
-                ActivityCompat.requestPermissions(LebPlayerActivity.this,
-                        (String[]) permissions.toArray(new String[0]),
-                        REQ_PERMISSION_CODE);
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override

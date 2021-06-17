@@ -17,6 +17,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.squareup.picasso.Picasso;
 import com.tencent.liteav.audiosettingkit.AudioEffectPanel;
@@ -119,23 +121,36 @@ public class VoiceRoomBaseActivity extends AppCompatActivity implements VoiceRoo
             mAnchorAudioPanel = null;
         }
     }
+    private void updateMicButton() {
+        if (checkButtonPermission()) {
+            boolean currentMode = !mBtnMic.isSelected();
+            mBtnMic.setSelected(currentMode);
+            if (currentMode) {
+                mTRTCVoiceRoom.startMicrophone();
+                ToastUtils.showLong(R.string.trtcvoiceroom_toast_you_have_turned_on_the_microphone);
+            } else {
+                mTRTCVoiceRoom.stopMicrophone();
+                mAnchorAudioPanel.stopPlay();
+                ToastUtils.showLong(R.string.trtcvoiceroom_toast_you_have_turned_off_the_microphone);
+            }
+        }
+    }
 
     protected void initListener() {
         mBtnMic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkButtonPermission()) {
-                    boolean currentMode = !mBtnMic.isSelected();
-                    mBtnMic.setSelected(currentMode);
-                    if (currentMode) {
-                        mTRTCVoiceRoom.startMicrophone();
-                        ToastUtils.showLong(R.string.trtcvoiceroom_toast_you_have_turned_on_the_microphone);
-                    } else {
-                        mTRTCVoiceRoom.stopMicrophone();
-                        mAnchorAudioPanel.stopPlay();
-                        ToastUtils.showLong(R.string.trtcvoiceroom_toast_you_have_turned_off_the_microphone);
+                PermissionUtils.permission(PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+                    @Override
+                    public void onGranted(List<String> permissionsGranted) {
+                        updateMicButton();
                     }
-                }
+
+                    @Override
+                    public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                        ToastUtils.showShort(R.string.trtcvoiceroom_tips_open_audio);
+                    }
+                }).request();
             }
         });
         mBtnAudio.setOnClickListener(new View.OnClickListener() {

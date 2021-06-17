@@ -28,4 +28,6 @@
     <string name="trtccalling_toast_voice_call">Audio Call:%s</string>
     <string name="trtccalling_toast_not_call_myself">You cannot call yourself.</string>
     <string name="trtccalling_title_have_a_call_invitation">You have a call invitation.</string>
+    <string name="trtccalling_tips_start_camera_audio">Please turn on the camera and microphone permissions first</string>
+    <string name="trtccalling_tips_start_audio">Please turn on the microphone permissions first</string>
 </resources>

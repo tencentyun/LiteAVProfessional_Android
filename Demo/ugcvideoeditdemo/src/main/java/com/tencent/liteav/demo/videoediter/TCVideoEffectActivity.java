@@ -3,6 +3,7 @@ package com.tencent.liteav.demo.videoediter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.view.WindowManager;
 
 import com.tencent.qcloud.ugckit.UGCKitConstants;
 import com.tencent.qcloud.ugckit.UGCKitVideoEffect;
@@ -30,6 +31,7 @@ public class TCVideoEffectActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.ugcedit_activity_video_effect);
 
         mFragmentType = getIntent().getIntExtra(UGCKitConstants.KEY_FRAGMENT, 0);

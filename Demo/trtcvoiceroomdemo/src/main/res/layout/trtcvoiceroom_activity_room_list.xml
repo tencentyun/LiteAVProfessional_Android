@@ -34,7 +34,7 @@
             android:layout_gravity="center"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
-            android:text="@string/trtcvoiceroom_title_chat_room"
+            android:text="@string/trtcvoiceroom_title"
             android:textAlignment="center"
             android:textColor="#EEEEEE"
             android:textSize="18sp" />

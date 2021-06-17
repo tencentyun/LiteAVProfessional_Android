@@ -26,6 +26,7 @@
     <string name="livepusher_screen_cancel">取消录屏推流</string>
 
     <string name="livepusher_screen_push_tip">正在录屏推流中...</string>
-
+    <string name="livepusher_screen_camera">请先打开摄像头权限</string>
+    <string name="livepusher_screen_camera_storage_mic">请先打开摄像头,麦克风和存储权限</string>
 
 </resources>

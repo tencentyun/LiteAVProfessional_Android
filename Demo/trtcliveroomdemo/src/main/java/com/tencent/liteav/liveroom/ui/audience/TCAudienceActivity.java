@@ -27,6 +27,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.liteav.demo.beauty.view.BeautyPanel;
 import com.tencent.liteav.demo.beauty.BeautyParams;
@@ -552,11 +554,21 @@ public class TCAudienceActivity extends AppCompatActivity implements View.OnClic
      * 生命周期相关
      */
     private void startLinkMic() {
-        if (!TCUtils.checkRecordPermission(TCAudienceActivity.this)) {
-            showNoticeToast(getString(R.string.trtcliveroom_tips_start_camera_audio));
-            return;
+        PermissionUtils.permission(PermissionConstants.CAMERA, PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                if (permissionsGranted.size() == 2) {
+                    onStartLinkMic();
+                }
+            }
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.trtcliveroom_tips_start_camera_audio);
+            }
+        }).request();
         }
 
+    private void onStartLinkMic() {
         mButtonLinkMic.setEnabled(false);
         mButtonLinkMic.setBackgroundResource(R.drawable.trtcliveroom_linkmic_off);
 

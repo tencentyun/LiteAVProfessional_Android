@@ -22,6 +22,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.liteav.demo.videojoiner.R;
@@ -31,8 +34,9 @@ import com.tencent.qcloud.ugckit.module.picker.data.TCVideoFileInfo;
 import com.tencent.qcloud.ugckit.utils.VideoChecker;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class TCVideoJoinChooseActivity extends Activity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class TCVideoJoinChooseActivity extends Activity implements View.OnClickListener{
     private static final String TAG = "TCVideoJoinChooseActivity";
 
     public static final int TYPE_MULTI_CHOOSE = 1;              // 视频拼接
@@ -79,22 +83,28 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
     }
 
     private void loadPictureList() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    ArrayList<TCVideoFileInfo> fileInfoArrayList = PickerManagerKit.getInstance(TCVideoJoinChooseActivity.this).getAllPictrue();
 
-                    Message msg = new Message();
-                    msg.obj = fileInfoArrayList;
-                    mMainHandler.sendMessage(msg);
-                }
-            });
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ArrayList<TCVideoFileInfo> fileInfoArrayList = PickerManagerKit.getInstance(TCVideoJoinChooseActivity.this).getAllPictrue();
+
+                        Message msg = new Message();
+                        msg.obj = fileInfoArrayList;
+                        mMainHandler.sendMessage(msg);
+                    }
+                });
             }
-        }
+
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.ugcjoin_app_storage);
+                finish();
+            }
+        }).request();
     }
 
     @Override
@@ -113,33 +123,27 @@ public class TCVideoJoinChooseActivity extends Activity implements View.OnClickL
     }
 
     private void loadVideoList() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    ArrayList<TCVideoFileInfo> fileInfoArrayList = PickerManagerKit.getInstance(TCVideoJoinChooseActivity.this).getAllVideo();
+        PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ArrayList<TCVideoFileInfo> fileInfoArrayList = PickerManagerKit.getInstance(TCVideoJoinChooseActivity.this).getAllVideo();
 
-                    Message msg = new Message();
-                    msg.obj = fileInfoArrayList;
-                    mMainHandler.sendMessage(msg);
-                }
-            });
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                        Message msg = new Message();
+                        msg.obj = fileInfoArrayList;
+                        mMainHandler.sendMessage(msg);
+                    }
+                });
             }
-        }
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (grantResults != null && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (mType == TYPE_MULTI_CHOOSE_PICTURE) {
-                loadPictureList();
-            } else {
-                loadVideoList();
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.ugcjoin_app_storage);
+                finish();
             }
-        }
+        }).request();
     }
 
     private void init() {

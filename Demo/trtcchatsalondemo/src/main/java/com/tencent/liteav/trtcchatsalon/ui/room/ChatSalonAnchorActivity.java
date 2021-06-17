@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.liteav.login.model.RoomManager;
 import com.tencent.liteav.trtcchatsalon.R;
@@ -18,6 +20,7 @@ import com.tencent.liteav.trtcchatsalon.ui.widget.CommonBottomDialog;
 import com.tencent.liteav.trtcchatsalon.ui.widget.ConfirmDialogFragment;
 import com.tencent.liteav.trtcchatsalon.ui.widget.HandUpListDialog;
 import com.tencent.trtc.TRTCCloudDef;
+import java.util.List;
 
 public class ChatSalonAnchorActivity extends ChatSalonBaseActivity {
     public static final int ERROR_ROOM_ID_EXIT = -1301;
@@ -115,6 +118,18 @@ public class ChatSalonAnchorActivity extends ChatSalonBaseActivity {
         mCurrentRole = TRTCCloudDef.TRTCRoleAnchor;
         //设置昵称、头像
         mTRTCChatSalon.setSelfProfile(mUserName, mUserAvatar, null);
+        PermissionUtils.permission(PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                createRoom();
+            }
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.trtcchatsalon_tips_open_audio);
+            }
+        }).request();
+    }
+    private void createRoom() {
         RoomManager.getInstance().createRoom(mRoomId, TCConstants.TYPE_CHAT_SALON, new RoomManager.ActionCallback() {
             @Override
             public void onSuccess() {

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.liteav.login.model.RoomManager;
 import com.tencent.liteav.trtcvoiceroom.R;
@@ -140,6 +142,18 @@ public class VoiceRoomAnchorActivity extends VoiceRoomBaseActivity implements Se
         mCurrentRole = TRTCCloudDef.TRTCRoleAnchor;
         //设置昵称、头像
         mTRTCVoiceRoom.setSelfProfile(mUserName, mUserAvatar, null);
+        PermissionUtils.permission(PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                createRoom();
+            }
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.trtcvoiceroom_tips_open_audio);
+            }
+        }).request();
+    }
+    private void createRoom() {
         RoomManager.getInstance().createRoom(mRoomId, TCConstants.TYPE_VOICE_ROOM, new RoomManager.ActionCallback() {
             @Override
             public void onSuccess() {

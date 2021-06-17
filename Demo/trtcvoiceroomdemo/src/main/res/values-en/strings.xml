@@ -9,7 +9,7 @@
     <string name="trtcvoiceroom_dialog_clear_log">Clear Logs</string>
     <string name="trtcvoiceroom_dialog_ok">Clear</string>
     <string name="trtcvoiceroom_dialog_cancel">Cancel</string>
-    <string name="trtcvoiceroom_title_chat_room">Audio Chat Room</string>
+    <string name="trtcvoiceroom_title">Audio Chat Room</string>
     <string name="trtcvoiceroom_toast_reentering">The room was created by you. Reentering</string>
     <string name="trtcvoiceroom_toast_obtain_list_failure">Failed to get the list: %s</string>
     <string name="trtcvoiceroom_toast_request_network_failure">Network request failed: %s</string>
@@ -92,4 +92,5 @@
     <string name="trtcvoiceroom_create_room_limit">The cloud communication account you are currently using has not activated the audio and video chat room function, and the number of chat rooms created exceeds the limit, please go to the Tencent Cloud official website to open [IM audio and video chat rooms]：https://cloud.tencent.com/document/product/269/11673</string>
     <string name="trtcvoiceroom_create_or_join_group_limit">The number of groups that a single user can create and join exceeds the limit, please purchase relevant packages, more details:https://cloud.tencent.com/document/product/269/11673</string>
     <string name="trtcvoiceroom_group_member_limit">The number of group members exceeds the limit, please refer to it, please purchase the relevant packages, more details:https://cloud.tencent.com/document/product/269/11673</string>
+    <string name="trtcvoiceroom_tips_open_audio">Please turn on the microphone permission first</string>
 </resources>

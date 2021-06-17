@@ -1,0 +1,5 @@
+<resources>
+    <string name="ugcedit_app_name">videoediter</string>
+    <string name="ugcedit_ok">OK</string>
+    <string name="ugcedit_app_storage">Please turn on the storage permission first</string>
+</resources>

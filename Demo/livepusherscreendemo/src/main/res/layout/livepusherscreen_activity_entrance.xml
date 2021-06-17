@@ -134,6 +134,7 @@
         <RadioButton
             android:id="@+id/rb_landscape"
             style="@style/ScreenPusherCreateRadioButtonStyle"
+            android:visibility="gone"
             android:text="@string/livepusher_screen_tv_resolution_landscape" />
 
     </RadioGroup>
@@ -156,20 +157,20 @@
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/rb_video_super"
-            style="@style/ScreenPusherCreateRadioButtonStyle"
-            android:checked="true"
-            android:text="@string/livepusher_screen_rb_video_super" />
-
-        <RadioButton
             android:id="@+id/rb_video_stand"
             style="@style/ScreenPusherCreateRadioButtonStyle"
+            android:checked="true"
             android:text="@string/livepusher_screen_rb_video_stand" />
 
         <RadioButton
             android:id="@+id/rb_video_high"
             style="@style/ScreenPusherCreateRadioButtonStyle"
             android:text="@string/livepusher_screen_rb_video_high" />
+
+        <RadioButton
+            android:id="@+id/rb_video_super"
+            style="@style/ScreenPusherCreateRadioButtonStyle"
+            android:text="@string/livepusher_screen_rb_video_super" />
 
     </RadioGroup>
 

@@ -19,6 +19,9 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.zxing.Result;
 
 import java.util.ArrayList;
@@ -44,16 +47,24 @@ public class QRCodeScanActivity extends Activity implements ZXingScannerView.Res
         };
         view.addView(mScannerView, 0);
         setContentView(view);
-
-        // 检查权限
-        checkCameraPermission();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mScannerView.setResultHandler(this);
-        mScannerView.startCamera();
+        PermissionUtils.permission(PermissionConstants.CAMERA).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                mScannerView.startCamera();
+            }
+
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.livepusher_screen_camera);
+                finish();
+            }
+        }).request();
     }
 
     @Override
@@ -95,20 +106,6 @@ public class QRCodeScanActivity extends Activity implements ZXingScannerView.Res
         if (view.getId() == R.id.livepusher_ibtn_back) {
             finish();
         }
-    }
-
-    private boolean checkCameraPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            List<String> permissions = new ArrayList<>();
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)) {
-                permissions.add(Manifest.permission.CAMERA);
-            }
-            if (permissions.size() != 0) {
-                ActivityCompat.requestPermissions(this, permissions.toArray(new String[0]), 100);
-                return false;
-            }
-        }
-        return true;
     }
 
     private static class CustomViewFinderView extends ViewFinderView {

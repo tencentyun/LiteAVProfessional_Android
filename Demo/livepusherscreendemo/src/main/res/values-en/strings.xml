@@ -26,5 +26,6 @@
     <string name="livepusher_screen_cancel">cancel screen push</string>
 
     <string name="livepusher_screen_push_tip">ScreenCapture and pushing stream</string>
-
+    <string name="livepusher_screen_camera">Please turn on the camera permission first</string>
+    <string name="livepusher_screen_camera_storage_mic">Please turn on the camera, microphone and storage permissions first</string>
 </resources>

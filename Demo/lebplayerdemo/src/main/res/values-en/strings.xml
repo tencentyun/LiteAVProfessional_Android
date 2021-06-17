@@ -37,4 +37,6 @@
     <string name="lebplayer_tv_connecting">Connecting</string>
     <string name="lebplayer_tv_turn_on_audio">Enable audio</string>
 
+    <string name="lebplayer_camera">Please turn on the camera permission first</string>
+
 </resources>

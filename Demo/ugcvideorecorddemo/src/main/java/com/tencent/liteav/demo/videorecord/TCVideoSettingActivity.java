@@ -27,9 +27,6 @@ import com.tencent.qcloud.ugckit.UGCKitConstants;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.ugc.TXRecordCommon;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * UGC小视频设置界面.
  */
@@ -82,45 +79,7 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
         initListener();
 
         initViewStatus();
-
-        checkPermission();
     }
-
-    private boolean checkPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            List<String> permissions = new ArrayList<>();
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)) {
-                permissions.add(Manifest.permission.READ_PHONE_STATE);
-            }
-            if (permissions.size() != 0) {
-                ActivityCompat.requestPermissions(this,
-                        permissions.toArray(new String[0]),
-                        100);
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 100:
-                for (int ret : grantResults) {
-                    if (ret != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
     private void initData() {
         mRecommendQuality = -1;
     }
@@ -331,7 +290,6 @@ public class TCVideoSettingActivity extends Activity implements View.OnClickList
         } else if (i == R.id.btn_ok) {
             getConfigData();
             startVideoRecordActivity();
-
         } else if (i == R.id.webrtc_link_button) {
             showCloudLink();
 

@@ -1,3 +1,4 @@
 <resources>
     <string name="ugcrecord_app_name">videorecorder</string>
+    <string name="ugcrecord_app_camera_storage_mic">请先打开摄像头,麦克风和存储权限</string>
 </resources>

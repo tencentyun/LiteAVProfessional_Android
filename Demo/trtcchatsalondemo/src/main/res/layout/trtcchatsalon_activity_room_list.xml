@@ -34,7 +34,7 @@
             android:layout_gravity="center"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
-            android:text="@string/tctrtcchatsalon_app_name"
+            android:text="@string/trtcchatsalon_app_name"
             android:textAlignment="center"
             android:textColor="#EEEEEE"
             android:textSize="18sp" />

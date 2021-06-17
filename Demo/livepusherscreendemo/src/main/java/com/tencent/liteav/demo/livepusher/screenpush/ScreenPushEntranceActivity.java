@@ -1,24 +1,24 @@
 package com.tencent.liteav.demo.livepusher.screenpush;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.live2.V2TXLiveDef;
 import com.tencent.live2.V2TXLivePusher;
 import com.tencent.live2.V2TXLivePusherObserver;
@@ -28,7 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -51,15 +50,12 @@ public class ScreenPushEntranceActivity extends Activity {
     public static final String INTENT_SCAN_RESULT   = "SCAN_RESULT";
 
     public static final String URL_PUSH        = "url_push";       // RTMP 推流地址
-    public static final String URL_PLAY_RTMP   = "url_play_rtmp";  // RTMP 播放地址
     public static final String URL_PLAY_FLV    = "url_play_flv";   // FLA  播放地址
-    public static final String URL_PLAY_HLS    = "url_play_hls";   // HLS  播放地址
-    public static final String URL_PLAY_ACC    = "url_play_acc";   // RTMP 加速流地址
 
     private static final int ACTIVITY_SCAN_REQUEST_CODE = 1;
-    private static final int REQUEST_CODE = 100;
     private Context mContext;
     private EditText mEditInputURL;
+    private boolean mIsFirstPush = false;
 
     private RadioButton mLandScape;
     private RadioButton mPortrait;
@@ -68,12 +64,13 @@ public class ScreenPushEntranceActivity extends Activity {
     private RadioButton mVideoHigh;
 
     private QRCodeGenerateFragment mPusherPlayQRCodeFragment;
-    private boolean mHasInitPusher = false;
-    private String mQRCodePusherURL;
+    private static String sQRCodePusherURL;
     private static final String PUSHER_PLAY_QR_CODE_FRAGMENT = "push_play_qr_code_fragment";
-    private V2TXLiveDef.V2TXLiveVideoResolution mResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution960x540;
-    private V2TXLiveDef.V2TXLiveVideoResolutionMode mResolutionMode = V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModePortrait;
-    private V2TXLivePusher mLivePusher;
+    private static V2TXLiveDef.V2TXLiveVideoResolution sResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution640x360;
+    private static V2TXLiveDef.V2TXLiveVideoResolutionMode sResolutionMode = V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModePortrait;
+    private static V2TXLivePusher sLivePusher;
+    private static boolean sHasInitPusher = false;
+    private static String sPushURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +84,63 @@ public class ScreenPushEntranceActivity extends Activity {
         mVideoStand = findViewById(R.id.rb_video_stand);
         mVideoHigh = findViewById(R.id.rb_video_high);
 
+        mLandScape.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+                    sResolutionMode = V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModeLandscape;
+                    if (sLivePusher != null) {
+                        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+                    }
+                }
+            }
+        });
+        mPortrait.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+                    sResolutionMode = V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModePortrait;
+                    if (sLivePusher != null) {
+                        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+                    }
+                }
+            }
+        });
+        mVideoStand.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+                    sResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution640x360;
+                    if (sLivePusher != null) {
+                        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+                    }
+                }
+            }
+        });
+        mVideoHigh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+                    sResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution960x540;
+                    if (sLivePusher != null) {
+                        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+                    }
+
+                }
+            }
+        });
+        mVideoSuper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+                    sResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution1280x720;
+                    if (sLivePusher != null) {
+                        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+                    }
+                }
+            }
+        });
+
         setStyle(mPortrait);
         setStyle(mLandScape);
         setStyle(mVideoSuper);
@@ -94,7 +148,34 @@ public class ScreenPushEntranceActivity extends Activity {
         setStyle(mVideoHigh);
 
         initViews();
-        checkPublishPermission();
+        checkPusherStatus();
+    }
+
+    private void checkPusherStatus() {
+        if (sHasInitPusher) {
+            ((Button)findViewById(R.id.livepusher_btn_play)).setText(getString(R.string.livepusher_screen_push_tip));
+            ((Button)findViewById(R.id.livepusher_btn_stop)).setVisibility(View.VISIBLE);
+
+            if (!TextUtils.isEmpty(sPushURL)) {
+                mEditInputURL.setText(sPushURL);
+            }
+
+
+            if (sResolutionMode == V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModePortrait) {
+                mPortrait.setChecked(true);
+            } else if (sResolutionMode == V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModeLandscape) {
+                mLandScape.setChecked(true);
+            }
+
+            if (sResolution == V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution640x360) {
+                mVideoStand.setChecked(true);
+            } else if (sResolution == V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution960x540) {
+                mVideoHigh.setChecked(true);
+            } else if (sResolution == V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution1280x720){
+                mVideoSuper.setChecked(true);
+            }
+
+        }
     }
 
     private void setStyle(RadioButton rb) {
@@ -149,16 +230,16 @@ public class ScreenPushEntranceActivity extends Activity {
             startActivityForResult(intent, ACTIVITY_SCAN_REQUEST_CODE);
         } else if (id == R.id.livepusher_btn_play) {
             String url = mEditInputURL.getText().toString().trim();
-            if (!mHasInitPusher) {
+            if (!sHasInitPusher) {
                 startLivePusher(url);
             }
         } else if (id == R.id.livepusher_btn_stop) {
-            if (mHasInitPusher) {
+            if (sHasInitPusher) {
                 stopLivePusher();
             }
         } else if (id == R.id.livepusher_ibtn_qrcode) {
-            if (mHasInitPusher) {
-                mPusherPlayQRCodeFragment.setQRCodeURL(mQRCodePusherURL);
+            if (sHasInitPusher) {
+                mPusherPlayQRCodeFragment.setQRCodeURL(sQRCodePusherURL);
                 mPusherPlayQRCodeFragment.toggle(getFragmentManager(), PUSHER_PLAY_QR_CODE_FRAGMENT);
             } else {
                 Toast.makeText(this, getString(R.string.livepusher_screen_toast_please_start_up_push), Toast.LENGTH_LONG).show();
@@ -187,10 +268,15 @@ public class ScreenPushEntranceActivity extends Activity {
                 if (response.isSuccessful()) {
                     try {
                         JSONObject jsonRsp = new JSONObject(response.body().string());
-                        String pusherURLDefault = jsonRsp.optString(URL_PUSH);
+                        final String pusherURLDefault = jsonRsp.optString(URL_PUSH);
                         String flvPlayURL = jsonRsp.optString(URL_PLAY_FLV);
-                        mQRCodePusherURL = flvPlayURL;
-                        mEditInputURL.setText(pusherURLDefault);
+                        sQRCodePusherURL = flvPlayURL;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mEditInputURL.setText(pusherURLDefault);
+                            }
+                        });
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -199,41 +285,41 @@ public class ScreenPushEntranceActivity extends Activity {
         });
     }
 
-    private void startLivePusher(String pushURL) {
+    private void startLivePusher(final String pushURL) {
         if (mLandScape.isChecked()) {
-            mResolutionMode = V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModeLandscape;
+            sResolutionMode = V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModeLandscape;
         } else if (mPortrait.isChecked()) {
-            mResolutionMode = V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModePortrait;
+            sResolutionMode = V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModePortrait;
         }
 
-        if (mVideoSuper.isChecked()) {
-            mResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution640x480;
-        } else if (mVideoStand.isChecked()) {
-            mResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution960x540;
+        if (mVideoStand.isChecked()) {
+            sResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution640x360;
+        } else if (mVideoHigh.isChecked()) {
+            sResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution960x540;
         } else {
-            mResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution1280x720;
+            sResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution1280x720;
         }
 
         if (TextUtils.isEmpty(pushURL)) {
             Toast.makeText(mContext, getString(R.string.livepusher_screen_input_push_url), Toast.LENGTH_LONG).show();
         } else {
-            startLivePusher(pushURL, "", "", "", "");
-        }
-    }
+            PermissionUtils.permission(PermissionConstants.CAMERA, PermissionConstants.STORAGE, PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+                @Override
+                public void onGranted(List<String> permissionsGranted) {
+                    mIsFirstPush = true;
+                    startPush(pushURL);
+                }
 
-    private void startLivePusher(String pushURL, String rtmpPlayURL, String flvPlayURL, String hlsPlayURL, String realtimePlayURL) {
-        mLivePusher = new V2TXLivePusherImpl(mContext, V2TXLiveDef.V2TXLiveMode.TXLiveMode_RTMP);
-        mLivePusher.setObserver(new MyTXLivePusherObserver());
-        mLivePusher.startMicrophone();
-        mLivePusher.startScreenCapture();
-        mLivePusher.setVideoQuality(mResolution, mResolutionMode);
-        int result = mLivePusher.startPush(pushURL);
-        if (result == V2TXLIVE_OK) {
-            mHasInitPusher = true;
-            ((Button)findViewById(R.id.livepusher_btn_play)).setText(getString(R.string.livepusher_screen_push_tip));
-            ((Button)findViewById(R.id.livepusher_btn_stop)).setVisibility(View.VISIBLE);
-        } else {
-            mHasInitPusher = false;
+                @Override
+                public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                    ToastUtils.showShort(R.string.livepusher_screen_camera_storage_mic);
+                    finish();
+                }
+            }).request();
+
+            if (!mIsFirstPush) {
+                startPush(pushURL);
+            }
         }
     }
 
@@ -242,44 +328,57 @@ public class ScreenPushEntranceActivity extends Activity {
         @Override
         public void onWarning(int code, String msg, Bundle extraInfo) {
             if (code == V2TXLIVE_WARNING_SCREEN_CAPTURE_START_FAILED) {
-                mHasInitPusher = false;
+                sHasInitPusher = false;
+                resetConfig();
                 Toast.makeText(ScreenPushEntranceActivity.this, getString(R.string.livepusher_screen_cancel), Toast.LENGTH_LONG).show();
                 stopLivePusher();
             }
         }
     }
 
-    private void stopLivePusher() {
-        if (mLivePusher != null) {
-            mLivePusher.stopMicrophone();
-            mLivePusher.stopScreenCapture();
-            mLivePusher.stopPush();
-            mHasInitPusher = false;
-            ((Button)findViewById(R.id.livepusher_btn_play)).setText(getString(R.string.livepusher_screen_start_screen_push));
-            ((Button)findViewById(R.id.livepusher_btn_stop)).setVisibility(View.GONE);
+    private void resetConfig() {
+        sQRCodePusherURL = "";
+        sResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution640x360;
+        sPushURL = "";
+        sResolutionMode = V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModePortrait;
+    }
+
+    private void startPush(String pushURL) {
+        if (sLivePusher != null) {
+            sLivePusher.stopMicrophone();
+            sLivePusher.stopScreenCapture();
+            sLivePusher.stopPush();
+            sLivePusher = null;
+        }
+        sLivePusher = new V2TXLivePusherImpl(mContext, V2TXLiveDef.V2TXLiveMode.TXLiveMode_RTMP);
+        sLivePusher.setObserver(new MyTXLivePusherObserver());
+        sLivePusher.startMicrophone();
+        sLivePusher.startScreenCapture();
+        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+        sPushURL = pushURL;
+        int result = sLivePusher.startPush(pushURL);
+        if (result == V2TXLIVE_OK) {
+            sHasInitPusher = true;
+            Toast.makeText(ScreenPushEntranceActivity.this, getString(R.string.livepusher_screen_push), Toast.LENGTH_LONG).show();
+            ((Button)findViewById(R.id.livepusher_btn_play)).setText(getString(R.string.livepusher_screen_push_tip));
+            ((Button)findViewById(R.id.livepusher_btn_stop)).setVisibility(View.VISIBLE);
+        } else {
+            resetConfig();
+            sHasInitPusher = false;
         }
     }
 
-    private boolean checkPublishPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            List<String> permissions = new ArrayList<>();
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)) {
-                permissions.add(Manifest.permission.CAMERA);
-            }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)) {
-                permissions.add(Manifest.permission.RECORD_AUDIO);
-            }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)) {
-                permissions.add(Manifest.permission.READ_PHONE_STATE);
-            }
-            if (permissions.size() != 0) {
-                ActivityCompat.requestPermissions(this, permissions.toArray(new String[0]), REQUEST_CODE);
-                return false;
-            }
+    private void stopLivePusher() {
+        if (sLivePusher != null) {
+            sLivePusher.stopMicrophone();
+            sLivePusher.stopScreenCapture();
+            sLivePusher.stopPush();
         }
-        return true;
+        sHasInitPusher = false;
+        resetConfig();
+        mEditInputURL.setText("");
+        Toast.makeText(ScreenPushEntranceActivity.this, getString(R.string.livepusher_screen_cancel), Toast.LENGTH_LONG).show();
+        ((Button)findViewById(R.id.livepusher_btn_play)).setText(getString(R.string.livepusher_screen_start_screen_push));
+        ((Button)findViewById(R.id.livepusher_btn_stop)).setVisibility(View.GONE);
     }
 }

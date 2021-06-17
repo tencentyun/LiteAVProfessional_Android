@@ -10,8 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 
-import com.blankj.utilcode.constant.PermissionConstants;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.tencent.liteav.debug.GenerateTestUserSig;
 import com.tencent.liteav.login.model.RoomManager;
 import com.tencent.liteav.trtcchatsalon.R;
@@ -43,8 +41,7 @@ public class ChatSalonListActivity extends AppCompatActivity {
             }
         });
 
-        initPermission();
-        initializeLiveRoom();
+        initializeChatSalonRoom();
     }
 
     @Override
@@ -67,8 +64,8 @@ public class ChatSalonListActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void initializeLiveRoom() {
-        setTitle(R.string.tctrtcchatsalon_app_name);
+    private void initializeChatSalonRoom() {
+        setTitle(R.string.trtcchatsalon_app_name);
         RoomManager.getInstance().initSdkAppId(GenerateTestUserSig.SDKAPPID);
         showFragment();
     }
@@ -83,11 +80,5 @@ public class ChatSalonListActivity extends AppCompatActivity {
         }
     }
 
-    private void initPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PermissionUtils.permission(PermissionConstants.STORAGE, PermissionConstants.MICROPHONE, PermissionConstants.CAMERA)
-                    .request();
-        }
-    }
 
 }

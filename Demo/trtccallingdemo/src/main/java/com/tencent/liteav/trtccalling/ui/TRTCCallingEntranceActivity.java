@@ -21,8 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.constant.PermissionConstants;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.squareup.picasso.Picasso;
 import com.tencent.liteav.login.model.ProfileManager;
@@ -99,7 +97,6 @@ public class TRTCCallingEntranceActivity extends AppCompatActivity {
         mType = getIntent().getIntExtra("TYPE", TRTCCalling.TYPE_VIDEO_CALL);
         initView();
         initStatusBar();
-        initPermission();
     }
 
     private void initView() {
@@ -208,13 +205,6 @@ public class TRTCCallingEntranceActivity extends AppCompatActivity {
             window.setStatusBarColor(Color.TRANSPARENT);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-    }
-
-    private void initPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PermissionUtils.permission(PermissionConstants.STORAGE, PermissionConstants.MICROPHONE, PermissionConstants.CAMERA)
-                    .request();
         }
     }
 

@@ -15,8 +15,6 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.blankj.utilcode.constant.PermissionConstants;
-import com.blankj.utilcode.util.PermissionUtils;
 import com.tencent.liteav.debug.GenerateTestUserSig;
 import com.tencent.liteav.login.model.RoomManager;
 import com.tencent.liteav.trtcvoiceroom.R;
@@ -87,8 +85,7 @@ public class VoiceRoomListActivity extends AppCompatActivity {
         });
 
         globalLogTextviewContainer = ((ScrollView) findViewById(R.id.videoroom_global_log_container));
-        initPermission();
-        initializeLiveRoom();
+        initializeVoiceRoom();
     }
 
     @Override
@@ -111,8 +108,8 @@ public class VoiceRoomListActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void initializeLiveRoom() {
-        setTitle(getString(R.string.trtcvoiceroom_title_chat_room));
+    private void initializeVoiceRoom() {
+        setTitle(getString(R.string.trtcvoiceroom_title));
         RoomManager.getInstance().initSdkAppId(GenerateTestUserSig.SDKAPPID);
         showFragment();
     }
@@ -163,11 +160,5 @@ public class VoiceRoomListActivity extends AppCompatActivity {
         });
     }
 
-    private void initPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PermissionUtils.permission(PermissionConstants.STORAGE, PermissionConstants.MICROPHONE, PermissionConstants.CAMERA)
-                    .request();
-        }
-    }
 
 }

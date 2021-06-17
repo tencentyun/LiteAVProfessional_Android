@@ -15,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.CollectionUtils;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.squareup.picasso.Picasso;
 import com.tencent.liteav.trtccalling.R;
@@ -329,7 +331,18 @@ public class TRTCAudioCallActivity extends AppCompatActivity {
             if (params != null) {
                 mOtherInvitingUserInfoList = params.mUserInfos;
             }
+            PermissionUtils.permission(PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+                @Override
+                public void onGranted(List<String> permissionsGranted) {
             showWaitingResponseView();
+                }
+                @Override
+                public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                    mTRTCCalling.reject();
+                    ToastUtils.showShort(R.string.trtccalling_tips_start_audio);
+                    finish();
+                }
+            }).request();
         } else {
             // 主叫方
             IntentParams params = (IntentParams) intent.getSerializableExtra(PARAM_USER);
@@ -338,8 +351,18 @@ public class TRTCAudioCallActivity extends AppCompatActivity {
                 for (UserInfo userInfo : mCallUserInfoList) {
                     mCallUserModelMap.put(userInfo.userId, userInfo);
                 }
-                startInviting();
                 showInvitingView();
+                PermissionUtils.permission(PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+                    @Override
+                    public void onGranted(List<String> permissionsGranted) {
+                startInviting();
+                    }
+                    @Override
+                    public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                        ToastUtils.showShort(R.string.trtccalling_tips_start_audio);
+                        finish();
+                    }
+                }).request();
             }
         }
     }

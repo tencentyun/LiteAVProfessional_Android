@@ -18,6 +18,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.liteav.trtcchatsalon.R;
 import com.tencent.liteav.trtcchatsalon.model.TRTCChatSalon;
@@ -109,18 +111,30 @@ public class ChatSalonBaseActivity extends AppCompatActivity implements ChatSalo
             @Override
             public void onClick(View v) {
                 if (checkButtonPermission()) {
-                    boolean currentMode = !mBtnMic.isSelected();
-                    mBtnMic.setSelected(currentMode);
-                    if (currentMode) {
-                        mTRTCChatSalon.muteLocalAudio(false);
-                        ToastUtils.showLong(R.string.trtcchatsalon_already_open_mic);
-                    } else {
-                        mTRTCChatSalon.muteLocalAudio(true);
-                        ToastUtils.showLong(R.string.trtcchatsalon_already_close_mic);
-                    }
+                    PermissionUtils.permission(PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+                        @Override
+                        public void onGranted(List<String> permissionsGranted) {
+                            onMicButtonClick();
+                        }
+                        @Override
+                        public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                            ToastUtils.showShort(R.string.trtcchatsalon_tips_open_audio);
+                        }
+                    }).request();
                 }
             }
         });
+    }
+    private void onMicButtonClick() {
+        boolean currentMode = !mBtnMic.isSelected();
+        mBtnMic.setSelected(currentMode);
+        if (currentMode) {
+            mTRTCChatSalon.muteLocalAudio(false);
+            ToastUtils.showLong(R.string.trtcchatsalon_already_open_mic);
+        } else {
+            mTRTCChatSalon.muteLocalAudio(true);
+            ToastUtils.showLong(R.string.trtcchatsalon_already_close_mic);
+        }
     }
 
 

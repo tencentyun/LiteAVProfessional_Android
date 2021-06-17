@@ -21,6 +21,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.liteav.demo.videoediter.common.TCVideoEditerListAdapter;
 import com.tencent.qcloud.ugckit.UGCKitConstants;
@@ -44,7 +47,7 @@ import java.util.List;
  * 1、优点：具有"视频倒放"、"视频重复"两个时间特效、不具有拖动缩略图进行视频"单帧预览"功能
  * 2、缺点：导入视频相对于"快速导入"速度慢
  */
-public class TCVideoPickerActivity extends FragmentActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class TCVideoPickerActivity extends FragmentActivity implements View.OnClickListener {
     private static final String TAG = "TCVideoPickerActivity";
 
     private RecyclerView mRecyclerView;
@@ -63,55 +66,18 @@ public class TCVideoPickerActivity extends FragmentActivity implements View.OnCl
         setContentView(R.layout.ugcedit_activity_video_choose);
         initView();
         initData();
-        requestPermission();
-    }
-
-    private void requestPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-            List<String> mPermissionList = new ArrayList<>();
-            for (int i = 0; i < permissions.length; i++) {
-                if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
-                    mPermissionList.add(permissions[i]);
-                }
-            }
-            if (mPermissionList.isEmpty()) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadVideoList();
-                    }
-                });
-            } else {
-                //存在未允许的权限
-                String[] permissionsArr = mPermissionList.toArray(new String[mPermissionList.size()]);
-                ActivityCompat.requestPermissions(this, permissionsArr, 1);
-            }
-        } else {
-            //FIXBUG:Android6.0以下不需要动态获取权限
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
                 loadVideoList();
             }
-        }
 
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        boolean forbidden = false;
-        for (int i = 0; i < grantResults.length; i++) {
-            if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                forbidden = true;
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.ugcedit_app_storage);
+                finish();
             }
-        }
-        if (!forbidden) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    loadVideoList();
-                }
-            });
-        }
+        }).request();
     }
 
     public void loadVideoList() {

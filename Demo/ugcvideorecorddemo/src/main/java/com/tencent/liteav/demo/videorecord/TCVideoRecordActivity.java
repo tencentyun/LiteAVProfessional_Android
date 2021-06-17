@@ -14,6 +14,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.ugckit.UGCKitConstants;
 import com.tencent.qcloud.ugckit.UGCKitVideoRecord;
 import com.tencent.qcloud.ugckit.basic.UGCKitResult;
@@ -30,7 +33,7 @@ import java.util.List;
 /**
  * 小视频录制界面
  */
-public class TCVideoRecordActivity extends FragmentActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class TCVideoRecordActivity extends FragmentActivity {
 
     private UGCKitVideoRecord mUGCKitVideoRecord;
 
@@ -156,29 +159,18 @@ public class TCVideoRecordActivity extends FragmentActivity implements ActivityC
     @Override
     protected void onStart() {
         super.onStart();
-        if (hasPermission()) {
-            mUGCKitVideoRecord.start();
-        }
-    }
+        PermissionUtils.permission(PermissionConstants.CAMERA, PermissionConstants.STORAGE, PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                mUGCKitVideoRecord.start();
+            }
 
-    private boolean hasPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
-            List<String> mPermissionList = new ArrayList<>();
-            for (int i = 0; i < permissions.length; i++) {
-                if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
-                    mPermissionList.add(permissions[i]);
-                }
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.ugcrecord_app_camera_storage_mic);
+                finish();
             }
-            if (mPermissionList.size() != 0) {
-                //存在未允许的权限
-                String[] permissionsArr = mPermissionList.toArray(new String[mPermissionList.size()]);
-                ActivityCompat.requestPermissions(this, permissionsArr, 1);
-                return false;
-            }
-        }
-        return true;
+        }).request();
     }
 
     @Override
@@ -219,19 +211,5 @@ public class TCVideoRecordActivity extends FragmentActivity implements ActivityC
     @Override
     public void onBackPressed() {
         mUGCKitVideoRecord.backPressed();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (grantResults == null || permissions == null || permissions.length == 0 || grantResults.length == 0) {
-            return;
-        }
-
-        for (int ret : grantResults) {
-            if (ret != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-        }
-        mUGCKitVideoRecord.start();
     }
 }

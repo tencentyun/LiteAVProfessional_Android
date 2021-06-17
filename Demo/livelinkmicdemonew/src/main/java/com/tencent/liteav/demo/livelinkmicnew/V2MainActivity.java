@@ -894,6 +894,7 @@ public class V2MainActivity extends AppCompatActivity {
         container.isPlaying = false;
         container.playURL = url;
         container.livePlayer = player;
+        container.isCancelPlay = false;
 
         playerView.setTag(url);
         playerView.showCloseButton();
@@ -901,7 +902,8 @@ public class V2MainActivity extends AppCompatActivity {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!container.isPlaying) {
+                // 判断当前不是播放状态且用户没有主动取消播放提示拉流失败
+                if (!container.isPlaying && !container.isCancelPlay) {
                     Toast.makeText(V2MainActivity.this, getString(R.string.livelinkmicnew_toast_player_failure), Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "[Player] play error, timeout to receive first video");
                     resetPlayer(container);
@@ -1024,9 +1026,11 @@ public class V2MainActivity extends AppCompatActivity {
                     startPlayerLoading(mPlayerContainer, player);
                     break;
                 case V2TXLivePlayStatusStopped:
-                    resetPlayer(mPlayerContainer);
-                    mPlayerContainer.isPlaying = false;
-                    mPlayerContainer.isShowDebugView = false;
+                    if (reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonRemoteOffline) {
+                        resetPlayer(mPlayerContainer);
+                        mPlayerContainer.isPlaying = false;
+                        mPlayerContainer.isShowDebugView = false;
+                    }
                     break;
                 default:
                     break;
@@ -1057,9 +1061,11 @@ public class V2MainActivity extends AppCompatActivity {
                     startPlayerLoading(mPlayerContainer, player);
                     break;
                 case V2TXLivePlayStatusStopped:
-                    resetPlayer(mPlayerContainer);
-                    mPlayerContainer.isPlaying = false;
-                    mPlayerContainer.isShowDebugView = false;
+                    if (reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonRemoteOffline) {
+                        resetPlayer(mPlayerContainer);
+                        mPlayerContainer.isPlaying = false;
+                        mPlayerContainer.isShowDebugView = false;
+                    }
                     break;
                 default:
                     break;
@@ -1229,6 +1235,7 @@ public class V2MainActivity extends AppCompatActivity {
             resetPlayer(mPlayViewContainer);
             mPlayViewContainer.isPlaying = false;
             mPlayViewContainer.isShowDebugView = false;
+            mPlayViewContainer.isCancelPlay = true;
         }
     }
 
@@ -1639,6 +1646,7 @@ public class V2MainActivity extends AppCompatActivity {
         private boolean isMuteVideo;
         private boolean isMuteAudio;
         private String textTitle;
+        private boolean isCancelPlay;
     }
 
 }

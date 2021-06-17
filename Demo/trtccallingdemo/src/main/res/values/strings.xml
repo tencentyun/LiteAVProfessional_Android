@@ -28,4 +28,6 @@
     <string name="trtccalling_toast_voice_call">语音呼叫:%s</string>
     <string name="trtccalling_toast_not_call_myself">不能呼叫自己</string>
     <string name="trtccalling_title_have_a_call_invitation">您有一个通话请求</string>
+    <string name="trtccalling_tips_start_camera_audio">请先打开摄像头与麦克风权限</string>
+    <string name="trtccalling_tips_start_audio">请先打开麦克风权限</string>
 </resources>

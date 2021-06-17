@@ -58,8 +58,6 @@ public class LivePlayerMainActivity extends Activity {
 
     private static final String TAG = "LivePlayerActivity";
 
-    private static final int PERMISSION_REQUEST_CODE = 100;      //申请权限的请求码
-
     private Context          mContext;
 
     private ImageView        mImageLoading;          //显示视频缓冲动画
@@ -115,7 +113,6 @@ public class LivePlayerMainActivity extends Activity {
         initCacheStrategyButton();
         initAccButton();
         initNavigationBack();
-        requestPermissions();
         initRTMPURL();
 
         // 初始化完成之后自动播放
@@ -309,23 +306,6 @@ public class LivePlayerMainActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
         destroy();
-    }
-
-    private boolean requestPermissions() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            List<String> permissions = new ArrayList<>();
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)) {
-                permissions.add(Manifest.permission.CAMERA);
-            }
-            if (permissions.size() != 0) {
-                ActivityCompat.requestPermissions(this, permissions.toArray(new String[0]), PERMISSION_REQUEST_CODE);
-                return false;
-            }
-        }
-        return true;
     }
 
     private void startLoadingAnimation() {

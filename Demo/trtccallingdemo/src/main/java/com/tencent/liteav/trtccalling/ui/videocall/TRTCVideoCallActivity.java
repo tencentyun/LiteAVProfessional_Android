@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.squareup.picasso.Picasso;
 import com.tencent.liteav.trtccalling.R;
@@ -356,7 +358,18 @@ public class TRTCVideoCallActivity extends AppCompatActivity {
             if (params != null) {
                 mOtherInvitingUserInfoList = params.mUserInfos;
             }
-            showWaitingResponseView();
+            PermissionUtils.permission(PermissionConstants.CAMERA, PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+                @Override
+                public void onGranted(List<String> permissionsGranted) {
+                    showWaitingResponseView();
+                }
+                @Override
+                public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                    mTRTCCalling.reject();
+                    ToastUtils.showShort(R.string.trtccalling_tips_start_camera_audio);
+                    finish();
+                }
+            }).request();
         } else {
             // 主叫方
             IntentParams params = (IntentParams) intent.getSerializableExtra(PARAM_USER);
@@ -373,11 +386,21 @@ public class TRTCVideoCallActivity extends AppCompatActivity {
     }
 
     private void startInviting() {
-        List<String> list = new ArrayList<>();
+        final List<String> list = new ArrayList<>();
         for (UserInfo userInfo : mCallUserInfoList) {
             list.add(userInfo.userId);
         }
-        mTRTCCalling.groupCall(list, TRTCCalling.TYPE_VIDEO_CALL, "");
+        PermissionUtils.permission(PermissionConstants.CAMERA, PermissionConstants.MICROPHONE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                mTRTCCalling.groupCall(list, TRTCCalling.TYPE_VIDEO_CALL, "");
+            }
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.trtccalling_tips_start_camera_audio);
+                finish();
+            }
+        }).request();
     }
 
     private void initView() {
