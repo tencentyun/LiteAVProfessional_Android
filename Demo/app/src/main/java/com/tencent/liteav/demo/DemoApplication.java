@@ -61,6 +61,7 @@ public class DemoApplication extends MultiDexApplication {
             builder.detectFileUriExposure();
         }
         closeAndroidPDialog();
+        CallService.start(this);
     }
 
     //    public static RefWatcher getRefWatcher(Context context) {

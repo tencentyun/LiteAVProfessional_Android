@@ -84,7 +84,6 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                             ProfileManager.getInstance().logout(new ProfileManager.ActionCallback() {
                                 @Override
                                 public void onSuccess() {
-                                    CallService.stop(UserInfoActivity.this);
                                     // 退出登录
                                     mAlertDialog.dismiss();
                                     startLoginActivity();

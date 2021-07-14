@@ -78,7 +78,6 @@ public class LogOffActivity extends Activity {
             @Override
             public void onSuccess() {
                 ToastUtils.showShort(getString(R.string.app_logoff_account_ok));
-                CallService.stop(mContext);
                 // 注销登录
                 startLoginActivity();
             }

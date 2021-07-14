@@ -56,6 +56,7 @@
     <string name="livelinkmicnew_tv_disable_volume_tips">关闭</string>
     <string name="livelinkmicnew_tv_screen_snapshot">视频截图</string>
     <string name="livelinkmicnew_tv_snapshot">截图</string>
+    <string name="livelinkmicnew_tv_mute_audio">开启音频上行</string>
 
     <string name="livelinkmicnew_tv_volume_type">音量类型</string>
     <string name="livelinkmicnew_tv_volume_type_auto">自动</string>
@@ -74,6 +75,8 @@
     <string name="livelinkmicnew_tv_mirror_type_disable">关闭</string>
     <string name="livelinkmicnew_tv_enable_remote_mirror">开启远程镜像</string>
     <string name="livelinkmicnew_tv_enable_video_watermark">开启视频水印</string>
+    <string name="livelinkmicnew_tv_enable_virtual_camera">开启垫片推流</string>
+    <string name="livelinkmicnew_tv_enable_mute_video">开启视频上行</string>
 
     <string name="livelinkmicnew_primary_clip">已添加至剪切板</string>
 

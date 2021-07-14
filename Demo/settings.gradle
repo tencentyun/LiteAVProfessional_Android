@@ -1,14 +1,10 @@
+include ':trtcdemo'
 include ':app'
 include ':login'
 include ':debug'
 include ':ugckit'
 include ':beautysettingkit'
 //project(':beauty').projectDir = new File(settingsDir, '../../../../project/android/demo/liteav/beauty')
-include ':trtccallingdemo'
-include ':trtcliveroomdemo'
-include ':trtcvoiceroomdemo'
-include ':trtcmeetingdemo'
-include ':trtcchatsalondemo'
 include ':audioeffectsettingkit'
 
 include ':ugcvideoeditdemo'

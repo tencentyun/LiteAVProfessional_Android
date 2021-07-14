@@ -29,6 +29,7 @@ public class PushAudioSettingFragment extends Fragment {
     private RadioButtonSettingItem mAudioVolumeTypeItem;
     private CheckBoxSettingItem    mAudioEarMonitoringItem;
     private CheckBoxSettingItem    mAudioVolumeEvaluationItem;
+    private CheckBoxSettingItem    mAudioMuteItem;
     private AVSettingConfig.AudioConfig mAudioConfig;
     private V2TXLivePusher         mLivePusher;
 
@@ -107,6 +108,25 @@ public class PushAudioSettingFragment extends Fragment {
                 });
         mSettingItemList.add(mAudioVolumeEvaluationItem);
 
+        itemText =
+                new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_mute_audio), "");
+        mAudioMuteItem = new CheckBoxSettingItem(getContext(), itemText,
+                new CheckBoxSettingItem.ClickListener() {
+                    @Override
+                    public void onClick() {
+                        mAudioConfig.setEnableAudio(mAudioMuteItem.getChecked());
+                        if (mLivePusher != null) {
+                            boolean isChecked = mAudioMuteItem.getChecked();
+                            if (isChecked) {
+                                mLivePusher.resumeAudio();
+                            } else {
+                                mLivePusher.pauseAudio();
+                            }
+                        }
+                    }
+                });
+        mSettingItemList.add(mAudioMuteItem);
+
         updateItem();
 
         // 将这些view添加到对应的容器中
@@ -127,6 +147,7 @@ public class PushAudioSettingFragment extends Fragment {
         mAudioVolumeTypeItem.setSelect(mAudioConfig.getAudioVolumeType());
         mAudioEarMonitoringItem.setCheck(mAudioConfig.isEnableEarMonitoring());
         mAudioVolumeEvaluationItem.setCheck(mAudioConfig.isAudioVolumeEvaluation());
+        mAudioMuteItem.setCheck(mAudioConfig.isEnableAudio());
     }
 
     @Nullable

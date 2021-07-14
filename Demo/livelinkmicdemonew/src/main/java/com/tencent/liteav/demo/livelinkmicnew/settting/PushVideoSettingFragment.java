@@ -1,6 +1,7 @@
 package com.tencent.liteav.demo.livelinkmicnew.settting;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -52,6 +53,8 @@ public class PushVideoSettingFragment extends Fragment {
     private              RadioButtonSettingItem mMirrorTypeItem;
     private              CheckBoxSettingItem    mRemoteMirrorItem;
     private              CheckBoxSettingItem    mWatermark;
+    private              CheckBoxSettingItem    mVirtualCamera;
+    private              CheckBoxSettingItem    mMuteVideo;
 
     private AVSettingConfig.VideoConfig         mVideoConfig;
     private ArrayList<TRTCSettingBitrateTable>  paramArray;
@@ -169,6 +172,44 @@ public class PushVideoSettingFragment extends Fragment {
         mSettingItemList.add(mWatermark);
 
         itemText =
+                new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_enable_virtual_camera), "");
+        mVirtualCamera = new CheckBoxSettingItem(getContext(), itemText,
+                new CheckBoxSettingItem.ClickListener() {
+                    @Override
+                    public void onClick() {
+                        mVideoConfig.setMuteImageEnabled(mVirtualCamera.getChecked());
+                        if (mLivePusher != null) {
+                            boolean isChecked = mVirtualCamera.getChecked();
+                            if (isChecked) {
+                                mLivePusher.startVirtualCamera( BitmapFactory.decodeResource(getResources(), R.drawable.live_link_mic_pause_publish));
+                            } else {
+                                mLivePusher.stopVirtualCamera();
+                            }
+                        }
+                    }
+                });
+        mSettingItemList.add(mVirtualCamera);
+
+        itemText =
+                new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_enable_mute_video), "");
+        mMuteVideo = new CheckBoxSettingItem(getContext(), itemText,
+                new CheckBoxSettingItem.ClickListener() {
+                    @Override
+                    public void onClick() {
+                        mVideoConfig.setEnableVideo(mMuteVideo.getChecked());
+                        if (mLivePusher != null) {
+                            boolean isChecked = mMuteVideo.getChecked();
+                            if (isChecked) {
+                                mLivePusher.resumeVideo();
+                            } else {
+                                mLivePusher.pauseVideo();
+                            }
+                        }
+                    }
+                });
+        mSettingItemList.add(mMuteVideo);
+
+        itemText =
                 new BaseSettingItem.ItemText(getString(R.string.livelinkmicnew_tv_screen_snapshot), "");
         CustomSettingItem snapshotItem = new CustomSettingItem(getContext(), itemText, createSnapshotButton());
         snapshotItem.setAlign(CustomSettingItem.ALIGN_RIGHT);
@@ -226,6 +267,8 @@ public class PushVideoSettingFragment extends Fragment {
         mMirrorTypeItem.setSelect(index);
         mRemoteMirrorItem.setCheck(mVideoConfig.isRemoteMirror());
         mWatermark.setCheck(mVideoConfig.isWatermark());
+        mVirtualCamera.setCheck(mVideoConfig.isMuteImageEnabled());
+        mMuteVideo.setCheck(mVideoConfig.isEnableVideo());
     }
 
     @Nullable

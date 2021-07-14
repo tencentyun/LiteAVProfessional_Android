@@ -58,6 +58,7 @@
     <string name="livelinkmicnew_tv_disable_volume_tips">Off</string>
     <string name="livelinkmicnew_tv_screen_snapshot">Screenshot</string>
     <string name="livelinkmicnew_tv_snapshot">Take</string>
+    <string name="livelinkmicnew_tv_mute_audio">Mute Audio</string>
 
     <string name="livelinkmicnew_tv_volume_type">Volume Type</string>
     <string name="livelinkmicnew_tv_volume_type_auto">Auto</string>
@@ -76,6 +77,8 @@
     <string name="livelinkmicnew_tv_mirror_type_disable">Off</string>
     <string name="livelinkmicnew_tv_enable_remote_mirror">Remote Mirror</string>
     <string name="livelinkmicnew_tv_enable_video_watermark">Watermarking</string>
+    <string name="livelinkmicnew_tv_enable_virtual_camera">Push Image</string>
+    <string name="livelinkmicnew_tv_enable_mute_video">Mute Video</string>
 
     <string name="livelinkmicnew_primary_clip">Copied to clipboard</string>
 

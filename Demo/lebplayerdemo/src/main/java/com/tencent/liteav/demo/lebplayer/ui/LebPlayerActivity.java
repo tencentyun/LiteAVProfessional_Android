@@ -219,7 +219,7 @@ public class LebPlayerActivity extends AppCompatActivity {
                     if (audio) {
                         break;
                     }
-                    mPlayerState = PLAY_STATE_INIT;
+                    mPlayerState = PLAY_STATE_PAUSE;
                     mPlayerView.dismissLoading();
                     if (reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonRemoteStopped) {
                         Toast.makeText(LebPlayerActivity.this, "disconnect!", Toast.LENGTH_LONG).show();

@@ -27,14 +27,11 @@ import android.widget.TextView;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.tencent.bugly.beta.Beta;
-import com.tencent.liteav.liveroom.ui.liveroomlist.LiveRoomListActivity;
 import com.tencent.liteav.login.model.ProfileManager;
 import com.tencent.liteav.login.ui.LoginActivity;
-import com.tencent.liteav.meeting.ui.CreateMeetingActivity;
-import com.tencent.liteav.trtccalling.model.TRTCCalling;
-import com.tencent.liteav.trtccalling.ui.TRTCCallingEntranceActivity;
-import com.tencent.liteav.trtcchatsalon.ui.list.ChatSalonListActivity;
-import com.tencent.liteav.trtcvoiceroom.ui.list.VoiceRoomListActivity;
+import com.tencent.liteav.trtcdemo.ui.TRTCCallEnterActivity;
+import com.tencent.liteav.trtcdemo.ui.TRTCLiveEnterActivity;
+import com.tencent.liteav.trtcdemo.ui.TRTCSpeedTestActivity;
 import com.tencent.rtmp.TXLiveBase;
 
 import java.io.File;
@@ -119,7 +116,6 @@ public class TRTCMainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        CallService.start(this);
     }
 
     @Override
@@ -130,7 +126,6 @@ public class TRTCMainActivity extends Activity {
                 .setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        CallService.stop(TRTCMainActivity.this);
                         finish();
                     }
                 })
@@ -160,7 +155,6 @@ public class TRTCMainActivity extends Activity {
                             ProfileManager.getInstance().logout(new ProfileManager.ActionCallback() {
                                 @Override
                                 public void onSuccess() {
-                                    CallService.stop(TRTCMainActivity.this);
                                     // 退出登录
                                     startLoginActivity();
                                 }
@@ -192,12 +186,12 @@ public class TRTCMainActivity extends Activity {
 
     private List<TRTCItemEntity> createTRTCItems() {
         List<TRTCItemEntity> list = new ArrayList<>();
-        list.add(new TRTCItemEntity(getString(R.string.item_video_conferencing), getString(R.string.app_tv_video_conferencing_tips), R.drawable.multi_meeting, 0, CreateMeetingActivity.class));
-        list.add(new TRTCItemEntity(getString(R.string.item_chat_room), getString(R.string.app_tv_chat_room_tips), R.drawable.voice_chatroom, 0, VoiceRoomListActivity.class));
-        list.add(new TRTCItemEntity(getString(R.string.item_video_interactive_live_streaming), getString(R.string.app_tv_video_interactive_live_streaming_tips), R.drawable.live_stream, 0, LiveRoomListActivity.class));
-        list.add(new TRTCItemEntity(getString(R.string.item_voice_call), getString(R.string.app_tv_voice_call_tips), R.drawable.voice_call, TRTCCalling.TYPE_AUDIO_CALL, TRTCCallingEntranceActivity.class));
-        list.add(new TRTCItemEntity(getString(R.string.item_video_call), getString(R.string.app_tv_video_call_tips), R.drawable.video_call, TRTCCalling.TYPE_VIDEO_CALL, TRTCCallingEntranceActivity.class));
-        list.add(new TRTCItemEntity(getString(R.string.item_chat_salon), "", R.drawable.chat_salon, 0, ChatSalonListActivity.class));
+
+        list.add(new TRTCItemEntity(getString(R.string.item_trtc_speed_test),"", R.drawable.room_multi, 1, TRTCSpeedTestActivity.class));
+        list.add(new TRTCItemEntity(getString(R.string.item_trtc_live),"", R.drawable.room_multi, 1, TRTCLiveEnterActivity.class));
+        list.add(new TRTCItemEntity(getString(R.string.item_trtc_call),"", R.drawable.room_multi, 1, TRTCCallEnterActivity.class));
+        list.add(new TRTCItemEntity(getString(R.string.item_trtc_app),"", R.drawable.trtcdemo_fill_adjust, 0, null));
+
         return list;
     }
 

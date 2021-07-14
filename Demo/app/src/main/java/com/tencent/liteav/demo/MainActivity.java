@@ -2,13 +2,16 @@ package com.tencent.liteav.demo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +30,11 @@ import com.tencent.liteav.demo.player.demo.SuperPlayerActivity;
 import com.tencent.liteav.demo.videoediter.TCVideoPickerActivity;
 import com.tencent.liteav.demo.videojoiner.ui.TCVideoJoinChooseActivity;
 import com.tencent.liteav.demo.videorecord.TCVideoSettingActivity;
-import com.tencent.liteav.liveroom.ui.liveroomlist.LiveRoomListActivity;
-import com.tencent.liteav.meeting.ui.CreateMeetingActivity;
-import com.tencent.liteav.trtccalling.model.TRTCCalling;
-import com.tencent.liteav.trtccalling.ui.TRTCCallingEntranceActivity;
-import com.tencent.liteav.trtcvoiceroom.ui.list.VoiceRoomListActivity;
+import com.tencent.liteav.login.model.ProfileManager;
+import com.tencent.liteav.login.ui.LoginActivity;
+import com.tencent.liteav.trtcdemo.ui.TRTCCallEnterActivity;
+import com.tencent.liteav.trtcdemo.ui.TRTCLiveEnterActivity;
+import com.tencent.liteav.trtcdemo.ui.TRTCSpeedTestActivity;
 import com.tencent.rtmp.TXLiveBase;
 
 import java.io.File;
@@ -46,12 +49,16 @@ import java.util.zip.ZipOutputStream;
 
 public class MainActivity extends Activity {
 
-    private static final String   TAG = MainActivity.class.getName();
-    private              TextView mMainTitle, mTvVersion;
-    private RecyclerView          mRvList;
-    private MainExpandableAdapter mAdapter;
-    private ImageView             mLogoutImg;
-    private AlertDialog           mAlertDialog;
+    private static final String     TAG = MainActivity.class.getName();
+    private static final String     TRTC_APP_PACKAGE_NAME = "com.tencent.trtc";
+    private static final String     TRTC_APP_MAIN_CLASS_NAME = "com.tencent.liteav.demo.SplashActivity";
+
+    private TextView                mMainTitle, mTvVersion;
+    private RecyclerView            mRvList;
+    private MainExpandableAdapter   mAdapter;
+    private ImageView               mLogoutImg;
+    private AlertDialog             mAlertDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +73,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mTvVersion = (TextView) findViewById(R.id.main_tv_version);
-        mTvVersion.setText(getString(R.string.app_tv_video_cloud_tools_version, TXLiveBase.getSDKVersionStr()+"(8.8.912)"));
+        mTvVersion.setText(getString(R.string.app_tv_video_cloud_tools_version, TXLiveBase.getSDKVersionStr()+"(8.9.1015)"));
 
         mMainTitle = (TextView) findViewById(R.id.main_title);
         mMainTitle.setOnLongClickListener(new View.OnLongClickListener() {
@@ -79,7 +86,6 @@ public class MainActivity extends Activity {
                         if (logFile != null) {
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             intent.setType("application/octet-stream");
-                            //intent.setPackage("com.tencent.mobileqq");
                             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(logFile));
                             startActivity(Intent.createChooser(intent, getString(R.string.app_title_share_log)));
                         }
@@ -90,11 +96,10 @@ public class MainActivity extends Activity {
         });
         mLogoutImg = (ImageView) findViewById(R.id.img_logout);
         mLogoutImg.setVisibility(View.VISIBLE);
-        final Intent intent = new Intent(this, UserInfoActivity.class);
         mLogoutImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intent);
+                showLogoutDialog();
             }
         });
 
@@ -130,6 +135,13 @@ public class MainActivity extends Activity {
                     intent.setData(Uri.parse("http://dldir1.qq.com/hudongzhibo/liteav/xiaozhibo.apk"));
                     startActivity(intent);
                     return;
+                } else if (childItem.mIconId == R.drawable.trtcdemo_fill_adjust){
+                    if(checkAPP()){
+                        jumpTRTCAPP();
+                    }else{
+                        jumpDownloadPage();
+                    }
+                    return;
                 }
                 Intent intent = new Intent(MainActivity.this, childItem.getTargetClass());
                 intent.putExtra("TITLE", childItem.mName);
@@ -140,10 +152,38 @@ public class MainActivity extends Activity {
         mRvList.setAdapter(mAdapter);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        CallService.start(this);
+    private void showLogoutDialog() {
+        if (mAlertDialog == null) {
+            mAlertDialog = new AlertDialog.Builder(this, R.style.common_alert_dialog)
+                    .setMessage(getString(R.string.app_dialog_log_out))
+                    .setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 执行退出登录操作
+                            ProfileManager.getInstance().logout(new ProfileManager.ActionCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    // 退出登录
+                                    startLoginActivity();
+                                }
+
+                                @Override
+                                public void onFailed(int code, String msg) {
+                                }
+                            });
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create();
+        }
+        if (!mAlertDialog.isShowing()) {
+            mAlertDialog.show();
+        }
     }
 
     @Override
@@ -154,7 +194,6 @@ public class MainActivity extends Activity {
                 .setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        CallService.stop(MainActivity.this);
                         finish();
                     }
                 })
@@ -166,6 +205,12 @@ public class MainActivity extends Activity {
                 })
                 .create();
         alertDialog.show();
+    }
+
+    private void startLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private List<GroupBean> initGroupData() {
@@ -210,13 +255,13 @@ public class MainActivity extends Activity {
             groupList.add(shortVideoGroupBean);
         }
 
-        // 视频通话
+        // TRTC
         List<ChildBean> videoConnectChildList = new ArrayList<>();
-        videoConnectChildList.add(new ChildBean(getString(R.string.item_video_conferencing), R.drawable.multi_meeting, 0, CreateMeetingActivity.class));
-        videoConnectChildList.add(new ChildBean(getString(R.string.item_chat_room), R.drawable.room_multi, 0, VoiceRoomListActivity.class));
-        videoConnectChildList.add(new ChildBean(getString(R.string.item_video_interactive_live_streaming), R.drawable.room_multi, 1, LiveRoomListActivity.class));
-        videoConnectChildList.add(new ChildBean(getString(R.string.item_voice_call), R.drawable.room_multi, TRTCCalling.TYPE_AUDIO_CALL, TRTCCallingEntranceActivity.class));
-        videoConnectChildList.add(new ChildBean(getString(R.string.item_video_call), R.drawable.room_multi, TRTCCalling.TYPE_VIDEO_CALL, TRTCCallingEntranceActivity.class));
+        videoConnectChildList.add(new ChildBean(getString(R.string.item_trtc_speed_test), R.drawable.room_multi, 1, TRTCSpeedTestActivity.class));
+        videoConnectChildList.add(new ChildBean(getString(R.string.item_trtc_live), R.drawable.room_multi, 1, TRTCLiveEnterActivity.class));
+        videoConnectChildList.add(new ChildBean(getString(R.string.item_trtc_call), R.drawable.room_multi, 1, TRTCCallEnterActivity.class));
+        videoConnectChildList.add(new ChildBean(getString(R.string.item_trtc_app), R.drawable.trtcdemo_fill_adjust, 0, null));
+
         if (videoConnectChildList.size() != 0) {
             GroupBean videoConnectGroupBean = new GroupBean(getString(R.string.app_item_trtc), R.drawable.room_multi, videoConnectChildList);
             groupList.add(videoConnectGroupBean);
@@ -465,4 +510,33 @@ public class MainActivity extends Activity {
         }
         return zipFile;
     }
+
+
+    private void jumpDownloadPage() {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://dldir1.qq.com/hudongzhibo/liteav/TRTCDemo.apk"));
+        startActivity(intent);
+    }
+
+    private void jumpTRTCAPP() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        ComponentName componentName = new ComponentName(TRTC_APP_PACKAGE_NAME, TRTC_APP_MAIN_CLASS_NAME);
+        intent.setComponent(componentName);
+        startActivity(intent);
+    }
+
+    private boolean checkAPP() {
+        List<PackageInfo> packages = getPackageManager().getInstalledPackages(0);
+        for (int i = 0; i < packages.size(); i++) {
+            PackageInfo packageInfo = packages.get(i);
+            if(packageInfo != null && !TextUtils.isEmpty(packageInfo.packageName)){
+                if(TRTC_APP_PACKAGE_NAME.equals(packageInfo.packageName)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

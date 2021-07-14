@@ -493,7 +493,7 @@ public class V2MainActivity extends AppCompatActivity {
                                 Intent intent = new Intent(V2MainActivity.this, QRCodeScanActivity.class);
                                 startActivityForResult(intent, ACTIVITY_PUSHER_REQUEST_CODE);
                             }
-                        }, 200);
+                        }, 500);
                     }
                 });
                 mPushChooseTypeFragmentDialog.setIsPlay(false);
@@ -646,7 +646,7 @@ public class V2MainActivity extends AppCompatActivity {
                         intent.putExtra("position", positionView);
                         startActivityForResult(intent, ACTIVITY_PLAYER_REQUEST_CODE);
                     }
-                }, 200);
+                }, 500);
             }
         });
         mPlayChooseTypeFragmentDialog.setIsPlay(true);
@@ -1294,11 +1294,11 @@ public class V2MainActivity extends AppCompatActivity {
             }
             if (!mIsMuteAudio) {
                 ((ImageView) view).setImageResource(R.drawable.live_link_mic_new_ic_bottom_mic_off);
-                mLivePusher.stopMicrophone();
+                mLivePusher.pauseAudio();
                 mIsMuteAudio = true;
             } else {
                 ((ImageView) view).setImageResource(R.drawable.live_link_mic_new_ic_bottom_mic_on);
-                mLivePusher.startMicrophone();
+                mLivePusher.resumeAudio();
                 mIsMuteAudio = false;
             }
         }

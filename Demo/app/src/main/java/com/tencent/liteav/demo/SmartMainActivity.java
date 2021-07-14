@@ -140,7 +140,6 @@ public class SmartMainActivity extends Activity {
                             ProfileManager.getInstance().logout(new ProfileManager.ActionCallback() {
                                 @Override
                                 public void onSuccess() {
-                                    CallService.stop(SmartMainActivity.this);
                                     // 退出登录
                                     startLoginActivity();
                                 }
@@ -167,7 +166,6 @@ public class SmartMainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        CallService.start(this);
     }
 
     @Override
@@ -178,7 +176,6 @@ public class SmartMainActivity extends Activity {
                 .setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        CallService.stop(SmartMainActivity.this);
                         finish();
                     }
                 })

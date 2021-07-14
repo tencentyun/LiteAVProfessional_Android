@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/trtcdemo_bg_main_gradient"
+    android:orientation="vertical">
+
+    <com.tencent.liteav.trtcdemo.ui.widget.videolayout.TRTCVideoLayoutManager
+        android:id="@+id/trtc_video_view_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+    </com.tencent.liteav.trtcdemo.ui.widget.videolayout.TRTCVideoLayoutManager>
+
+    <ImageView
+        android:id="@+id/trtc_iv_log"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/icon_height"
+        android:src="@drawable/trtcdemo_ic_trtc_log2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="15dp"/>
+
+    <ImageButton
+        android:id="@+id/trtc_ib_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@color/transparent"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:src="@drawable/trtcdemo_ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/trtc_tv_room_id"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="left|center_vertical"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="23dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/trtc_iv_camera"
+            android:layout_width="45dp"
+            android:layout_height="@dimen/icon_height"
+            android:src="@drawable/trtcdemo_ic_camera_back"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/iv_camera_on_off"
+            android:layout_width="45dp"
+            android:layout_height="@dimen/icon_height"
+            android:src="@drawable/trtcdemo_remote_video_enable"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/trtc_iv_mic"
+            android:layout_width="44dp"
+            android:layout_height="@dimen/icon_height"
+            android:src="@drawable/trtcdemo_mic_enable"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/trtc_iv_beauty"
+            android:layout_width="44dp"
+            android:layout_height="@dimen/icon_height"
+            android:src="@drawable/trtcdemo_beauty"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/trtc_iv_music"
+            android:layout_width="45dp"
+            android:layout_height="@dimen/icon_height"
+            android:padding="5dp"
+            android:src="@drawable/trtcdemo_ic_pusher_bgm"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/trtc_iv_setting"
+            android:layout_width="44dp"
+            android:layout_height="@dimen/icon_height"
+            android:src="@drawable/trtcdemo_ic_setting"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/trtc_iv_more"
+            android:layout_width="40dp"
+            android:layout_height="@dimen/icon_height"
+            android:padding="3dp"
+            android:src="@drawable/trtcdemo_ic_member_show"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <com.tencent.liteav.demo.beauty.view.BeautyPanel
+        android:id="@+id/trtc_beauty_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible" />
+
+    <com.tencent.liteav.audiosettingkit.AudioEffectPanel
+        android:id="@+id/anchor_audio_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="gone"/>
+
+
+    <FrameLayout
+        android:id="@+id/trtc_fl_link_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ImageView
+            android:id="@+id/trtc_iv_link_loading"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:focusable="true" />
+    </FrameLayout>
+</android.support.constraint.ConstraintLayout>

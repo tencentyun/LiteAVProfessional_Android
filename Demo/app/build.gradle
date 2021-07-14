@@ -8,8 +8,8 @@ android {
         applicationId "com.tencent.liteav.demo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 18
-        versionName "8.8.912"
+        versionCode 19
+        versionName "8.9.1015"
 
         multiDexEnabled true
         ndk {
@@ -43,12 +43,6 @@ android {
 dependencies {
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
-
-    compile project(':trtcliveroomdemo')
-    compile project(':trtcvoiceroomdemo')
-    compile project(':trtccallingdemo')
-    compile project(':trtcmeetingdemo')
-    compile project(':trtcchatsalondemo')
     compile project(':login')
     compile project(':ugcvideoeditdemo')
     compile project(':ugcvideojoindemo')
@@ -61,6 +55,7 @@ dependencies {
     compile project(':livelinkmicdemoold')
     compile project(':livelinkmicdemonew')
     compile project(':livepusherscreendemo')
+    compile project(':trtcdemo')
 
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.android.support:recyclerview-v7:25.+'
