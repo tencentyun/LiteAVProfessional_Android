@@ -9,11 +9,7 @@
 |  ├─ beautysettingkit      // 美颜面板，包含美颜，滤镜，动效等效果
 |  ├─ debug                 // 包含 GenerateTestUserSig，用于本地生成测试用的 UserSig
 |  ├─ login                 // 一个演示性质的简单登录界面
-|  ├─ trtcmeetingdemo       // 场景一：多人会议，类似腾讯会议，包含屏幕分享
-|  ├─ trtcvoiceroomdemo     // 场景二：语音聊天室，也叫语聊房，多人音频聊天场景
-|  ├─ trtcliveroomdemo      // 场景三：互动直播，包含连麦、PK、聊天、点赞等特性
-|  ├─ trtcaudiocalldemo     // 场景四：音频通话，展示双人音频通话，有离线通知能力
-|  ├─ trtcvideocalldemo     // 场景五：视频通话，展示双人视频通话，有离线通知能力
+|  ├─ trtcdemo              // 包含 网络测速、视频互动、视频通话、跳转TRTC APP 等功能
 |  ├─ liveplayerdemo        // 直播播放，可以扫码播放地址进行播放
 |  ├─ livepusherdemo        // 直播推流，包含推流时，设置美颜，音效，等基础操作
 |  ├─ livelinkmicdemoold    // 互动直播，包含连麦、聊天、点赞等特性
@@ -41,8 +37,8 @@
 ## 相关文档链接
 
 - [SDK 的版本更新历史](https://github.com/tencentyun/LiteAVProfessional_Android/releases)
-- [实时音视频（TRTC） API文档](https://cloud.tencent.com/document/product/647/32267)
+- [实时音视频（TRTC） API文档](http://doc.qcloudtrtc.com/md_introduction_trtc_Android_%E6%A6%82%E8%A7%88.html)
 - [播放器（Player） API文档](https://github.com/tencentyun/SuperPlayer_Android/wiki)
 - [移动直播（MLVB） API文档](https://cloud.tencent.com/document/product/454/34766)
-- [短视频（UGSV） API文档](https://liteav.sdk.qcloud.com/doc/api/zh-cn/group__TXUGCRecord__android.html)
+- [短视频（UGSV） API文档](http://doc.qcloudtrtc.com/group__TXUGCRecord__android.html)
 - [Demo体验](https://cloud.tencent.com/document/product/454/6555#.E7.B2.BE.E7.AE.80.E7.89.88-demo)
