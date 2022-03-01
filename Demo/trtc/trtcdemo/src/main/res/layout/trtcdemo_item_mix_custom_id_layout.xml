@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:gravity="top"
+        android:layout_weight="1"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:text="@string/trtcdemo_mix_id"
+        android:layout_alignParentLeft="true" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_weight="2" >
+
+        <EditText
+            android:id="@+id/trtcdemo_mix_custom_id_et"
+            android:layout_width="wrap_content"
+            android:hint="@string/trtcdemo_mix_custom_id"
+            android:textSize="15sp"
+            android:inputType="numberDecimal"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/trtcdemo_mix_custom_id_btn"
+            android:layout_width="60dp"
+            android:text="@string/trtcdemo_set"
+            android:layout_marginStart="3dp"
+            android:textSize="15sp"
+            android:background="@drawable/trtcdemo_radio_border"
+            android:layout_height="28dp" />
+    </LinearLayout>
+</LinearLayout>

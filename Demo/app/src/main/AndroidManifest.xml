@@ -14,9 +14,9 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
 
-        <!-- 【必须】消息收发service -->
-
-        <activity android:name=".SplashActivity" android:launchMode="singleTask"
+        <activity
+            android:name=".SplashActivity"
+            android:launchMode="singleTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +39,7 @@
 
                 <data
                     android:host="com.tencent.liteav.demo"
-                    android:scheme="liteav"/>
+                    android:scheme="liteav" />
             </intent-filter>
         </activity>
 
@@ -75,7 +75,7 @@
         <activity
             android:name=".WebViewActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.NoActionBar" >
+            android:theme="@android:style/Theme.Holo.NoActionBar">
             <intent-filter>
                 <action android:name="com.tencent.liteav.action.videocloud.webview" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -83,19 +83,24 @@
         </activity>
 
         <activity
-            android:name=".LogOffActivity"
+            android:name=".LogoffActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.NoActionBar" />
 
-        <service android:name="com.blankj.utilcode.util.MessengerUtils$ServerService"
+        <service
+            android:name="com.blankj.utilcode.util.MessengerUtils$ServerService"
             android:exported="false"
-            tools:node="merge">
-        </service>
-        <service android:name=".CallService" android:enabled="true" android:exported="false" />
+            tools:node="merge"></service>
+        <service
+            android:name=".CallService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -118,5 +123,8 @@
 
     <!-- <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
 </manifest>

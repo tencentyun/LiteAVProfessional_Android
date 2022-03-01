@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="liveplayer_cache_strategy">
+        <item>Speed</item>
+        <item>Smooth</item>
+        <item>Auto</item>
+    </string-array>
+
+    <string-array name="liveplayer_hw_decode">
+        <item>Hardware decoding</item>
+        <item>Software decoding</item>
+    </string-array>
+
+    <string-array name="liveplayer_render_type_with_surface">
+        <item>TXCloudVideoView</item>
+        <item>TextureView</item>
+        <item>SurfaceView</item>
+        <item>CustomRender</item>
+        <item>Surface</item>
+    </string-array>
+
+    <string-array name="liveplayer_render_type_without_surface">
+        <item>TXCloudVideoView</item>
+        <item>TextureView</item>
+        <item>SurfaceView</item>
+        <item>CustomRender</item>
+    </string-array>
+
+    <string-array name="liveplayer_custom_render_type">
+        <item>Texture2D + Texture</item>
+        <item>I420 + ByteArray</item>
+        <item>I420 + ByteBuffer</item>
+    </string-array>
+</resources>

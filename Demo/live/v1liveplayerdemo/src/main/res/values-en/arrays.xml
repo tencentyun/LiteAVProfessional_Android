@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="v1liveplayer_cache_strategy">
+        <item>Speed</item>
+        <item>Smooth</item>
+        <item>Auto</item>
+    </string-array>
+
+    <string-array name="v1liveplayer_hw_decode">
+        <item>Hardware decoding</item>
+        <item>Software decoding</item>
+    </string-array>
+
+    <string-array name="v1liveplayer_render_type">
+        <item>TXCloudVideoView</item>
+        <item>Custom Render</item>
+        <item>Surface</item>
+    </string-array>
+
+    <string-array name="v1liveplayer_custom_render_type">
+        <item>NV21</item>
+        <item>I420</item>
+    </string-array>
+</resources>

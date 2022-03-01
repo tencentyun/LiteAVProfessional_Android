@@ -1,30 +1,38 @@
 package com.tencent.liteav.demo.common.widget;
 
 import android.content.Context;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.blankj.utilcode.util.ToastUtils;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.tencent.liteav.demo.R;
+import com.tencent.liteav.demo.common.UserModel;
+import com.tencent.liteav.demo.common.UserModelManager;
 import com.tencent.liteav.login.model.ProfileManager;
-import com.tencent.liteav.login.model.UserModel;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class ModifyUserAvatarDialog extends BottomSheetDialog {
-    private UserModel mUserModel;
-    private Context mContext;
+    private UserModel             mUserModel;
+    private Context               mContext;
     private ModifySuccessListener mListener;
-    private RecyclerView mRvAvatar;
-    private String mSelectAvatarUrl;
+    private RecyclerView          mRvAvatar;
+    private String                mSelectAvatarUrl;
 
+    /**
+     * Modify the user avatar dialog.
+     *
+     * @param context
+     * @param listener
+     */
     public ModifyUserAvatarDialog(Context context, ModifySuccessListener listener) {
         super(context, R.style.AppBottomDialog);
-        mUserModel = ProfileManager.getInstance().getUserModel();
+        mUserModel = UserModelManager.getInstance().getUserModel();
         if (mUserModel == null) {
             dismiss();
             return;
@@ -37,12 +45,13 @@ public class ModifyUserAvatarDialog extends BottomSheetDialog {
         mRvAvatar.setLayoutManager(gridLayoutManager);
         String[] avatarArr = AvatarConstant.USER_AVATAR_ARRAY;
         List<String> avatarList = Arrays.asList(avatarArr);
-        AvatarListAdapter adapter = new AvatarListAdapter(context, avatarList, new AvatarListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(String avatarUrl) {
-                mSelectAvatarUrl = avatarUrl;
-            }
-        });
+        AvatarListAdapter adapter =
+                new AvatarListAdapter(context, avatarList, new AvatarListAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(String avatarUrl) {
+                        mSelectAvatarUrl = avatarUrl;
+                    }
+                });
         mRvAvatar.setAdapter(adapter);
         findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
             @Override

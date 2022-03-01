@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="v2_live_pixel_format">
+        <item>Unknown</item>
+        <item>I420</item>
+        <item>Texture2D</item>
+    </string-array>
+
+    <string-array name="v2_live_buffer_type">
+        <item>Unknown</item>
+        <item>ByteBuffer</item>
+        <item>Texture</item>
+        <item>ByteArray</item>
+    </string-array>
+</resources>

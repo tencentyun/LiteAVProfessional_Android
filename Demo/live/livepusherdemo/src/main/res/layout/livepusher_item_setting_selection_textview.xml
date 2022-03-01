@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="50dp"
+    android:gravity="right"
+    android:padding="5dp"
+    android:background="@drawable/livepusher_bg_main_gradient"
+    android:textSize="15sp"
+    android:textColor="@color/livepusher_white" />

@@ -1,0 +1,170 @@
+package com.tencent.liteav.demo.videoediter;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.ToastUtils;
+import com.tencent.liteav.demo.common.utils.IntentUtils;
+import com.tencent.liteav.demo.videoediter.common.TCVideoEditerListAdapter;
+import com.tencent.qcloud.ugckit.UGCKitConstants;
+import com.tencent.qcloud.ugckit.module.picker.data.PickerManagerKit;
+import com.tencent.qcloud.ugckit.module.picker.data.TCVideoFileInfo;
+import com.tencent.qcloud.ugckit.utils.VideoChecker;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 腾讯云"短视频导入"功能使用参考 Demo
+ * <p>
+ * 有"快速导入" 和"全功能导入" 两种视频导入方式
+ * <p>
+ * 快速导入：
+ * 1、优点：导入视频速度快
+ * 2、缺点：不具有"视频倒放"、"视频重复"两个时间特效、不具有拖动缩略图进行视频"单帧预览"功能
+ * <p>
+ * 全功能导入：
+ * 1、优点：具有"视频倒放"、"视频重复"两个时间特效、不具有拖动缩略图进行视频"单帧预览"功能
+ * 2、缺点：导入视频相对于"快速导入"速度慢
+ */
+public class TCVideoPickerActivity extends FragmentActivity implements View.OnClickListener {
+    private static final String TAG = "TCVideoPickerActivity";
+
+    private RecyclerView             mRecyclerView;
+    private Button                   mButtonFullImport;      // 全功能导入
+    private Button                   mButtonFastImport;      // 快速导入
+    private ImageButton              mButtonLink;
+    private LinearLayout             mLayoutBack;
+    private TCVideoEditerListAdapter mAdapter;
+    private HandlerThread            mHandlerThread;
+    private Handler                  mHandler;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.ugcedit_activity_video_choose);
+        initView();
+        initData();
+        PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.FullCallback() {
+            @Override
+            public void onGranted(List<String> permissionsGranted) {
+                loadVideoList();
+            }
+
+            @Override
+            public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
+                ToastUtils.showShort(R.string.ugcedit_app_storage);
+                finish();
+            }
+        }).request();
+    }
+
+    public void loadVideoList() {
+        ArrayList<TCVideoFileInfo> fileInfoArrayList = PickerManagerKit.getInstance(this).getAllVideo();
+
+        Message msg = new Message();
+        msg.obj = fileInfoArrayList;
+        mMainHandler.sendMessage(msg);
+    }
+
+    private Handler mMainHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            ArrayList<TCVideoFileInfo> fileInfoArrayList = (ArrayList<TCVideoFileInfo>) msg.obj;
+            mAdapter.addAll(fileInfoArrayList);
+        }
+    };
+
+    private void initData() {
+        mHandlerThread = new HandlerThread("LoadList");
+        mHandlerThread.start();
+        mHandler = new Handler(mHandlerThread.getLooper());
+    }
+
+    private void initView() {
+        mButtonFullImport = (Button) findViewById(R.id.btn_full_import);
+        mButtonFullImport.setOnClickListener(this);
+        mButtonFastImport = (Button) findViewById(R.id.btn_fast_import);
+        mButtonFastImport.setOnClickListener(this);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+        mAdapter = new TCVideoEditerListAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setMultiplePick(false);
+
+        mLayoutBack = (LinearLayout) findViewById(R.id.ll_back);
+        mButtonLink = (ImageButton) findViewById(R.id.ib_webrtc_link);
+
+        mLayoutBack.setOnClickListener(this);
+        mButtonLink.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        boolean fastImport = false;
+        if (v.getId() == R.id.btn_fast_import) {
+            // 快速导入
+            fastImport = true;
+            doSelect(fastImport);
+        } else if (v.getId() == R.id.btn_full_import) {
+            // 全功能导入
+            fastImport = false;
+            doSelect(fastImport);
+        } else if (i == R.id.ib_webrtc_link) {
+            showCloudLink();
+        } else if (i == R.id.ll_back) {
+            finish();
+        }
+    }
+
+    private void showCloudLink() {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://cloud.tencent.com/document/product/584/9502"));
+        IntentUtils.safeStartActivity(this, intent);
+    }
+
+    private void doSelect(boolean fastImport) {
+        TCVideoFileInfo fileInfo = mAdapter.getSingleSelected();
+        if (fileInfo == null) {
+            Log.d(TAG, "select file null");
+            return;
+        }
+        if (VideoChecker.isVideoDamaged(this, fileInfo)) {
+            VideoChecker.showErrorDialog(this, "该视频文件已经损坏");
+            return;
+        }
+//        if (fastImport) {
+//             快速导入
+//            Intent intent = new Intent(this, TCVideoEditerActivity.class);
+//            intent.putExtra(UGCKitConstants.VIDEO_PATH, fileInfo.getFilePath());
+//            startActivity(intent);
+//        } else {
+        // 全功能导入
+        Intent intent = new Intent(this, TCVideoCutActivity.class);
+        intent.putExtra(UGCKitConstants.VIDEO_PATH, fileInfo.getFilePath());
+        intent.putExtra(UGCKitConstants.VIDEO_URI, fileInfo.getFileUri().toString());
+        startActivity(intent);
+//        }
+    }
+}

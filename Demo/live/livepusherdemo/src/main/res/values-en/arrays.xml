@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="livepusher_voice_channel">
+        <item>Voice</item>
+        <item>Standard</item>
+        <item>Music</item>
+    </string-array>
+
+    <string-array name="livepusher_render_rotation">
+        <item>0</item>
+        <item>90</item>
+        <item>180</item>
+        <item>270</item>
+    </string-array>
+
+    <string-array name="livepusher_render_mirror">
+        <item>Auto</item>
+        <item>Disable</item>
+        <item>Enable</item>
+    </string-array>
+
+    <string-array name="livepusher_setting">
+        <item>Bandwidth Adaptation</item>
+        <item>In-ear Monitor</item>
+        <item>Mute</item>
+        <item>Landscape</item>
+        <item>Watermarking</item>
+        <item>Playback Mirror</item>
+        <item>Back Flashlight</item>
+        <item>Tap to Adjust Focus/Exposure</item>
+        <item>Privacy mode</item>
+    </string-array>
+
+    <string-array name="livepusher_render_type_with_surface">
+        <item>TXCloudVideoView</item>
+        <item>TextureView</item>
+        <item>SurfaceView</item>
+        <item>Surface</item>
+    </string-array>
+    
+    <string-array name="livepusher_render_type_without_surface">
+        <item>TXCloudVideoView</item>
+        <item>TextureView</item>
+        <item>SurfaceView</item>
+    </string-array>
+        
+    <string-array name="livepusher_video_solution">
+        <item>160 * 160</item>
+        <item>270 * 270</item>
+        <item>480 * 480</item>
+        <item>320 * 240</item>
+        <item>480 * 360</item>
+        <item>640 * 480</item>
+        <item>320 * 180</item>
+        <item>480 * 270</item>
+        <item>640 * 360</item>
+        <item>960 * 540</item>
+        <item>1280 * 720</item>
+        <item>1920 * 1080</item>
+    </string-array>
+
+</resources>

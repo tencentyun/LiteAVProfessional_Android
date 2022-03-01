@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <dimen name="v1livepusher_icon_width">30dp</dimen>
+    <dimen name="v1livepusher_icon_height">30dp</dimen>
+    <dimen name="v1livepusher_item_title_size">16sp</dimen>
+
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lebplayer_title">LEB Player</string>
+    <string name="lebplayer_intput_url">Enter a playback address</string>
+    <string name="lebplayer_intput_leb_url">Enter a playback address started with webrtc://</string>
+    <string name="lebplayer_have_url">I have a playback address</string>
+    <string name="lebplayer_start_paly">Start Playback</string>
+
+    <string name="lebplayer_msg_success">Success</string>
+    <string name="lebplayer_msg_error_refused">Call failed (rejected)</string>
+    <string name="lebplayer_msg_error_invalid_parameter">Call failed (parameter exception)</string>
+    <string name="lebplayer_msg_error_not_supported">The called API is not implemented</string>
+    <string name="lebplayer_msg_error_failed">Call failed</string>
+
+    <string name="lebplayer_tv_setting">Setting</string>
+    <string name="lebplayer_tv_play_volume">Playback Volume: </string>
+    <string name="lebplayer_tv_screen_filling_direction">Fill Mode</string>
+    <string name="lebplayer_tv_screen_auto">Auto</string>
+    <string name="lebplayer_tv_screen_fill">Fill</string>
+    <string name="lebplayer_tv_direction_of_rotation">Rotation</string>
+    <string name="lebplayer_tv_rotation0">0</string>
+    <string name="lebplayer_tv_rotation90">90</string>
+    <string name="lebplayer_tv_rotation180">180</string>
+    <string name="lebplayer_tv_rotation270">270</string>
+    <string name="lebplayer_tv_volume_tips">Volume Reminder</string>
+    <string name="lebplayer_tv_enable_volume_tips">On</string>
+    <string name="lebplayer_tv_disable_volume_tips">Off</string>
+    <string name="lebplayer_tv_screen_snapshot">Screenshot</string>
+    <string name="lebplayer_tv_snapshot">Take</string>
+
+    <string name="lebplayer_toast_error_url_is_null">Empty URL</string>
+    <string name="lebplayer_toast_error_player_stream_id_duplicate">Pull failed: you cannot use the same stream ID for push and pull on the same device.</string>
+    <string name="lebplayer_toast_player_failure">Pull failed</string>
+
+    <string name="lebplayer_btn_ok">OK</string>
+
+    <string name="lebplayer_tv_connecting">Connecting</string>
+    <string name="lebplayer_tv_turn_on_audio">Enable audio</string>
+
+    <string name="lebplayer_camera">Please turn on the camera permission first</string>
+
+    <string name="lebplayer_pusher_steam_not_found">Player stream disappear</string>
+
+    <string name="lebplayer_sei_payload_type">SEI payloadType: </string>
+    <string name="lebplayer_sei_payload_type_invalid">Invalid SEI payload type! Only 5 or 242 allowed.</string>
+
+</resources>

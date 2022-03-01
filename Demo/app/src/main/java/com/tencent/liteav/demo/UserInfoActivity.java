@@ -5,24 +5,32 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.squareup.picasso.Picasso;
-//import com.tencent.liteav.demo.common.widget.ShowTipDialogFragment;
+import com.tencent.liteav.demo.common.UserModelManager;
+import com.tencent.liteav.demo.common.utils.IntentUtils;
 import com.tencent.liteav.demo.common.widget.ModifyUserAvatarDialog;
 import com.tencent.liteav.demo.common.widget.ModifyUserNameDialog;
 import com.tencent.liteav.login.model.ProfileManager;
 import com.tencent.liteav.login.ui.LoginActivity;
-import com.tencent.rtmp.TXLiveBase;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserInfoActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG                                                       = "UserInfoActivity";
+    private static final String TENCENT_VIDEO_CLOUD_TOOLKIT_PRIVACY_PROTECTION_GUIDELINES =
+            "https://web.sdk.qcloud.com/document/Tencent-Video-Cloud-Toolkit-Privacy-Protection-Guidelines.html";
+    private static final String TENCENT_VIDEO_CLOUD_TOOLKIT_USER_AGREEMENT                =
+            "https://web.sdk.qcloud.com/document/Tencent-Video-Cloud-Toolkit-User-Agreement.html";
+
     private CircleImageView mIvAvatar;
     private TextView        mTvNickName;
     private TextView        mTvUserId;
@@ -37,12 +45,12 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initView() {
-        mIvAvatar = (CircleImageView) findViewById(R.id.iv_avatar);
-        mTvNickName = (TextView) findViewById(R.id.tv_show_name);
-        mTvUserId = (TextView) findViewById(R.id.tv_userid);
-        String userId = ProfileManager.getInstance().getUserModel().userId;
-        String userName = ProfileManager.getInstance().getUserModel().userName;
-        String userAvatar = ProfileManager.getInstance().getUserModel().userAvatar;
+        mIvAvatar = findViewById(R.id.iv_avatar);
+        mTvNickName = findViewById(R.id.tv_show_name);
+        mTvUserId = findViewById(R.id.tv_userid);
+        String userId = UserModelManager.getInstance().getUserModel().userId;
+        String userName = UserModelManager.getInstance().getUserModel().userName;
+        String userAvatar = UserModelManager.getInstance().getUserModel().userAvatar;
         Picasso.get().load(userAvatar).into(mIvAvatar);
         mTvNickName.setText(userName);
         mTvUserId.setText(userId);
@@ -54,7 +62,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.tv_statement).setOnClickListener(this);
 
         // 导航栏回退/设置
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.rl_title);
+        Toolbar mToolbar = findViewById(R.id.rl_title);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,9 +70,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        TextView mTvVersion = (TextView) findViewById(R.id.main_tv_version);
-        mTvVersion.setText(getString(R.string.app_tv_video_cloud_tools_version, TXLiveBase.getSDKVersionStr()));
-        TextView mBtnLogout = (TextView) findViewById(R.id.tv_logout);
+        TextView mBtnLogout = findViewById(R.id.tv_logout);
         mBtnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,14 +100,12 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                                 }
                             });
                         }
-                    })
-                    .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+                    }).setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
-                    })
-                    .create();
+                    }).create();
         }
         if (!mAlertDialog.isShowing()) {
             mAlertDialog.show();
@@ -118,7 +122,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     private void showStatementDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.app_show_tip_dialog_confirm, null);
-        TextView tvMessage = (TextView) view.findViewById(R.id.tv_message);
+        TextView tvMessage = view.findViewById(R.id.tv_message);
         tvMessage.setText(getString(R.string.app_statement_detail));
         Button tvBtn = (Button) view.findViewById(R.id.btn_negative);
         tvBtn.setOnClickListener(new View.OnClickListener() {
@@ -140,22 +144,22 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_show_name:
-                ModifyUserNameDialog modifyUserNameDialog = new ModifyUserNameDialog(this,
-                        new ModifyUserNameDialog.ModifySuccessListener() {
+                ModifyUserNameDialog modifyUserNameDialog =
+                        new ModifyUserNameDialog(this, new ModifyUserNameDialog.ModifySuccessListener() {
                             @Override
                             public void onSuccess() {
-                                String userName = ProfileManager.getInstance().getUserModel().userName;
+                                String userName = UserModelManager.getInstance().getUserModel().userName;
                                 mTvNickName.setText(userName);
                             }
                         });
                 modifyUserNameDialog.show();
                 break;
             case R.id.iv_avatar:
-                ModifyUserAvatarDialog modifyUserAvatarDialog = new ModifyUserAvatarDialog(this,
-                        new ModifyUserAvatarDialog.ModifySuccessListener() {
+                ModifyUserAvatarDialog modifyUserAvatarDialog =
+                        new ModifyUserAvatarDialog(this, new ModifyUserAvatarDialog.ModifySuccessListener() {
                             @Override
                             public void onSuccess() {
-                                String userAvatar = ProfileManager.getInstance().getUserModel().userAvatar;
+                                String userAvatar = UserModelManager.getInstance().getUserModel().userAvatar;
                                 Picasso.get().load(userAvatar).into(mIvAvatar);
                             }
                         });
@@ -168,17 +172,20 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
             case R.id.tv_privacy_statement:
                 Intent privacyIntent = new Intent("com.tencent.liteav.action.videocloud.webview");
                 privacyIntent.putExtra("title", getString(R.string.app_privacy_statement));
-                privacyIntent.putExtra("url", "https://web.sdk.qcloud.com/document/Tencent-Video-Cloud-Toolkit-Privacy-Protection-Guidelines.html");
-                startActivity(privacyIntent);
+                privacyIntent.putExtra("url", TENCENT_VIDEO_CLOUD_TOOLKIT_PRIVACY_PROTECTION_GUIDELINES);
+                IntentUtils.safeStartActivity(UserInfoActivity.this, privacyIntent);
                 break;
             case R.id.tv_user_agreement:
                 Intent agreementIntent = new Intent("com.tencent.liteav.action.videocloud.webview");
                 agreementIntent.putExtra("title", getString(R.string.app_user_agreement));
-                agreementIntent.putExtra("url", "https://web.sdk.qcloud.com/document/Tencent-Video-Cloud-Toolkit-User-Agreement.html");
-                startActivity(agreementIntent);
+                agreementIntent.putExtra("url", TENCENT_VIDEO_CLOUD_TOOLKIT_USER_AGREEMENT);
+                IntentUtils.safeStartActivity(UserInfoActivity.this, agreementIntent);
                 break;
             case R.id.tv_statement:
                 showStatementDialog();
+                break;
+            default :
+                Log.e(TAG, "wrong id : " + v.getId());
                 break;
         }
 

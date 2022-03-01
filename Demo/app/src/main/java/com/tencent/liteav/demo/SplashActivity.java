@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.tencent.liteav.login.model.ProfileManager;
 import com.tencent.liteav.login.ui.LoginActivity;
@@ -59,7 +60,8 @@ public class SplashActivity extends Activity {
         Intent intent = new Intent("com.tencent.liteav.action.WED_DATA");
         intent.setData(data);
         if (Build.VERSION.SDK_INT >= 26) {
-            ComponentName componentName = new ComponentName(getPackageName(), "com.tencent.liteav.demo.player.expand.webdata.reveiver.WebDataReceiver");
+            ComponentName componentName = new ComponentName(getPackageName(),
+                    "com.tencent.liteav.demo.player.expand.webdata.reveiver.WebDataReceiver");
             intent.setComponent(componentName);
         }
         Log.d(TAG, "navigationWebData: intent -> " + intent);

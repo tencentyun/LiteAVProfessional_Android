@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="UGCRecordRecordActivityTheme" parent="UGCKitRecordStyle">
-        <item name="nextIcon">@drawable/ugcrecord_drawable_ugc_green_next</item>
-        <item name="recordButtonTapModeInnerBackground">@color/ugckit_color_accent</item>
-        <item name="ugckitColorPrimary">@color/ugckit_color_accent</item>
-        <item name="beautyPanelColorPrimary">@color/ugckit_color_accent</item>
-    </style>
-</resources>

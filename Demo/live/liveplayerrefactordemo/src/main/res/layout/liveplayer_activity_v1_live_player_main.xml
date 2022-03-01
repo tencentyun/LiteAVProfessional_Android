@@ -1,0 +1,588 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bkg"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp">
+
+        <com.tencent.rtmp.ui.TXCloudVideoView
+            android:id="@+id/vw_v1_main_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <SurfaceView
+            android:id="@+id/vw_v1_main_surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <TextureView
+            android:id="@+id/vw_v1_main_texture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_v1_main_stats"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="255dp"
+            android:background="#aaFFFFFF"
+            android:scrollbars="vertical"
+            android:textColor="@color/red"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tv_v1_main_event"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:layout_marginLeft="190dp"
+            android:layout_marginTop="255dp"
+            android:background="#aaFFFFFF"
+            android:scrollbars="vertical"
+            android:textColor="@color/red"
+            android:textSize="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_v1_main_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:text="start"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_stop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:text="stop"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_enableHWDecode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="enableHWDecode"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_disableHWDecode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="disableHWDecode"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_v1_main_showLog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:text="showLog"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_hideLog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:text="hideLog"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_rotation0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="0"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_rotation90"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="90"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_rotation180"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="180"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_rotation270"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="270"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_v1_main_fillMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="fill"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_adjustMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="fit"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_h265"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="h265"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_h264"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="h264"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_v1_main_isPlaying"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="isPlaying"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_snapshot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="snapshot"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_getCurrentRenderPts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="getCurrentRenderPts"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_v1_main_pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="pause"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_resume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="resume"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_mute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="mute"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_noMute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="noMute"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_speaker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="speaker"
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_receiver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="receiver"
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btn_v1_main_autoAdjustCacheTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="autoAdjustCacheTime"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_noAutoAdjustCacheTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="noAutoAdjustCacheTime"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btn_v1_main_startRecord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:text="startRecord"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_stopRecord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:text="stopRecord"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_v1_main_resumeLive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:text="resumeLive"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="560dp"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="seek(s)：" />
+
+                        <EditText
+                            android:id="@+id/et_v1_main_seek"
+                            android:layout_width="70dp"
+                            android:layout_height="30dp"
+                            android:ems="10"
+
+                            android:inputType="text"
+                            android:textSize="12dp" />
+
+                        <Button
+                            android:id="@+id/btn_v1_main_seek"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="onClick"
+                            android:text="设置"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="volume：" />
+
+                        <ProgressBar
+                            android:id="@+id/pb_v1_main_volume"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="30dp"
+                            android:layout_weight="1"
+                            android:max="100" />
+
+                        <EditText
+                            android:id="@+id/et_v1_main_setVolume"
+                            android:layout_width="70dp"
+                            android:layout_height="30dp"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:text="100"
+                            android:textSize="12dp" />
+
+                        <Button
+                            android:id="@+id/btn_v1_main_setVolume"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="onClick"
+                            android:text="设置"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="volumeEvaluationInterval(ms)：" />
+
+                        <EditText
+                            android:id="@+id/et_v1_main_enableAudioVolumeEvaluation"
+                            android:layout_width="70dp"
+                            android:layout_height="30dp"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:text="300"
+                            android:textSize="12dp" />
+
+                        <Button
+                            android:id="@+id/btn_v1_main_enableAudioVolumeEvaluation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="onClick"
+                            android:text="设置"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="minAutoAdjustCacheTime(s)：" />
+
+                        <EditText
+                            android:id="@+id/et_v1_main_minAutoAdjustCacheTime"
+                            android:layout_width="70dp"
+                            android:layout_height="30dp"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:text="1"
+                            android:textSize="12dp" />
+
+                        <Button
+                            android:id="@+id/btn_v1_main_minAutoAdjustCacheTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="onClick"
+                            android:text="设置"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="maxAutoAdjustCacheTime(s)：" />
+
+                        <EditText
+                            android:id="@+id/et_v1_main_maxAutoAdjustCacheTime"
+                            android:layout_width="70dp"
+                            android:layout_height="30dp"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:text="5"
+                            android:textSize="12dp" />
+
+                        <Button
+                            android:id="@+id/btn_v1_main_maxAutoAdjustCacheTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="onClick"
+                            android:text="设置"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="experimentalAPI：" />
+
+                        <EditText
+                            android:id="@+id/et_v1_main_experimentalAPI"
+                            android:layout_width="70dp"
+                            android:layout_height="30dp"
+                            android:ems="10"
+
+                            android:inputType="number"
+                            android:textSize="12dp" />
+
+                        <Button
+                            android:id="@+id/btn_v1_main_experimentalAPI"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="onClick"
+                            android:text="设置"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/iv_v1_main_loading"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_gravity="center"
+            android:src="@drawable/liveplayer_loading_animation"
+            android:visibility="gone" />
+
+        <include
+            layout="@layout/liveplayer_activity_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp" />
+
+        <include
+            layout="@layout/liveplayer_activity_play_address_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginRight="12dp" />
+    </FrameLayout>
+
+</LinearLayout>

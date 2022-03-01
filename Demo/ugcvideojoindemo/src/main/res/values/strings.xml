@@ -1,7 +1,0 @@
-<resources>
-    <string name="ugcjoin_app_name">videojoiner</string>
-    <string name="ugcjoin_video_join">视频合成</string>
-    <string name="ugcjoin_video_drag_sort">视频将按照列表顺序进行合成，您可以长按拖动进行片段顺序调整。</string>
-    <string name="ugcjoin_video_join_preview">片段合成预览</string>
-    <string name="ugcjoin_app_storage">请先打开存储权限</string>
-</resources>

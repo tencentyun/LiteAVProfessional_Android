@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v1livepusher_hlf_transparent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_open_privacy_mode"
+            android:textColor="@color/v1livepusher_line_btn"
+            android:textSize="15sp" />
+
+        <CheckBox
+            android:id="@+id/v1livepusher_pusher_cb_private_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_open_mute_mode"
+            android:textColor="@color/v1livepusher_line_btn"
+            android:textSize="15sp" />
+
+        <CheckBox
+            android:id="@+id/v1livepusher_pusher_cb_mute_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/v1livepusher_pusher_ll_orientation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_open_horizontal_mode"
+            android:textColor="@color/v1livepusher_line_btn"
+            android:textSize="15sp" />
+
+        <CheckBox
+            android:id="@+id/v1livepusher_pusher_cb_orientation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_open_debug_info"
+            android:textColor="@color/v1livepusher_line_btn"
+            android:textSize="15sp" />
+
+        <CheckBox
+            android:id="@+id/v1livepusher_pusher_cb_debug_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_open_watermark"
+            android:textColor="@color/v1livepusher_line_btn"
+            android:textSize="15sp" />
+
+        <CheckBox
+            android:id="@+id/v1livepusher_pusher_cb_water_mark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_open_only_audio_push"
+            android:textColor="@color/v1livepusher_line_btn"
+            android:textSize="15sp" />
+
+        <CheckBox
+            android:id="@+id/v1livepusher_pusher_cb_pure_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_open_audience_mirror"
+            android:textColor="@color/v1livepusher_line_btn"
+            android:textSize="15sp" />
+
+        <CheckBox
+            android:id="@+id/v1livepusher_pusher_cb_mirror"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_open_back_flash"
+            android:textColor="@color/v1livepusher_line_btn"
+            android:textSize="15sp" />
+
+        <CheckBox
+            android:id="@+id/v1livepusher_pusher_cb_flash_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_manual_click_exposure_focus"
+            android:textColor="@color/v1livepusher_line_btn"
+            android:textSize="15sp" />
+
+        <CheckBox
+            android:id="@+id/v1livepusher_pusher_cb_focus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_gesture_zoom_preview_screen"
+            android:textColor="@color/v1livepusher_line_btn"
+            android:textSize="15sp" />
+
+        <CheckBox
+            android:id="@+id/v1livepusher_pusher_cb_zoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_local_screenshot"
+            android:textColor="@color/v1livepusher_line_btn"
+            android:textSize="15sp" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/v1livepusher_pusher_btn_snapshot"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="right"
+                android:clickable="true"
+                android:text="@string/v1livepusher_screenshot"
+                android:textSize="14sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/v1livepusher_send_message"
+            android:textColor="@color/v1livepusher_line_btn" />
+
+        <EditText
+            android:id="@+id/v1livepusher_et_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:maxLines="1" />
+
+        <Button
+            android:id="@+id/v1livepusher_btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginLeft="3dp"
+            android:clickable="true"
+            android:text="@string/v1livepusher_send"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/v1livepusher_btn_send_loop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="@string/v1livepusher_cyclic_send"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+
+</LinearLayout>

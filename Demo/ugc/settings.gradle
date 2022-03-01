@@ -1,0 +1,13 @@
+include ':app'
+
+include ':common'
+include ':beautysettingkit'
+
+include ':ugckit'
+include ':ugcvideoeditdemo'
+include ':ugcvideorecorddemo'
+include ':ugcvideojoindemo'
+include ':ugcvideouploaddemo'
+
+include ':superplayerkit'
+include ':superplayerdemo'

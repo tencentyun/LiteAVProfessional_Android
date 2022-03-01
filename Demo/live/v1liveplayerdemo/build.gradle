@@ -1,0 +1,43 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation rootProject.ext.liteavSdk
+    implementation project(":audioeffectsettingkit")
+    implementation project(':beautysettingkit')
+    implementation project(':common')
+    implementation 'com.google.android:flexbox:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation('com.blankj:utilcode:1.25.9', {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    })
+    implementation "com.google.android.material:material:1.0.0"
+    implementation 'me.dm7.barcodescanner:zxing:1.8.4'
+    implementation 'com.kyleduo.switchbutton:library:2.0.0'
+}

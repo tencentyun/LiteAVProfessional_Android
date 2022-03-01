@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/v1livepusher_radio_select_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp">
+
+        <TextView
+            android:id="@+id/v1livepusher_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/v1livepusher_setting"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" />
+
+        <Button
+            android:id="@+id/v1livepusher_btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/v1livepusher_close"
+            android:textColor="@android:color/white"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:focusable="false"
+        android:layout_marginBottom="10dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/v1livepusher_audio_quality"
+            android:textColor="@color/v1livepusher_white"
+            android:textSize="16dp" />
+
+        <HorizontalScrollView
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <com.tencent.liteav.v1livepusherdemo.view.RadioButton
+                    android:id="@+id/v1livepusher_rb_audio_quality_speech"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.tencent.liteav.v1livepusherdemo.view.RadioButton
+                    android:id="@+id/v1livepusher_rb_audio_quality_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+
+                <com.tencent.liteav.v1livepusherdemo.view.RadioButton
+                    android:id="@+id/v1livepusher_rb_audio_quality_music"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:focusable="false"
+        android:layout_marginBottom="10dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/v1livepusher_capture_frame"
+            android:textColor="@color/v1livepusher_white"
+            android:textSize="16dp" />
+
+        <HorizontalScrollView
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.tencent.liteav.v1livepusherdemo.view.RadioButton
+                    android:id="@+id/v1livepusher_rb_capture_frame_fifteen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.tencent.liteav.v1livepusherdemo.view.RadioButton
+                    android:id="@+id/v1livepusher_rb_capture_frame_twenty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+    <com.tencent.liteav.v1livepusherdemo.view.CheckSelectView
+        android:id="@+id/v1livepusher_ctv_setting_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/v1livepusher_local_snapshot"
+            android:textColor="@color/v1livepusher_white"
+            android:textSize="16dp" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/v1livepusher_btn_snapshot"
+            android:layout_width="46dp"
+            android:layout_height="24dp"
+            android:layout_gravity="right|end"
+            android:background="@drawable/v1livepusher_swicth_button_checked"
+            android:text="@string/v1livepusher_snapshot"
+            android:textColor="@color/v1livepusher_white"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/v1livepusher_send_message"
+            android:textColor="@color/v1livepusher_white"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/v1livepusher_et_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/v1livepusher_input_bg"
+            android:gravity="center_vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:singleLine="true"
+            android:textColor="@color/v1livepusher_text_gray"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/v1livepusher_btn_send_message"
+            android:layout_width="46dp"
+            android:layout_height="24dp"
+            android:background="@drawable/v1livepusher_swicth_button_checked"
+            android:text="@string/v1livepusher_send"
+            android:textColor="@color/v1livepusher_white"
+            android:textSize="12dp" />
+
+        <Button
+            android:id="@+id/v1livepusher_btn_send_messageex"
+            android:layout_width="60dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="3dp"
+            android:background="@drawable/v1livepusher_swicth_button_checked"
+            android:text="@string/v1livepusher_cycle_send"
+            android:textColor="@color/v1livepusher_white"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+</LinearLayout>

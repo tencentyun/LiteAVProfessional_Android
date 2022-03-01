@@ -1,0 +1,35 @@
+<resources>
+    <string name="ugcupload_app_name">videouploader</string>
+    <string name="ugcupload_title_activity_txdownload">TXDownloadActivity</string>
+    <string name="ugcupload_back">返回</string>
+    <string name="ugcupload_ok">确定</string>
+    <string name="ugcupload_text_title">标题</string>
+    <string name="ugcupload_text_content">内容</string>
+    <string name="ugcupload_btn_publish">发布</string>
+    <string name="ugcupload_btn_known">知道了</string>
+    <string name="ugcupload_title_compress_video">压缩视频</string>
+    <string name="ugcupload_resolution_origin">无</string>
+    <string name="ugcupload_resolution_360p">360p</string>
+    <string name="ugcupload_resolution_480p">480p</string>
+    <string name="ugcupload_resolution_540p">540p</string>
+    <string name="ugcupload_resolution_720p">720p</string>
+    <string name="ugcupload_resolution_1080p">1080p</string>
+    <string name="ugcupload_title_bit_rate">码率(kbps)</string>
+    <string name="ugcupload_error_handle_video">视频处理失败</string>
+    <string name="ugcupload_error_invalid_format">不支持的视频格式</string>
+    <string name="ugcupload_error_unsupport_audio_format">暂不支持非单双声道的视频格式</string>
+    <string name="ugcupload_error_read_file">找不到文件或文件读取失败</string>
+    <string name="ugcupload_error_copy_file">拷贝文件到私有目录失败</string>
+    <string name="ugcupload_toast_no_network">没有网络链接</string>
+    <string name="ugcupload_toast_publish_success">发布成功</string>
+    <string name="ugcupload_error_publish_without_network">网络连接断开，视频上传失败: %1$s</string>
+    <string name="ugcupload_message_publish_fail">发布失败，errCode = %1$d, msg =%2$s</string>
+    <string name="ugcupload_title_picture_upload">图片上传</string>
+    <string name="ugcupload_text_local_picture_preview">本地图片预览：</string>
+    <string name="ugcupload_text_remote_picture_preview">上传结果图片预览：</string>
+    <string name="ugcupload_title_preview">预览</string>
+    <string name="ugcupload_section_title_video">标题：</string>
+    <string name="ugcupload_hint_section_title_video">设置标题…</string>
+    <string name="ugcupload_section_cover_video">封面：</string>
+    <string name="ugcupload_tips_video_working">视频生成中...</string>
+</resources>

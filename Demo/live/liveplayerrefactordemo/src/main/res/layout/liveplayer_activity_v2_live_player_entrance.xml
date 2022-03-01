@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="18dp"
+    android:paddingRight="18dp">
+
+    <include
+        layout="@layout/liveplayer_activity_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_v2_entrance_normal_url"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:text="开始播放"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+
+    <RadioGroup
+        android:id="@+id/rg_v2_entrance_payloadType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SEI类型：" />
+
+        <RadioButton
+            android:id="@+id/rb_v2_entrance_seiClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="关闭" />
+
+        <RadioButton
+            android:id="@+id/rb_v2_entrance_sei5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5" />
+
+        <RadioButton
+            android:id="@+id/rb_v2_entrance_sei242"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="242" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rg_v2_entrance_renderType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="渲染方式：" />
+
+        <RadioButton
+            android:id="@+id/rb_v2_entrance_TXCloudVideoView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="TXCloudVideoView" />
+
+        <RadioButton
+            android:id="@+id/rb_v2_entrance_textureView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextureView" />
+
+        <RadioButton
+            android:id="@+id/rb_v2_entrance_surfaceView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SurfaceView" />
+
+        <RadioButton
+            android:id="@+id/rb_v2_entrance_surface"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Surface" />
+
+        <RadioButton
+            android:id="@+id/rb_v2_entrance_custom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="自定义渲染" />
+
+        <LinearLayout
+            android:id="@+id/ll_v2_entrance_spinners"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rb_v2_texture2d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Texture2D + Texture" />
+
+
+                <RadioButton
+                    android:id="@+id/rb_v2_i420_bytearray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="I420 + ByteArray" />
+
+                <RadioButton
+                    android:id="@+id/rb_v2_i420_bytebuffer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="I420 + ByteBuffer" />
+            </RadioGroup>
+        </LinearLayout>
+
+
+    </RadioGroup>
+
+
+</LinearLayout>

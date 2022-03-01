@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/liveplayer_content_bg"
+        android:orientation="vertical"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp">
+
+    <include
+            layout="@layout/liveplayer_top_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/liveplayer_render_type"
+            android:textColor="@color/liveplayer_white"
+            android:textSize="16sp" />
+
+    <com.tencent.liteav.demo.liveplayer.ui.view.VariableRadioSelectorView
+            android:id="@+id/liveplayer_rsv_render_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <com.tencent.liteav.demo.liveplayer.ui.view.VariableRadioSelectorView
+            android:id="@+id/liveplayer_rsv_custom_render_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginLeft="40dp" />
+
+</LinearLayout>

@@ -1,0 +1,14 @@
+<resources>
+
+    <style name="UGCEditEditerActivityTheme" parent="UGCKitEditerStyle">
+        <item name="nextIcon">@drawable/ugcedit_drawable_ugc_green_next</item>
+        <item name="progressColor">@color/ugckit_color_accent</item>
+        <item name="sliderColor">@color/ugckit_color_accent</item>
+        <item name="editerCutViewColor">@color/ugckit_color_accent</item>
+        <item name="ugckitColorPrimary">@color/ugckit_color_accent</item>
+    </style>
+
+    <style name="UGCEditPictureTransitionActivityStyle" parent="UGCKitPictureTransitionStyle">
+        <item name="nextIcon">@drawable/ugcedit_drawable_ugc_green_next</item>
+    </style>
+</resources>

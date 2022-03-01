@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="trtcdemo_video_solution">
+        <item>160 * 160</item>
+        <item>180 * 320</item>
+        <item>240 * 320</item>
+        <item>480 * 480</item>
+        <item>360 * 640</item>
+        <item>480 * 640</item>
+        <item>540 * 960</item>
+        <item>720 * 1280</item>
+        <item>1080 * 1920</item>
+    </string-array>
+
+    <string-array name="trtcdemo_video_fps">
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </string-array>
+
+    <string-array name="trtcdemo_video_render_type">
+        <item>RGBA - ByteArray</item>
+        <item>RGBA - ByteBuffer</item>
+        <item>I420 - ByteArray</item>
+        <item>I420 - ByteBuffer</item>
+        <item>Texture</item>
+    </string-array>
+
+    <string-array name="trtcdemo_audio_bits">
+        <item>16</item>
+        <item>20</item>
+        <item>32</item>
+        <item>50</item>
+        <item>64</item>
+        <item>96</item>
+        <item>128</item>
+    </string-array>
+
+    <string-array name="trtcdemo_audio_equalization_type">
+        <item>关闭</item>
+        <item>流行</item>
+        <item>舞曲</item>
+        <item>蓝调</item>
+        <item>古典</item>
+        <item>爵士</item>
+        <item>慢歌</item>
+        <item>电子乐</item>
+        <item>摇滚</item>
+        <item>乡村</item>
+        <item>人声</item>
+        <item>自定义</item>
+    </string-array>
+
+    <string-array name="trtcdemo_audio_equalization_custom_param">
+        <item>子带-31HZ</item>
+        <item>子带-62HZ</item>
+        <item>子带-125HZ</item>
+        <item>子带-250HZ</item>
+        <item>子带-500HZ</item>
+        <item>子带-1000HZ</item>
+        <item>子带-2000HZ</item>
+        <item>子带-4000HZ</item>
+        <item>子带-8000HZ</item>
+        <item>子带-16000HZ</item>
+    </string-array>
+</resources>

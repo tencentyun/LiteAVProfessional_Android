@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#FF13233F"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:text="@string/livepusher_please_select_protocol"
+        android:textColor="@color/livepusher_white"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left">
+
+            <com.tencent.liteav.demo.livepusher.camerapush.ui.view.RadioButton
+                android:id="@+id/livepusher_rb_flv"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="RTMP" />
+
+            <com.tencent.liteav.demo.livepusher.camerapush.ui.view.RadioButton
+                android:id="@+id/livepusher_rb_rtmp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="RTC" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/livepusherdemo_select_protocol_desc"
+        android:textColor="#7699a5"
+        android:textSize="11sp" />
+
+
+    <Button
+        android:id="@+id/livepusher_btn_push"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/livepusher_btn_bg"
+        android:text="@string/livepusher_push_url_start"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
+
+</LinearLayout>

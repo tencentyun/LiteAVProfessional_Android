@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:text="@string/trtcdemo_title_third_party_cdn_publish"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="1dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/trtcdemo_et_cdn_stream_url"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/trtcdemo_third_party_cdn_publish_url"
+            android:singleLine="true"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/trtcdemo_et_cdn_stream_id"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/trtcdemo_third_party_cdn_publish_stream_id"
+            android:singleLine="true"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/trtcdemo_start_push_cdn_stream_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_marginStart="3dp"
+            android:background="@drawable/trtcdemo_radio_border"
+            android:text="@string/trtcdemo_btn_start_third_party_cdn_publish"
+            android:textSize="15sp" />
+    </LinearLayout>
+</LinearLayout>

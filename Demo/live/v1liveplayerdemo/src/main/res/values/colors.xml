@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="v1liveplayer_color_btn">#016EFF</color>
+    <color name="v1liveplayer_color_primary_dark">#21a3f5</color>
+    <color name="v1liveplayer_accent">#0ACCAC</color>
+    <color name="v1liveplayer_red">#FF3333</color>
+    <color name="v1liveplayer_white">#FFFFFF</color>
+    <color name="v1liveplayer_black">#000000</color>
+    <color name="v1liveplayer_hlf_transparent">#30000000</color>
+    <color name="v1liveplayer_btn_line">#BBBBBB</color>
+    <color name="v1liveplayer_gray_white">#EEEEEE</color>
+    <color name="v1liveplayer_green">#33DA33</color>
+    <color name="v1liveplayer_dark_gray">#3F000000</color>
+    <color name="v1liveplayer_light_gray">#EDEDEF</color>
+    <color name="v1liveplayer_gray">#666666</color>
+    <color name="v1liveplayer_audio_gray">#CC000000</color>
+    <color name="v1liveplayer_text_gray">#FF6B82A8</color>
+    <color name="v1liveplayer_blue">#FF0062E3</color>
+    <color name="v1liveplayer_background_gray">#EBEBEB</color>
+    <color name="v1liveplayer_color_accent">#0accac</color>
+</resources>

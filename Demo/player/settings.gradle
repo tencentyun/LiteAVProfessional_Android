@@ -1,0 +1,4 @@
+include ':app'
+include ':common'
+include ':superplayerkit'
+include ':superplayerdemo'

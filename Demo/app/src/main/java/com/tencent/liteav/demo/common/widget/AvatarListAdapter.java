@@ -1,13 +1,14 @@
 package com.tencent.liteav.demo.common.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.tencent.liteav.demo.R;
@@ -16,14 +17,13 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AvatarListAdapter extends
-        RecyclerView.Adapter<AvatarListAdapter.ViewHolder> {
-    private static final String TAG = AvatarListAdapter.class.getSimpleName();
+public class AvatarListAdapter extends RecyclerView.Adapter<AvatarListAdapter.ViewHolder> {
+    private static final String TAG = "AvatarListAdapter";
 
-    private Context                   mContext;
-    private List<String>              mAvatarList;
-    private OnItemClickListener       mOnItemClickListener;
-    private int                       mSelectPosition = -1;
+    private Context             mContext;
+    private List<String>        mAvatarList;
+    private OnItemClickListener mOnItemClickListener;
+    private int                 mSelectPosition = -1;
 
     public AvatarListAdapter(Context context, List<String> list, OnItemClickListener onItemClickListener) {
         this.mContext = context;
@@ -33,7 +33,7 @@ public class AvatarListAdapter extends
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context        context  = parent.getContext();
+        Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.app_item_avatar_layout, parent, false);
         return new ViewHolder(view);
@@ -56,16 +56,22 @@ public class AvatarListAdapter extends
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView mImgHead;
-        public ImageView mIvSelect;
+        public ImageView       mIvSelect;
 
         public ViewHolder(View itemView) {
             super(itemView);
             initView(itemView);
         }
 
-        public void bind(final Context context,
-                         final String userAvatar,
-                         final int   position,
+        /**
+         * Bind listener to item.
+         *
+         * @param context
+         * @param userAvatar
+         * @param position
+         * @param listener
+         */
+        public void bind(final Context context, final String userAvatar, final int position,
                          final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

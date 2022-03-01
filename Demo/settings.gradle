@@ -1,31 +1,116 @@
-include ':trtcdemo'
+include ':v1liveplayerdemo'
 include ':app'
-include ':login'
+
+include ':common'
 include ':debug'
-include ':ugckit'
-include ':beautysettingkit'
-//project(':beauty').projectDir = new File(settingsDir, '../../../../project/android/demo/liteav/beauty')
+include ':loginmock'
+include ':loginnetwork'
 include ':audioeffectsettingkit'
+include ':beautysettingkit'
 
-include ':ugcvideoeditdemo'
-include ':ugcvideorecorddemo'
-include ':ugcvideojoindemo'
-include ':ugcvideouploaddemo'
+// Basic 模块的配置
+project(':common').projectDir = new File(settingsDir, './basic/common')
+project(':debug').projectDir = new File(settingsDir, './basic/debug')
+project(':loginmock').projectDir = new File(settingsDir, './basic/loginmock')
+project(':loginnetwork').projectDir = new File(settingsDir, './basic/loginnetwork')
+project(':audioeffectsettingkit').projectDir = new File(settingsDir, './basic/audioeffectsettingkit')
+project(':beautysettingkit').projectDir = new File(settingsDir, './basic/beautysettingkit')
 
-include ':superplayerkit'
-include ':superplayerdemo'
+// Live 模块的配置
+if (buildLive.toBoolean()) {
+    include ':lebplayerdemo'
+    include ':livelinkmicdemonew'
+    include ':livelinkmicdemoold'
+    include ':liveplayerdemo'
+    include ':livepusherdemo'
+    include ':livepusherscreendemo'
+    include ':v1livepusherdemo'
+    include ':v1liveplayerdemo'
 
-include ':liveplayerdemo'
-include ':lebplayerdemo'
-include ':livepusherdemo'
-include ':livelinkmicdemoold'
-include ':livelinkmicdemonew'
-include ':livepusherscreendemo'
+    project(':lebplayerdemo').projectDir = new File(settingsDir, './live/lebplayerdemo')
+    project(':livelinkmicdemonew').projectDir = new File(settingsDir, './live/livelinkmicdemonew')
+    project(':livelinkmicdemoold').projectDir = new File(settingsDir, './live/livelinkmicdemoold')
+    project(':liveplayerdemo').projectDir = new File(settingsDir, './live/liveplayerdemo')
+    project(':livepusherdemo').projectDir = new File(settingsDir, './live/livepusherdemo')
+    project(':livepusherscreendemo').projectDir = new File(settingsDir, './live/livepusherscreendemo')
+    project(':v1livepusherdemo').projectDir = new File(settingsDir, './live/v1livepusherdemo')
+    project(':v1liveplayerdemo').projectDir = new File(settingsDir, './live/v1liveplayerdemo')
+}
 
+// Smart 模块的配置
+if (buildSmart.toBoolean()) {
+    include ':livelinkmicdemoold'
+    include ':liveplayerdemo'
+    include ':livepusherdemo'
+    include ':livepusherscreendemo'
+
+    project(':livelinkmicdemoold').projectDir = new File(settingsDir, './live/livelinkmicdemoold')
+    project(':liveplayerdemo').projectDir = new File(settingsDir, './live/liveplayerdemo')
+    project(':livepusherdemo').projectDir = new File(settingsDir, './live/livepusherdemo')
+    project(':livepusherscreendemo').projectDir = new File(settingsDir, './live/livepusherscreendemo')
+}
+
+// Player 模块的配置
+if (buildPlayer.toBoolean()) {
+    include ':superplayerkit'
+    include ':superplayerdemo'
+
+    project(':superplayerkit').projectDir = new File(settingsDir, './player/superplayerkit')
+    project(':superplayerdemo').projectDir = new File(settingsDir, './player/superplayerdemo')
+}
+
+// TRTC 模块的配置
+if (buildTRTC.toBoolean()) {
+    include ':trtcdemo'
+
+    project(':trtcdemo').projectDir = new File(settingsDir, './trtc/trtcdemo')
+}
+
+// UGC 模块的配置
+if (buildUGC.toBoolean()) {
+    include ':superplayerkit'
+    include ':superplayerdemo'
+    include ':ugckit'
+    include ':ugcvideoeditdemo'
+    include ':ugcvideorecorddemo'
+    include ':ugcvideojoindemo'
+    include ':ugcvideouploaddemo'
+
+    project(':superplayerkit').projectDir = new File(settingsDir, './player/superplayerkit')
+    project(':superplayerdemo').projectDir = new File(settingsDir, './player/superplayerdemo')
+    project(':ugcvideoeditdemo').projectDir = new File(settingsDir, './ugc/ugcvideoeditdemo')
+    project(':ugckit').projectDir = new File(settingsDir, './ugc/ugckit')
+    project(':ugcvideorecorddemo').projectDir = new File(settingsDir, './ugc/ugcvideorecorddemo')
+    project(':ugcvideojoindemo').projectDir = new File(settingsDir, './ugc/ugcvideojoindemo')
+    project(':ugcvideouploaddemo').projectDir = new File(settingsDir, './ugc/ugcvideouploaddemo')
+}
+
+// International 模块的配置
+if (buildInternational.toBoolean()) {
+    include ':livelinkmicdemonew'
+
+    project(':livelinkmicdemonew').projectDir = new File(settingsDir, './live/livelinkmicdemonew')
+}
+
+// 重构 Live 模块的配置 (临时)
+if (buildRefactoringLive.toBoolean()) {
+    include ':liveplayerdemo'
+    include ':v1liveplayerdemo'
+    include ':lebplayerdemo'
+
+    project(':liveplayerdemo').projectDir = new File(settingsDir, './live/liveplayerdemo')
+    project(':v1liveplayerdemo').projectDir = new File(settingsDir, './live/v1liveplayerdemo')
+    project(':lebplayerdemo').projectDir = new File(settingsDir, './live/lebplayerdemo')
+}
+
+// SDK 源码编译调试的配置
 if (!liteavSourcePath.isEmpty()) {
     apply from: new File(settingsDir, '../source_link_gradle/liteav_source_settings.gradle').getAbsolutePath()
 }
 
-if (!videoEngineSourcePath.isEmpty()) {
-    apply from: new File(settingsDir, '../source_link_gradle/videoengine_source_settings.gradle').getAbsolutePath()
+// 重构 源码编译调试的配置
+if (!liteavRefactorSourcePath.isEmpty()) {
+    apply from: new File(settingsDir, '../source_link_gradle/liteav_refactor_source_settings.gradle').getAbsolutePath()
 }
+
+

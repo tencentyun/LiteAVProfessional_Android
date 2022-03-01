@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="superplayer_hardware_Acceleration">硬件加速</string>
+    <string name="superplayer_mirror">镜像</string>
+    <string name="superplayer_multi_speed_playback">多倍速播放</string>
+    <string name="superplayer_brightness">亮度</string>
+    <string name="superplayer_sound">声音</string>
+    <string name="superplayer_sharpness">清晰度</string>
+    <string name="superplayer_back_live">返回直播</string>
+    <string name="superplayer_small_video_special_effects_editing">小视频-特效剪辑</string>
+    <string name="superplayer_original_picture">原画</string>
+    <string name="superplayer_test_video">测试视频</string>
+    <string name="superplayer_screenshot_fail">截图失败</string>
+    <string name="superplayer_float_play_fail">悬浮播放失败</string>
+    <string name="superplayer_enter_setting_fail">进入设置页面失败,请手动开启悬浮窗权限</string>
+    <string name="superplayer_vipwatch_endwatch_tip">试看结束，VIP会员可观看完整视频</string>
+    <string name="superplayer_vipwatch_open_vip_tip">开通VIP会员</string>
+    <string name="superplayer_vipwatch_retry_tip">重新试看</string>
+</resources>

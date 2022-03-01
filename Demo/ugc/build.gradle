@@ -1,0 +1,40 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+
+    repositories {
+        jcenter()
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.3'
+    }
+}
+
+allprojects {
+    repositories {
+        flatDir {
+            dirs 'libs'
+            dirs project(':app').file('libs')
+        }
+        jcenter()
+        google()
+        mavenCentral()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    compileSdkVersion = 29
+    buildToolsVersion = "29.0.2"
+    supportSdkVersion = "26.1.0"
+    minSdkVersion = 19
+    targetSdkVersion = 23
+    versionCode = 1
+    versionName = "v1.0"
+    liteavSdk="com.tencent.liteav:LiteAVSDK_UGC:latest.release"
+}

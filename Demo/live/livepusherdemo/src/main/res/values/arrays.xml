@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="livepusher_voice_channel">
+        <item>语音</item>
+        <item>标准</item>
+        <item>音乐</item>
+    </string-array>
+
+    <string-array name="livepusher_render_rotation">
+        <item>0</item>
+        <item>90</item>
+        <item>180</item>
+        <item>270</item>
+    </string-array>
+
+    <string-array name="livepusher_render_mirror">
+        <item>自动</item>
+        <item>禁止</item>
+        <item>允许</item>
+    </string-array>
+
+    <string-array name="livepusher_setting">
+        <item>带宽适应</item>
+        <item>耳返</item>
+        <item>静音模式</item>
+        <item>横屏推流</item>
+        <item>图像水印</item>
+        <item>观看端镜像</item>
+        <item>后置闪光灯</item>
+        <item>手动点击曝光对焦</item>
+        <item>隐私模式</item>
+    </string-array>
+
+    <string-array name="livepusher_render_type_with_surface">
+        <item>TXCloudVideoView</item>
+        <item>TextureView</item>
+        <item>SurfaceView</item>
+        <item>Surface</item>
+    </string-array>
+    
+    <string-array name="livepusher_render_type_without_surface">
+        <item>TXCloudVideoView</item>
+        <item>TextureView</item>
+        <item>SurfaceView</item>
+    </string-array>
+        
+    <string-array name="livepusher_video_solution">
+        <item>160 * 160</item>
+        <item>270 * 270</item>
+        <item>480 * 480</item>
+        <item>320 * 240</item>
+        <item>480 * 360</item>
+        <item>640 * 480</item>
+        <item>320 * 180</item>
+        <item>480 * 270</item>
+        <item>640 * 360</item>
+        <item>960 * 540</item>
+        <item>1280 * 720</item>
+        <item>1920 * 1080</item>
+    </string-array>
+
+</resources>

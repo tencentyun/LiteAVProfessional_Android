@@ -1,28 +1,34 @@
 package com.tencent.liteav.demo.common.widget;
 
 import android.content.Context;
-import android.support.design.widget.BottomSheetDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.tencent.liteav.demo.R;
+import com.tencent.liteav.demo.common.UserModel;
+import com.tencent.liteav.demo.common.UserModelManager;
 import com.tencent.liteav.login.model.ProfileManager;
-import com.tencent.liteav.login.model.UserModel;
 
 public class ModifyUserNameDialog extends BottomSheetDialog {
-    private EditText mEditUserName;
-    private TextView mTvInputTips;
-    private UserModel mUserModel;
-    private Context mContext;
+    private EditText              mEditUserName;
+    private TextView              mTvInputTips;
+    private UserModel             mUserModel;
+    private Context               mContext;
     private ModifySuccessListener mListener;
 
-
+    /**
+     * Modify the user name dialog.
+     *
+     * @param context
+     * @param listener
+     */
     public ModifyUserNameDialog(Context context, ModifySuccessListener listener) {
         super(context, R.style.AppBottomDialog);
-        mUserModel = ProfileManager.getInstance().getUserModel();
+        mUserModel = UserModelManager.getInstance().getUserModel();
         if (mUserModel == null) {
             dismiss();
             return;

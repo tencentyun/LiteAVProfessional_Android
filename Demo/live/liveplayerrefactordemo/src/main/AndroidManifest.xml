@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.tencent.liteav.liveplayer">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <application>
+
+        <activity
+                android:name=".V1LivePlayerEntranceActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".V1LivePlayerMainActivity"
+                android:parentActivityName=".V1LivePlayerEntranceActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateVisible|adjustPan">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".V1LivePlayerEntranceActivity" />
+        </activity>
+        <activity
+                android:name=".V2LivePlayerEntranceActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".V2LivePlayerMainActivity"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="stateVisible|adjustPan" />
+        <activity android:name=".QRCodeScanActivity" />
+    </application>
+
+</manifest>

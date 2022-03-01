@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/livepusher_content_bg"
+    android:orientation="vertical"
+    android:paddingLeft="18dp"
+    android:paddingRight="18dp">
+
+    <include
+        layout="@layout/livepusher_top_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/livepusher_render_type"
+        android:textColor="@color/livepusher_white"
+        android:textSize="16sp" />
+
+    <com.tencent.liteav.demo.livepusher.camerapush.ui.view.VariableRadioSelectorView
+        android:id="@+id/livepusher_rsv_render_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
