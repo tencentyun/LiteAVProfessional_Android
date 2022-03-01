@@ -282,7 +282,11 @@ public class CameraPushMainActivity extends FragmentActivity implements
     public void onHomeOrientationChange(boolean isLandscape) {
         mIsLandscape = isLandscape;
         // 横竖屏推流
-        mLivePusher.setVideoQuality(mVideoResolution, isLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait);
+        // 横竖屏推流
+        V2TXLiveDef.V2TXLiveVideoEncoderParam param = new V2TXLiveDef.V2TXLiveVideoEncoderParam(mVideoResolution);
+        param.videoResolutionMode =
+                isLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait;
+        mLivePusher.setVideoQuality(param);
     }
 
     @Override
@@ -548,8 +552,10 @@ public class CameraPushMainActivity extends FragmentActivity implements
             // 添加播放回调
             mLivePusher.setObserver(new MyPusherObserver());
             // 设置推流分辨率
-            mLivePusher.setVideoQuality(mVideoResolution, mIsLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait);
-
+            V2TXLiveDef.V2TXLiveVideoEncoderParam param = new V2TXLiveDef.V2TXLiveVideoEncoderParam(mVideoResolution);
+            param.videoResolutionMode =
+                    mIsLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait;
+            mLivePusher.setVideoQuality(param);
             // 是否开启观众端镜像观看
             mLivePusher.setEncoderMirror(mIsMirrorEnable);
             // 是否打开调试信息
@@ -799,25 +805,41 @@ public class CameraPushMainActivity extends FragmentActivity implements
         switch (type) {
             case TXLiveConstants.VIDEO_QUALITY_STANDARD_DEFINITION:     // 360P
                 if (mLivePusher != null) {
-                    mLivePusher.setVideoQuality(V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution640x360, mIsLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait);
+                    V2TXLiveDef.V2TXLiveVideoEncoderParam param =
+                            new V2TXLiveDef.V2TXLiveVideoEncoderParam(mVideoResolution);
+                    param.videoResolutionMode =
+                            mIsLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait;
+                    mLivePusher.setVideoQuality(param);
                     mVideoResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution640x360;
                 }
                 break;
             case TXLiveConstants.VIDEO_QUALITY_HIGH_DEFINITION:         // 540P
                 if (mLivePusher != null) {
-                    mLivePusher.setVideoQuality(V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution960x540, mIsLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait);
+                    V2TXLiveDef.V2TXLiveVideoEncoderParam param =
+                            new V2TXLiveDef.V2TXLiveVideoEncoderParam(mVideoResolution);
+                    param.videoResolutionMode =
+                            mIsLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait;
+                    mLivePusher.setVideoQuality(param);
                     mVideoResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution960x540;
                 }
                 break;
             case TXLiveConstants.VIDEO_QUALITY_SUPER_DEFINITION:        // 720p
                 if (mLivePusher != null) {
-                    mLivePusher.setVideoQuality(V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution1280x720, mIsLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait);
+                    V2TXLiveDef.V2TXLiveVideoEncoderParam param =
+                            new V2TXLiveDef.V2TXLiveVideoEncoderParam(mVideoResolution);
+                    param.videoResolutionMode =
+                            mIsLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait;
+                    mLivePusher.setVideoQuality(param);
                     mVideoResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution1280x720;
                 }
                 break;
             case TXLiveConstants.VIDEO_QUALITY_ULTRA_DEFINITION:        // 1080p
                 if (mLivePusher != null) {
-                    mLivePusher.setVideoQuality(V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution1920x1080, mIsLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait);
+                    V2TXLiveDef.V2TXLiveVideoEncoderParam param =
+                            new V2TXLiveDef.V2TXLiveVideoEncoderParam(mVideoResolution);
+                    param.videoResolutionMode =
+                            mIsLandscape ? V2TXLiveVideoResolutionModeLandscape : V2TXLiveVideoResolutionModePortrait;
+                    mLivePusher.setVideoQuality(param);
                     mVideoResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution1920x1080;
                 }
                 break;

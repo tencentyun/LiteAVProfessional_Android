@@ -747,7 +747,9 @@ public class V2MainActivity extends AppCompatActivity {
 
         // 音频相关
         mLivePusher.setRenderMirror(V2TXLiveDef.V2TXLiveMirrorType.V2TXLiveMirrorTypeAuto);
-        mLivePusher.setVideoQuality(V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution960x540, V2TXLiveVideoResolutionModePortrait);
+        V2TXLiveDef.V2TXLiveVideoEncoderParam param = new V2TXLiveDef.V2TXLiveVideoEncoderParam(V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution960x540);
+        param.videoResolutionMode = V2TXLiveVideoResolutionModePortrait;
+        mLivePusher.setVideoQuality(param);
         mLivePusher.setRenderRotation(V2TXLiveDef.V2TXLiveRotation.V2TXLiveRotation0);
         mLivePusher.setEncoderMirror(false);
 
@@ -963,14 +965,14 @@ public class V2MainActivity extends AppCompatActivity {
 
         @Override
         public void onStatisticsUpdate(V2TXLiveDef.V2TXLivePusherStatistics statistics) {
-//            Log.i(TAG, "[Pusher] onStatisticsUpdate: statistics cpu-" + statistics.appCpu
-//                    + " syscpu-" + statistics.systemCpu
-//                    + " width-" + statistics.width
-//                    + " height-" + statistics.height
-//                    + " fps-" + statistics.fps
-//                    + " video bitrate-" + statistics.videoBitrate
-//                    + " audio bitrate-" + statistics.audioBitrate
-//            );
+            //            Log.i(TAG, "[Pusher] onStatisticsUpdate: statistics cpu-" + statistics.appCpu
+            //                    + " syscpu-" + statistics.systemCpu
+            //                    + " width-" + statistics.width
+            //                    + " height-" + statistics.height
+            //                    + " fps-" + statistics.fps
+            //                    + " video bitrate-" + statistics.videoBitrate
+            //                    + " audio bitrate-" + statistics.audioBitrate
+            //            );
         }
     }
 
@@ -1003,78 +1005,48 @@ public class V2MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onVideoPlayStatusUpdate(V2TXLivePlayer player, V2TXLiveDef.V2TXLivePlayStatus status, V2TXLiveDef.V2TXLiveStatusChangeReason reason, Bundle bundle) {
-            Log.i(TAG, "[Player] onVideoPlayStatusUpdate: player-" + player + ", status-" + status + ", reason-" + reason);
-            switch (status) {
-                case V2TXLivePlayStatusPlaying:
-                    mPlayerContainer.isPlaying = true;
-                    stopPlayerLoading(mPlayerContainer, player);
-                    if(reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonLocalStarted) {
-                        MainItemRenderView renderView = mPlayerContainer.playerView;
-                        for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
-                            if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
-                                if (renderView != null) {
-                                    renderView.recvFirstVideo(true);
-                                }
-                                return;
-                            }
-                        }
+        public void onAudioPlaying(V2TXLivePlayer player, boolean firstPlay, Bundle extraInfo) {
+            mPlayerContainer.isPlaying = true;
+            stopPlayerLoading(mPlayerContainer, player);
+            MainItemRenderView renderView = mPlayerContainer.playerView;
+            for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
+                if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
+                    if (renderView != null) {
+                        renderView.recvFirstAudio(true);
                     }
-                    break;
-                case V2TXLivePlayStatusLoading:
-                    mPlayerContainer.isPlaying = false;
-                    startPlayerLoading(mPlayerContainer, player);
-                    break;
-                case V2TXLivePlayStatusStopped:
-                    if (reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonRemoteOffline) {
-                        resetPlayer(mPlayerContainer);
-                        mPlayerContainer.isPlaying = false;
-                        mPlayerContainer.isShowDebugView = false;
-                    }
-                    break;
-                default:
-                    break;
+                    return;
+                }
             }
         }
 
         @Override
-        public void onAudioPlayStatusUpdate(V2TXLivePlayer player, V2TXLiveDef.V2TXLivePlayStatus status, V2TXLiveDef.V2TXLiveStatusChangeReason reason, Bundle bundle) {
-            Log.i(TAG, "[Player] onAudioPlayStatusUpdate: player-" + player + ", status-" + status + ", reason-" + reason);
-            switch (status) {
-                case V2TXLivePlayStatusPlaying:
-                    mPlayerContainer.isPlaying = true;
-                    stopPlayerLoading(mPlayerContainer, player);
-                    if (reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonLocalStarted) {
-                        MainItemRenderView renderView = mPlayerContainer.playerView;
-                        for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
-                            if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
-                                if (renderView != null) {
-                                    renderView.recvFirstAudio(true);
-                                }
-                                return;
-                            }
-                        }
+        public void onVideoPlaying(V2TXLivePlayer player, boolean firstPlay, Bundle extraInfo) {
+            mPlayerContainer.isPlaying = true;
+            stopPlayerLoading(mPlayerContainer, player);
+            MainItemRenderView renderView = mPlayerContainer.playerView;
+            for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
+                if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
+                    if (renderView != null) {
+                        renderView.recvFirstVideo(true);
                     }
-                    break;
-                case V2TXLivePlayStatusLoading:
-                    mPlayerContainer.isPlaying = false;
-                    startPlayerLoading(mPlayerContainer, player);
-                    break;
-                case V2TXLivePlayStatusStopped:
-                    if (reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonRemoteOffline) {
-                        resetPlayer(mPlayerContainer);
-                        mPlayerContainer.isPlaying = false;
-                        mPlayerContainer.isShowDebugView = false;
-                    }
-                    break;
-                default:
-                    break;
+                    return;
+                }
             }
+        }
+
+        @Override
+        public void onAudioLoading(V2TXLivePlayer player, Bundle extraInfo) {
+            startPlayerLoading(mPlayerContainer, player);
+        }
+
+        @Override
+        public void onVideoLoading(V2TXLivePlayer player, Bundle extraInfo) {
+            startPlayerLoading(mPlayerContainer, player);
         }
 
         @Override
         public void onPlayoutVolumeUpdate(V2TXLivePlayer player, int volume) {
-//            Log.i(TAG, "onPlayoutVolumeUpdate: player-" + player +  ", volume-" + volume);
+            //            Log.i(TAG, "onPlayoutVolumeUpdate: player-" + player +  ", volume-" + volume);
             MainItemRenderView renderView = mPlayerContainer.playerView;
             for (String url : AVSettingConfig.getInstance().playerMap.keySet()) {
                 if (AVSettingConfig.getInstance().playerMap.get(url) == player) {
@@ -1093,14 +1065,14 @@ public class V2MainActivity extends AppCompatActivity {
                     mPlayerContainer.playerView.setVolumeProgress(0);
                 }
             }
-//            Log.i(TAG, "[Player] onStatisticsUpdate: statistics cpu-" + statistics.appCpu
-//                    + " syscpu-" + statistics.systemCpu
-//                    + " width-" + statistics.width
-//                    + " height-" + statistics.height
-//                    + " fps-" + statistics.fps
-//                    + " video bitrate-" + statistics.videoBitrate
-//                    + " audio bitrate-" + statistics.audioBitrate
-//            );
+            //            Log.i(TAG, "[Player] onStatisticsUpdate: statistics cpu-" + statistics.appCpu
+            //                    + " syscpu-" + statistics.systemCpu
+            //                    + " width-" + statistics.width
+            //                    + " height-" + statistics.height
+            //                    + " fps-" + statistics.fps
+            //                    + " video bitrate-" + statistics.videoBitrate
+            //                    + " audio bitrate-" + statistics.audioBitrate
+            //            );
         }
 
     }
