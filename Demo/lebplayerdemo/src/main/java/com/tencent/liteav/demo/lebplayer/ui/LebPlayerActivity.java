@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -48,7 +49,7 @@ public class LebPlayerActivity extends AppCompatActivity {
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private PlaySetting mPlaySetting;
-    
+
     private MainItemRenderView mPlayerView;
     private int mPlayerState = PLAY_STATE_INIT;
     private String mPlayURL;
@@ -56,7 +57,7 @@ public class LebPlayerActivity extends AppCompatActivity {
     private boolean mIsShowDebugView;
     private boolean mIsMuteVideo;
     private boolean mIsMuteAudio;
-    
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,8 +122,8 @@ public class LebPlayerActivity extends AppCompatActivity {
         mPlayerView.updatePlayerStatus(true);
 
         mLebPlayer.setRenderView(mPlayerView.getCloudView());
-//        mLebPlayer.setRenderView(mPlayerView.getSurfaceView());
-//        mLebPlayer.setRenderView(mPlayerView.getTextureView());
+        //        mLebPlayer.setRenderView(mPlayerView.getSurfaceView());
+        //        mLebPlayer.setRenderView(mPlayerView.getTextureView());
         mLebPlayer.setRenderRotation(AVSettingConfig.getInstance().rotation);
         mLebPlayer.setRenderFillMode(AVSettingConfig.getInstance().fillMode);
 
@@ -181,55 +182,33 @@ public class LebPlayerActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onVideoPlayStatusUpdate(V2TXLivePlayer player, V2TXLiveDef.V2TXLivePlayStatus status, V2TXLiveDef.V2TXLiveStatusChangeReason reason, Bundle bundle) {
-            TXCLog.i(TAG, "[Player] onVideoPlayStatusUpdate: player-" + player + ", status-" + status + ", reason-" + reason);
-            onPlayStatusUpdate(player, status, reason, bundle, false);
+        public void onAudioPlaying(V2TXLivePlayer player, boolean firstPlay, Bundle extraInfo) {
+            Log.e(TAG, "[Player] onAudioPlaying: firstPlay -> " + firstPlay);
+            if (mPlayerView == null) {
+                return;
+            }
+            mPlayerState = PLAY_STATE_PLAYING;
+            mPlayerView.dismissLoading();
         }
 
         @Override
-        public void onAudioPlayStatusUpdate(V2TXLivePlayer player, V2TXLiveDef.V2TXLivePlayStatus status, V2TXLiveDef.V2TXLiveStatusChangeReason reason, Bundle bundle) {
-            TXCLog.i(TAG, "[Player] onAudioPlayStatusUpdate: player-" + player + ", status-" + status + ", reason-" + reason);
-            onPlayStatusUpdate(player, status, reason, bundle, true);
+        public void onVideoPlaying(V2TXLivePlayer player, boolean firstPlay, Bundle extraInfo) {
+            Log.e(TAG, "[Player] onVideoPlaying: firstPlay -> " + firstPlay);
         }
 
-        private void onPlayStatusUpdate(V2TXLivePlayer player,
-                                        V2TXLiveDef.V2TXLivePlayStatus status,
-                                        V2TXLiveDef.V2TXLiveStatusChangeReason reason,
-                                        Bundle bundle,
-                                        boolean audio) {
-            switch (status) {
-                case V2TXLivePlayStatusPlaying:
-                    if (mPlayerView == null) {
-                        break;
-                    }
-                    mPlayerState = PLAY_STATE_PLAYING;
-                    mPlayerView.dismissLoading();
-                    break;
-                case V2TXLivePlayStatusLoading:
-                    if (mPlayerView == null) {
-                        break;
-                    }
-                    mPlayerState = PLAY_STATE_LOADING;
-                    mPlayerView.showLoading();
-                    break;
-                case V2TXLivePlayStatusStopped:
-                    if (mPlayerView == null) {
-                        break;
-                    }
-                    if (audio) {
-                        break;
-                    }
-                    mPlayerState = PLAY_STATE_PAUSE;
-                    mPlayerView.dismissLoading();
-                    if (reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonRemoteStopped) {
-                        Toast.makeText(LebPlayerActivity.this, "disconnect!", Toast.LENGTH_LONG).show();
-                        mPlayerView.updatePlayerStatus(false);
-                        resetPlayer();
-                    }
-                    break;
-                default:
-                    break;
+        @Override
+        public void onAudioLoading(V2TXLivePlayer player, Bundle extraInfo) {
+            Log.e(TAG, "[Player] onAudioLoading");
+            if (mPlayerView == null) {
+                return;
             }
+            mPlayerState = PLAY_STATE_LOADING;
+            mPlayerView.showLoading();
+        }
+
+        @Override
+        public void onVideoLoading(V2TXLivePlayer player, Bundle extraInfo) {
+            Log.e(TAG, "[Player] onVideoLoading");
         }
 
         @Override
@@ -244,14 +223,14 @@ public class LebPlayerActivity extends AppCompatActivity {
             if (mPlayerView != null) {
                 mPlayerView.setVolumeProgress(0);
             }
-//            TXCLog.i(TAG, "[Player] onStatisticsUpdate: statistics cpu-" + statistics.appCpu
-//                    + " syscpu-" + statistics.systemCpu
-//                    + " width-" + statistics.width
-//                    + " height-" + statistics.height
-//                    + " fps-" + statistics.fps
-//                    + " video bitrate-" + statistics.videoBitrate
-//                    + " audio bitrate-" + statistics.audioBitrate
-//            );
+            //            TXCLog.i(TAG, "[Player] onStatisticsUpdate: statistics cpu-" + statistics.appCpu
+            //                    + " syscpu-" + statistics.systemCpu
+            //                    + " width-" + statistics.width
+            //                    + " height-" + statistics.height
+            //                    + " fps-" + statistics.fps
+            //                    + " video bitrate-" + statistics.videoBitrate
+            //                    + " audio bitrate-" + statistics.audioBitrate
+            //            );
         }
 
         @Override

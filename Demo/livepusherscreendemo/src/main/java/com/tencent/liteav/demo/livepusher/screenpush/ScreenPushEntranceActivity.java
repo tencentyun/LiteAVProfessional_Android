@@ -90,7 +90,10 @@ public class ScreenPushEntranceActivity extends Activity {
                 if (checked) {
                     sResolutionMode = V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModeLandscape;
                     if (sLivePusher != null) {
-                        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+                        V2TXLiveDef.V2TXLiveVideoEncoderParam param =
+                                new V2TXLiveDef.V2TXLiveVideoEncoderParam(sResolution);
+                        param.videoResolutionMode = sResolutionMode;
+                        sLivePusher.setVideoQuality(param);
                     }
                 }
             }
@@ -101,7 +104,10 @@ public class ScreenPushEntranceActivity extends Activity {
                 if (checked) {
                     sResolutionMode = V2TXLiveDef.V2TXLiveVideoResolutionMode.V2TXLiveVideoResolutionModePortrait;
                     if (sLivePusher != null) {
-                        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+                        V2TXLiveDef.V2TXLiveVideoEncoderParam param =
+                                new V2TXLiveDef.V2TXLiveVideoEncoderParam(sResolution);
+                        param.videoResolutionMode = sResolutionMode;
+                        sLivePusher.setVideoQuality(param);
                     }
                 }
             }
@@ -112,7 +118,10 @@ public class ScreenPushEntranceActivity extends Activity {
                 if (checked) {
                     sResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution640x360;
                     if (sLivePusher != null) {
-                        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+                        V2TXLiveDef.V2TXLiveVideoEncoderParam param =
+                                new V2TXLiveDef.V2TXLiveVideoEncoderParam(sResolution);
+                        param.videoResolutionMode = sResolutionMode;
+                        sLivePusher.setVideoQuality(param);
                     }
                 }
             }
@@ -123,7 +132,10 @@ public class ScreenPushEntranceActivity extends Activity {
                 if (checked) {
                     sResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution960x540;
                     if (sLivePusher != null) {
-                        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+                        V2TXLiveDef.V2TXLiveVideoEncoderParam param =
+                                new V2TXLiveDef.V2TXLiveVideoEncoderParam(sResolution);
+                        param.videoResolutionMode = sResolutionMode;
+                        sLivePusher.setVideoQuality(param);
                     }
 
                 }
@@ -135,7 +147,10 @@ public class ScreenPushEntranceActivity extends Activity {
                 if (checked) {
                     sResolution = V2TXLiveDef.V2TXLiveVideoResolution.V2TXLiveVideoResolution1280x720;
                     if (sLivePusher != null) {
-                        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+                        V2TXLiveDef.V2TXLiveVideoEncoderParam param =
+                                new V2TXLiveDef.V2TXLiveVideoEncoderParam(sResolution);
+                        param.videoResolutionMode = sResolutionMode;
+                        sLivePusher.setVideoQuality(param);
                     }
                 }
             }
@@ -354,7 +369,9 @@ public class ScreenPushEntranceActivity extends Activity {
         sLivePusher.setObserver(new MyTXLivePusherObserver());
         sLivePusher.startMicrophone();
         sLivePusher.startScreenCapture();
-        sLivePusher.setVideoQuality(sResolution, sResolutionMode);
+        V2TXLiveDef.V2TXLiveVideoEncoderParam param = new V2TXLiveDef.V2TXLiveVideoEncoderParam(sResolution);
+        param.videoResolutionMode = sResolutionMode;
+        sLivePusher.setVideoQuality(param);
         sPushURL = pushURL;
         int result = sLivePusher.startPush(pushURL);
         if (result == V2TXLIVE_OK) {

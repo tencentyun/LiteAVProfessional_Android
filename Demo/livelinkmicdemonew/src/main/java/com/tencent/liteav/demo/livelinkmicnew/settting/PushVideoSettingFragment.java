@@ -108,7 +108,9 @@ public class PushVideoSettingFragment extends Fragment {
                         if (resolution != mVideoConfig.getVideoResolution()) {
                             mVideoConfig.setVideoResolution(resolution);
                             if (mLivePusher != null) {
-                                mLivePusher.setVideoQuality(resolution, mVideoConfig.isVideoVertical() ? V2TXLiveVideoResolutionModePortrait : V2TXLiveVideoResolutionModeLandscape);
+                                V2TXLiveDef.V2TXLiveVideoEncoderParam param = new V2TXLiveDef.V2TXLiveVideoEncoderParam(resolution);
+                                param.videoResolutionMode = mVideoConfig.isVideoVertical() ? V2TXLiveVideoResolutionModePortrait : V2TXLiveVideoResolutionModeLandscape;
+                                mLivePusher.setVideoQuality(param);
                             }
                         }
                     }

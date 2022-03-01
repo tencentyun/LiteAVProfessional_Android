@@ -388,49 +388,36 @@ public class LivePlayerMainActivity extends Activity {
         }
 
         @Override
-        public void onVideoPlayStatusUpdate(V2TXLivePlayer player, V2TXLiveDef.V2TXLivePlayStatus status, V2TXLiveDef.V2TXLiveStatusChangeReason reason, Bundle bundle) {
-            Log.i(TAG, "[Player] onVideoPlayStatusUpdate: player-" + player + ", status-" + status + ", reason-" + reason);
-            switch (status) {
-                case V2TXLivePlayStatusLoading:
-                    startLoadingAnimation();
-                    break;
-                case V2TXLivePlayStatusPlaying:
-                    stopLoadingAnimation();
-                    Bundle params = new Bundle();
-                    params.putString(TXLiveConstants.EVT_DESCRIPTION, mContext.getResources().getString(R.string.liveplayer_warning_checkout_res_url));
-                    mLogInfoWindow.setLogText(null, params, LogInfoWindow.CHECK_RTMP_URL_OK);
-                    break;
-                case V2TXLivePlayStatusStopped:
-                    if (reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonRemoteOffline) {
-                        stopPlay();
-                    }
-                default:
-                    break;
-            }
+        public void onVideoPlaying(V2TXLivePlayer player, boolean firstPlay, Bundle extraInfo) {
+            Log.e(TAG, "[Player] onVideoPlaying  firstPlay -> " + firstPlay);
+            stopLoadingAnimation();
+            Bundle params = new Bundle();
+            params.putString(TXLiveConstants.EVT_DESCRIPTION,
+                    mContext.getResources().getString(R.string.liveplayer_warning_checkout_res_url));
+            mLogInfoWindow.setLogText(null, params, LogInfoWindow.CHECK_RTMP_URL_OK);
         }
 
         @Override
-        public void onAudioPlayStatusUpdate(V2TXLivePlayer player, V2TXLiveDef.V2TXLivePlayStatus status, V2TXLiveDef.V2TXLiveStatusChangeReason reason, Bundle bundle) {
-            Log.i(TAG, "[Player] onAudioPlayStatusUpdate: player-" + player + ", status-" + status + ", reason-" + reason);
-            switch (status) {
-                case V2TXLivePlayStatusLoading:
-                    startLoadingAnimation();
-                    break;
-                case V2TXLivePlayStatusPlaying:
-                    stopLoadingAnimation();
-                    break;
-                case V2TXLivePlayStatusStopped:
-                    if (reason == V2TXLiveDef.V2TXLiveStatusChangeReason.V2TXLiveStatusChangeReasonRemoteOffline) {
-                        stopPlay();
-                    }
-                default:
-                    break;
-            }
+        public void onVideoLoading(V2TXLivePlayer player, Bundle extraInfo) {
+            Log.e(TAG, "[Player] onVideoLoading");
+            startLoadingAnimation();
+        }
+
+        @Override
+        public void onAudioPlaying(V2TXLivePlayer player, boolean firstPlay, Bundle extraInfo) {
+            Log.e(TAG, "[Player] onAudioPlaying  firstPlay -> " + firstPlay);
+            stopLoadingAnimation();
+        }
+
+        @Override
+        public void onAudioLoading(V2TXLivePlayer player, Bundle extraInfo) {
+            Log.e(TAG, "[Player] onAudioLoading");
+            startLoadingAnimation();
         }
 
         @Override
         public void onPlayoutVolumeUpdate(V2TXLivePlayer player, int volume) {
-//            Log.i(TAG, "onPlayoutVolumeUpdate: player-" + player +  ", volume-" + volume);
+            //            Log.i(TAG, "onPlayoutVolumeUpdate: player-" + player +  ", volume-" + volume);
         }
 
         @Override
