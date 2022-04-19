@@ -1277,7 +1277,7 @@ public class MLVBLiveRoomImpl extends MLVBLiveRoom implements HttpRequests.Heart
                         if (mTXLivePusher != null) {
                             if (mMixMode == STREAM_MIX_MODE_PK) {
                                 //PK
-                                mTXLivePusher.setVideoQuality(TXLiveConstants.VIDEO_QUALITY_LINKMIC_MAIN_PUBLISHER, true, true);
+                                mTXLivePusher.setVideoQuality(TXLiveConstants.VIDEO_QUALITY_LINKMIC_MAIN_PUBLISHER, true, false);
                                 TXLivePushConfig config = mTXLivePusher.getConfig();
                                 config.setVideoResolution(TXLiveConstants.VIDEO_RESOLUTION_TYPE_360_640);
                                 config.setAutoAdjustBitrate(false);
